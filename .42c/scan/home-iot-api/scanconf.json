@@ -1,0 +1,659 @@
+{
+    "version": "2.0.0",
+    "runtimeConfiguration": {
+        "environment": "default",
+        "laxTestingModeEnabled": false,
+        "apiConnectivityCheck": true,
+        "logLevel": "error",
+        "logDestination": "stdout+platform",
+        "logMaxFileSize": 2147483648,
+        "requestHeaderNameRequestId": "x-scan-request-id",
+        "requestHeaderNameScenarioId": "x-scan-scenario-id",
+        "requestHeaderNameRequestType": "x-scan-request-type",
+        "requestFlowrate": 100,
+        "requestTimeout": 30,
+        "requestTlsInsecureSkipVerify": true,
+        "responseFollowRedirection": false,
+        "responseMaxBodySizeScan": 10485760,
+        "happyPathOnly": false,
+        "maxRequestRetryAttempts": 5,
+        "maxScanDuration": 1800,
+        "memoryLimit": 2147483648,
+        "memoryTimeSpan": 10,
+        "reportMaxRequestSizeHappyPath": 8092,
+        "reportMaxRequestSizeTest": 8092,
+        "reportIncludeRequestBody": true,
+        "reportIncludeResponseBody": true,
+        "reportMaxHttpResponseSizeHappyPath": 8092,
+        "reportMaxBodySizeHappyPath": 8092,
+        "reportMaxHttpResponseSizeTest": 8092,
+        "reportMaxBodySizeTest": 8092,
+        "reportIssuesOnly": false,
+        "reportMaxIssues": 1000,
+        "reportMaxSize": 20971520,
+        "reportGenerateCurlCommand": true
+    },
+    "customizations": {
+        "happyPaths": {
+            "retry": 1,
+            "responsePolicy": {
+                "httpStatusExpected": true,
+                "mustBeConformant": true
+            },
+            "httpStatusExpected": []
+        },
+        "tests": {
+            "responsePolicy": {
+                "httpStatusExpected": true,
+                "mustBeConformant": true
+            }
+        }
+    },
+    "operations": {
+        "getDevices": {
+            "operationId": "getDevices",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/getDevices/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "getDevices",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/devices",
+                        "method": "GET"
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "getForecast": {
+            "operationId": "getForecast",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/getForecast/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "getForecast",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/temperature/forecast/{days}",
+                        "method": "GET",
+                        "paths": [
+                            {
+                                "key": "days",
+                                "value": 419468253602183881
+                            }
+                        ]
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "getHeaterState": {
+            "operationId": "getHeaterState",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/getHeaterState/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "getHeaterState",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/temperature/{zoneId}/heater",
+                        "method": "GET",
+                        "paths": [
+                            {
+                                "key": "zoneId",
+                                "value": "wsymefgxecdyuabpyaqnpitqvecmzxxj"
+                            }
+                        ]
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "getLightingSummary": {
+            "operationId": "getLightingSummary",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/getLightingSummary/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "getLightingSummary",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/lightingSummary",
+                        "method": "GET"
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "getSwitchState": {
+            "operationId": "getSwitchState",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/getSwitchState/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "getSwitchState",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/lighting/switches/{deviceId}",
+                        "method": "GET",
+                        "paths": [
+                            {
+                                "key": "deviceId",
+                                "value": "hwtjlpolkyjciqptbwuatoskygbhbbbj"
+                            }
+                        ]
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "getZoneTemperature": {
+            "operationId": "getZoneTemperature",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/getZoneTemperature/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "getZoneTemperature",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/temperature/{zoneId}",
+                        "method": "GET",
+                        "paths": [
+                            {
+                                "key": "zoneId",
+                                "value": "txmufapfjssdmqatdqifmwllhincuilm"
+                            }
+                        ]
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "getZones": {
+            "operationId": "getZones",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/getZones/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "getZones",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/zones",
+                        "method": "GET"
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "quietZone": {
+            "operationId": "quietZone",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/quietZone/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "quietZone",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/zones/{zoneId}/quiet",
+                        "method": "GET",
+                        "paths": [
+                            {
+                                "key": "zoneId",
+                                "value": "first-floor"
+                            }
+                        ]
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "register": {
+            "operationId": "register",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/register/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "register",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/devices",
+                        "method": "POST",
+                        "headers": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "requestBody": {
+                            "mode": "json",
+                            "json": {}
+                        }
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "setDimmer": {
+            "operationId": "setDimmer",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/setDimmer/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "setDimmer",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/lighting/dimmers/{deviceId}/{value}",
+                        "method": "POST",
+                        "paths": [
+                            {
+                                "key": "deviceId",
+                                "value": "iqgatbiitjifpgzxojiepebxqrbzavmj"
+                            },
+                            {
+                                "key": "value",
+                                "value": 90
+                            }
+                        ]
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "setDimmerTimer": {
+            "operationId": "setDimmerTimer",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/setDimmerTimer/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "setDimmerTimer",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/lighting/dimmers/{deviceId}/{value}/timer/{timeunit}",
+                        "method": "POST",
+                        "paths": [
+                            {
+                                "key": "deviceId",
+                                "value": "ckwsdsmlpiuklvtufwdkwaleessjgjuz"
+                            },
+                            {
+                                "key": "value",
+                                "value": 242747733811815998
+                            },
+                            {
+                                "key": "timeunit",
+                                "value": 4942859566973743745
+                            }
+                        ]
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "setHeaterState": {
+            "operationId": "setHeaterState",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/setHeaterState/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "setHeaterState",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/temperature/{zoneId}/heater/{state}",
+                        "method": "POST",
+                        "paths": [
+                            {
+                                "key": "zoneId",
+                                "value": "wtcgidhbabamlysaslsssoinbgzvmvwc"
+                            },
+                            {
+                                "key": "state",
+                                "value": "true"
+                            }
+                        ]
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "setSwitch": {
+            "operationId": "setSwitch",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/setSwitch/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "setSwitch",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/lighting/switches/{deviceId}/{value}",
+                        "method": "POST",
+                        "paths": [
+                            {
+                                "key": "deviceId",
+                                "value": "prbodhcfwvggddocwogwbwepvrkxpwqj"
+                            },
+                            {
+                                "key": "value",
+                                "value": "false"
+                            }
+                        ]
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "setSwitchTimer": {
+            "operationId": "setSwitchTimer",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/setSwitchTimer/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "setSwitchTimer",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/lighting/switches/{deviceId}/{value}/timer/{minutes}",
+                        "method": "POST",
+                        "paths": [
+                            {
+                                "key": "deviceId",
+                                "value": "nirinbztgdgmugxuxesyplmndkmehgjn"
+                            },
+                            {
+                                "key": "value",
+                                "value": "false"
+                            },
+                            {
+                                "key": "minutes",
+                                "value": 3887185870285850990
+                            }
+                        ]
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        },
+        "temperatureSummary": {
+            "operationId": "temperatureSummary",
+            "scenarios": [
+                {
+                    "key": "happy.path",
+                    "fuzzing": true,
+                    "requests": [
+                        {
+                            "$ref": "#/operations/temperatureSummary/request",
+                            "fuzzing": true
+                        }
+                    ]
+                }
+            ],
+            "request": {
+                "operationId": "temperatureSummary",
+                "request": {
+                    "type": "42c",
+                    "details": {
+                        "url": "{{host}}/temperature",
+                        "method": "GET"
+                    }
+                },
+                "defaultResponse": "200",
+                "responses": {
+                    "200": {
+                        "expectations": {
+                            "httpStatus": 200
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "environments": {
+        "default": {
+            "variables": {
+                "host": {
+                    "from": "environment",
+                    "name": "SCAN42C_HOST",
+                    "required": false,
+                    "default": "https://virtserver.swaggerhub.com/LEONARDOMARIA/Mappa/1.0.0"
+                }
+            }
+        }
+    }
+}

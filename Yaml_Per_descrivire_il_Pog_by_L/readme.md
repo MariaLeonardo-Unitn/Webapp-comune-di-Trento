@@ -1,0 +1,1 @@
+sto provando a capire a cosa servono sti yaml, e quali sono le risorse

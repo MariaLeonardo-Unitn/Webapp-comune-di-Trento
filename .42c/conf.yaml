@@ -1,0 +1,3 @@
+apis:
+  Webapp-comune-di-Trento/oas3.yaml:
+    alias: home-iot-api
