@@ -1,3 +1,5 @@
 apis:
   Webapp-comune-di-Trento/oas3.yaml:
     alias: home-iot-api
+  Yaml_Per_descrivire_il_Pog_by_L/resources.yaml:
+    alias: trento-clean-city-api

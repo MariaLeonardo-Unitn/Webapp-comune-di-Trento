@@ -1,0 +1,97 @@
+openapi: 3.0.0
+info:
+  title: Trento Clean City API
+  version: 1.0.0
+  description: API per la gestione le segnalazioni di problemi riguardo i rifiuti a Trento.
+paths:
+  /segnalazioni:
+    post:
+      summary: Crea una nuova segnalazione
+      description: Permette ai cittadini di creare una segnalazione di un problema riguardo i rifiuti
+      requestBody:
+        description: Dettagli della nuova segnalazione
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Segnalazioni'
+      responses:
+        '201':
+          description: "Segnalazione creata con successo"
+        '400':
+          description: "Richiesta malformata"
+    get:
+      summary: Ottieni tutte le segnalazioni
+      description: Ritorna la lista di tutte le segnalazioni registrate.
+      responses:
+        '200':
+          description: Lista delle segnalazioni
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Segnalazione'
+  /segnalazioni/{id}:
+    get:
+      summary: Ottieni una segnalazione specifica
+      description: Ritorna i dettagli di una singola segnalazione identificata dal suo ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: L'ID della segnalazione
+      responses:
+        '200':
+          description: Dettagli della segnalazione
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Segnalazione'
+        '404':
+          description: Segnalazione non trovata
+    put:
+      summary: 
+components:
+  schemas:
+    Segnalazione:
+      type: object
+      properties: 
+        id:
+          type: integer
+          description: Identificatore univoco della segnalazione
+          example: 123
+        title:
+          type: string
+          description: Titolo breve della segnalazione
+          example: "Accumulo di rifiuti al parco"
+        descrizione:
+          type: string
+          description: Descrizione dettagliata del problema
+          example: "Ci sono rifiuti abbandonati vicino al laghetto nel parco pubblico."
+        categoria:
+          type: string
+          description: Tipo di segnalazione (es. "Accumulazione di rifiuti", "Bidoni pieni")
+          example: "Accumulazione di rifiuti"
+        indirizzo:
+          type: string
+          description: Luogo in cui si trova il problema
+          example: "Parco centrale, Trento"
+        stato:
+          type: string
+          description: Stato della segnalazione (es. "in attesa", "risolta")
+          example: "in attesa"
+        data_creazione:
+          type: string
+          format: date-time
+          description: Data e ora in cui è stata creata la segnalazione
+          example: "2024-10-19T10:00:00Z"
+        autore:
+          type: string
+          description: Nome utente del cittadino che ha effettuato la segnalazione
+          example: "cittadino123"
+    
+      
+
