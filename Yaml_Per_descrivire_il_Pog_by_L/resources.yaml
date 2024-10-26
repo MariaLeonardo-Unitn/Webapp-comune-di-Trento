@@ -14,7 +14,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Segnalazioni'
+              $ref: '#/components/schemas/Segnalazione'
       responses:
         '201':
           description: "Segnalazione creata con successo"
@@ -53,7 +53,28 @@ paths:
         '404':
           description: Segnalazione non trovata
     put:
-      summary: 
+      summary: Aggiorna una segnalazione esistente
+      description: Permette di aggiornare i dettagli di una segnalazione
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: 
+            type: integer
+          description: L'ID delle segnalazioni
+      requestBody:
+        description: I nuovi dettagli della segnalazione
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Segnalazione'
+      responses:
+        '200':
+          description: Segnalazione aggiornata con successo
+        '404':
+          description: Segnalazione non trovata
+
 components:
   schemas:
     Segnalazione:
@@ -92,6 +113,3 @@ components:
           type: string
           description: Nome utente del cittadino che ha effettuato la segnalazione
           example: "cittadino123"
-    
-      
-
