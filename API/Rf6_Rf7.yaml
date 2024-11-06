@@ -3,3 +3,125 @@ info:
   title: API per la Raccolta Differenziata
   version: 1.0.0
   description: API per la gestione dei calendari e delle disposizioni per la raccolta differenziata.
+paths:
+  /api/rifiuti/calendari: 
+    get: 
+      summary: Ottieni il calendario della raccolta differenziata per le varie zone
+      description: Fornisce i calendari con le informazioni su quando vengono raccolti i vari tipi di rifiuti nelle diverse zone.
+      parameters:
+        - name: zona
+          in: query
+          description: Zona specifica per cui ottenere il calendario (facoltativo)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista dei calendari disponibili per le zone specificate
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    zona:
+                      type: string
+                      description: Nome della zona (es. Centro, Nord, Sud)
+                    giorno:
+                      type: string
+                      description: Giorno della settimana per la raccolta (es. Lunedì, Martedì)
+                    tipoRifiuto:
+                      type: string
+                      description: Tipo di rifiuto raccolto (es. Plastica, Carta, Vetro)
+                    orario:
+                      type: string
+                      description: Orario di raccolta (facoltativo, se disponibile)
+        '400':
+          description: Parametri errati
+        '500':
+          description: Errore del server interno
+          
+  /api/rifiuti/calendari/{zona}:
+    get:
+      summary: Ottieni il calendario della raccolta differenziata per una zona specifica
+      description: Restituisce il calendario per la raccolta differenziata di una zona specificata come file PDF.
+      parameters:
+        - in: path
+          name: zona
+          required: true
+          schema:
+            type: string
+          description: Identificativo della zona per la quale si vuole ottenere il calendario
+      responses:
+        '200':
+          description: Calendario della raccolta differenziata per la zona specificata
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Calendario non trovato per la zona specificata
+        '500':
+          description: Errore interno
+    post: 
+      summary: Carica un nuovo file PDF con il calendario per la raccolta differenziata di una zona specificata
+      description: Permette di caricare il calendario per la raccolta differenziata per una zona specificata come file PDF 
+      requestBody: 
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Il file PDF del calendario
+      responses:
+        '201':
+          description: File caricato correttamente
+        '400':
+          description: Errore di validazione del file caricato
+        '500':
+          description: Errore interno del server     
+
+  /api/rifiuti/disposizioni:
+    get:
+      summary: Ottieni le disposizioni per la raccolta differenziata
+      description: Restituisce un file scaricabile con le informazioni sulle normative e disposizioni comunali per la raccolta differenziata.
+      responses:
+        '200':
+          description: File PDF scaricabile con le normative per la raccolta differenziata
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: File non trovato
+        '500':
+          description: Errore del server interno
+    post:
+      summary: Carica un nuovo file PDF con le disposizioni per la raccolta differenziata
+      description: Permette di caricare un file PDF con le normative comunali.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Il file PDF con le disposizioni da caricare
+      responses:
+        '201':
+          description: File caricato correttamente
+        '400':
+          description: Errore di validazione del file caricato
+        '500':
+          description: Errore interno del server      
+  
