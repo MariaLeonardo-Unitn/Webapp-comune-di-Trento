@@ -1,0 +1,5 @@
+openapi: 3.0.0
+info:
+  title: API per la Raccolta Differenziata
+  version: 1.0.0
+  description: API per la gestione dei calendari e delle disposizioni per la raccolta differenziata.
