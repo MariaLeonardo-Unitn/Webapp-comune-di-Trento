@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+  title: API per la Raccolta Differenziata
+  version: 1.0.0
+  description: API per la gestione dei login.
+paths:
+  /api/auth/login:
+    post: 
+      summary: Permette l'accesso a cittadini, operatori ecologici di Dolomiti Ambiente e operatori del Comune di Trento.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: 
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Autenticazione avvenuta con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: 
+                    type: string
+                  role: 
+                    type: string
+                    enum: [cittadino, operatore_Dolomiti, operatore_comune]
+                  permission:
+                    type: array
+                    items: 
+                      type: string
+  /api/auth/me:
+    get:
+      summary: Ottieni informazioni sull'utente autenticato
+      description: Restituisce le informazioni sull'utente corrente e i suoi permessi.
+      security:
+        - bearerAuth: []  # Richiede autenticazione con token
+      responses:
+        '200':
+          description: Informazioni sull'utente autenticato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  role:
+                    type: string
+                    enum: [cittadino, operatore_dolomiti, operatore_comune]
+                  permissions:
+                    type: array
+                    items:
+                      type: string
+        '401':
+          description: Utente non autenticato
