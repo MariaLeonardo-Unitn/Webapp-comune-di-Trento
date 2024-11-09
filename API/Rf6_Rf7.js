@@ -4,35 +4,48 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
-// Cartella per i file
-const directoryPath = path.join(__dirname, 'files');
-if (!fs.existsSync(directoryPath)) {
-    fs.mkdirSync(directoryPath);
+// Cartella per i calendari
+const CalenDirectoryPath = path.join(__dirname, 'calendari');
+if (!fs.existsSync(CalenDirectoryPath)) {
+    fs.mkdirSync(CalenDirectoryPath);
+}
+// Cartella per le disposizioni
+const DispDirectoryPath = path.join(__dirname, 'calendari');
+if (!fs.existsSync(DispDirectoryPath)) {
+    fs.mkdirSync(DispDirectoryPath);
 }
 
 // Array per i calendari
 let calendari = [];
+let disposizioni = [];
 
 // Funzione per caricare i calendari dai file JSON all'avvio del server
 function loadCalendari() {
-    const files = fs.readdirSync(directoryPath);
+    const files = fs.readdirSync(CalenDirectoryPath);
     calendari = files
         .filter(file => file.endsWith('.json'))
-        .map(file => JSON.parse(fs.readFileSync(path.join(directoryPath, file), 'utf8')));
+        .map(file => JSON.parse(fs.readFileSync(path.join(CalenDirectoryPath, file), 'utf8')));
 }
-
+function loadDisposizioni() {
+    const files = fs.readdirSync(DispDirectoryPath);
+    disposizioni = files
+        .filter(file => file.endsWith('.json'))
+        .map(file => JSON.parse(fs.readFileSync(path.join(DispDirectoryPath, file), 'utf8')));
+}   
 // Chiamata per aggiornare i calendari
 loadCalendari();
+loadDisposizioni();
 
 app.use(express.json());
 app.use(express.raw({ type: 'application/pdf', limit: '30mb' }));
 app.get('/', (req, res) => {
     res.send("bella");
-})
+});
+/*per ora non so come farla
 app.get('/api/rifiuti/calendari', (req, res) =>{
     const calendars = getCalendars();
     res.json(calendars);
-} );
+} );*/
 app.get('/api/rifiuti/calendari/:zona', (req, res) => {
     const zona = req.params.zona;
     const calendario = calendari.find(c => c.zona === zona);
@@ -65,8 +78,8 @@ app.post('/api/rifiuti/calendari/:zona', (req, res) => {
         return res.status(400).json({ error: 'Nessun file caricato' });
 
     // Percorso e nome dei file
-    const pdfFilePath = path.join(directoryPath, `calendario_${zona}.pdf`);
-    const jsonFilePath = path.join(directoryPath, `calendario_${zona}.json`);
+    const pdfFilePath = path.join(CalenDirectoryPath, `calendario_${zona}.pdf`);
+    const jsonFilePath = path.join(CalenDirectoryPath, `calendario_${zona}.json`);
 
     // Salva il file PDF
     fs.writeFile(pdfFilePath, fileBuffer, (err) => {
@@ -85,5 +98,10 @@ app.post('/api/rifiuti/calendari/:zona', (req, res) => {
         res.json({ message: `Calendario caricato con successo per la zona ${zona}` });
     });
 });
+
+app.get('/api/rifiuti/disposizioni', (req, res) => {
+    
+});
+
 
 app.listen(port, () => console.log("server on port " + port));
