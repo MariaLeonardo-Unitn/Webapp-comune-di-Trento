@@ -1,0 +1,35 @@
+
+user:
+  properties:
+    nome: string
+    cognome: string
+    codiceFiscale: string
+    telefono: string
+    prenotazioni:
+      type: array
+      items:
+        $ref: prenotazione
+prenotazione:
+  properties:
+    utente:
+      $ref: user
+    tipoSacchetto: string
+    quantita: integer
+    dataPrenotazione: string
+    puntoRitiro: string
+    stato: string
+puntoRitiro:
+  properties:
+    nome: string
+    indirizzo: string
+    orari:
+      type: array
+      items:
+        type: object
+        properties:
+          giorno: string
+          apertura: string
+          chiusura: string
+    tipiSacchetti:
+      type: array
+      items: string
