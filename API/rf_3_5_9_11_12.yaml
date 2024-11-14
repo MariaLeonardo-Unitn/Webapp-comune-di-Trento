@@ -18,7 +18,7 @@ components:
     PuntoInteresse:
       type: object
       properties:
-        id:
+        PuntoId:
           type: string
           description: ID del punto significativo
         tipo:
@@ -40,15 +40,15 @@ components:
               format: float
               description: Longitudine del punto
       required:
-        - id
+        - puntoId
         - tipo
         - nome
         - posizione
     Segnalazioni:
       type: object
       required:
-      - id
-      - user
+      - segnalazioneId
+      - utenteId
       - luogo
       - data
       - descrizione
@@ -56,10 +56,10 @@ components:
       - foto
       - posizione
       properties:
-        id:
+        segnalazioneId:
           type: string
           description: 'Identificatore della segnalazione'
-        user:
+        utenteId:
           type: string
           description: 'Link allo user'
         luogo:
@@ -91,6 +91,26 @@ components:
               type: number
               format: float
               description: longitudine del luogo della segnalazione.
+    Notifiche:
+      type: object
+      properties:
+        utenteId:
+          type: string
+          description: ID dell'utente a cui è stata inviata la notifica.
+        message:
+          type: string
+          description: Descrizione del contenuto della notifica.
+        segnalazioneId:
+          type: string
+          description: ID della segnalazione associata alla notifica, se presente.
+        data:
+          type: string
+          format: date-time
+          description: La data di creazione della notifica.
+      required:
+        - utenteId
+        - message
+        - data
 paths:
   /segnalazioni:
     post:
@@ -175,7 +195,7 @@ paths:
           description: Non autenticato.
         '500':
           description: Errore del server.
-  /segnalazioni/{id}:
+  /segnalazioni/{segnalazioneId}:
     get:
       description: >-
         Mostra la segnalazione specificata tramite ID.
@@ -183,7 +203,7 @@ paths:
       tags:
         - Segnalazioni
       parameters:
-        - name: id
+        - name: segnalazioneId
           in: path
           required: true
           description: ID della segnalazione da visualizzare
@@ -267,7 +287,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Segnalazioni'
-  /operatore_dol/segnalazioni/{id}:
+  /operatore_dol/segnalazioni/{segnalazioneId}:
     patch:
       summary: Aggiorna lo stato della segnalazione.
       description: >-
@@ -276,7 +296,7 @@ paths:
         - Interfacce operatori
       parameters: 
         - in: path
-          name: id
+          name: segnalazioneId
           required: true
           schema:
             type: string
@@ -307,7 +327,7 @@ paths:
         - Interfacce operatori
       parameters:
         - in: path
-          name: id
+          name: segnalazioneId
           required: true
           schema:
             type: string
@@ -355,13 +375,13 @@ paths:
             schema:
               type: object
               properties:
-                userid:
+                utenteId:
                   type: string
                   description: ID dell'utente a cui si vuole mandare la notifica
                 message:
                   type: string
                   description: descrizione della notifica.
-                id:
+                segnalazioneId:
                   type: string
                   description: ID della segnalazione riguardante la notifica, se necessario
       responses:
@@ -370,4 +390,4 @@ paths:
           content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/Segnalazioni'
+                  $ref: '#/components/schemas/Notifiche'
