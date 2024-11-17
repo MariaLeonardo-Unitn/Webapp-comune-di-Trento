@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
-const Segnalazione = require('./models/segnalazione');
-const Notifica = require('./models/notifica');
-const Utente = require('./models/utente');
+const Segnalazione = require('./modelli/segnalazione');
+const Notifica = require('./modelli/notifica');
+const Utente = require('./modelli/utente');
 const mongoose = require('mongoose');
-const uri = 'mongodb+srv://gabrielegonzato04:<db_password>@cluster0.mdllo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const uri = 'mongodb+srv://gabrielegonzato04:trentocleancity@cluster0.mdllo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(uri);
 const jwt = require('jsonwebtoken');
 const router = express.Router();
@@ -33,24 +33,24 @@ app.get('/api/segnalazioni/:segnalazioneId', async (req, res) => {
 });
 
 app.post('/api/segnalazioni', async (req, res) => {
-    // let utenteUrl = req.body.utente;
+    let utenteUrl = req.body.utente;
     let segnalazioneUrl = req.body.segnalazione;
-    // if(!utenteUrl){
-    //     res.status(400).json({error: 'Utente non specificato'});
-    // return
-    // }
+    if(!utenteUrl){
+        res.status(400).json({error: 'Utente non specificato'});
+    return
+    }
     if(!segnalazioneUrl){
         res.status(400).json({error: 'Segnalazione non specificata'})
         return
     }
-    // let idUtente = utenteUrl.substring(utenteUrl.lastIndexOf('/') + 1);
-    // let utente = await Utente.findOne({
-    //     utenteId: idUtente
-    // }).exec();
-    // if(utente == null){
-    //     res.status(400).json({ error: 'Utente non esistente' });
-    //     return
-    // }
+    let idUtente = utenteUrl.substring(utenteUrl.lastIndexOf('/') + 1);
+    let utente = await Utente.findOne({
+        utenteId: idUtente
+    }).exec();
+    if(utente == null){
+        res.status(400).json({ error: 'Utente non esistente' });
+        return
+    }
     let idSegnalazione = segnalazioneUrl.substring(segnalazioneUrl.lastIndexOf('/') + 1);
     let segnalazione = await Utente.findOne({
         segnalazioneId: idSegnalazione
