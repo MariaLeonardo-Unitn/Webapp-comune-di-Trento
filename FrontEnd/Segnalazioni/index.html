@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Garbage Bag Reservation</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1 class="fade-in">Segnalazioni</h1>
+  <form id="reservation-form" class="slide-in">
+    <label for="reason">Motivo Segnalazione:</label>
+    <textarea id="reason" name="reason" required></textarea>
+    
+    <label for="visibility">Pubblica o Privata:</label>
+    <select id="visibility" name="visibility" required>
+      <option value="pubblica">Pubblica</option>
+      <option value="privata">Privata</option>
+    </select>
+    
+    <button type="submit">Invia</button>
+  </form>
+  <script src="script.js"></script>
+</body>
+</html>
