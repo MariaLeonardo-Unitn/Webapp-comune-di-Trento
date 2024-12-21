@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-const Segnalazione = require('./modelli/segnalazione');
-const Notifica = require('./modelli/notifica');
-const Utente = require('./modelli/utente');
+const Segnalazione = require('../MODELLI/segnalazione');
+const Notifica = require('../MODELLI/notifica');
+const Utente = require('../MODELLI/utente');
 const mongoose = require('mongoose');
 const uri = 'mongodb+srv://gabrielegonzato04:trentocleancity@cluster0.mdllo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(uri);

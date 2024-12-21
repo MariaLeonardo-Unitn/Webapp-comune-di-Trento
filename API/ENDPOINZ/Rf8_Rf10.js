@@ -1,18 +1,15 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose'); // Libreria per connettersi a MongoDB
-const uri = 'mongodb+srv://gabrielegonzato04:trentocleancity@cluster0.mdllo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
-const User = require('./modelli/user');
+const mongoose = require('mongoose'); 
+const User = require('../MODELLI/user');
+require('dotenv').config();
 const app = express();
-const port = 3000;
-
-app.use(express.json());
-
-const SECRET_KEY = 'supersegreto123'; // Chiave segreta per i JWT (da mantenere sicura)
 
 // Connessione al database MongoDB
-mongoose.connect(uri);
-const SECRET_TOKEN = 17;
+mongoose.connect(process.env.DB_URI);
+
+// Specifiche
+app.use(express.json());
 
 // Endpoint di login
 app.post('/api/auth/login', async (req, res) => {
@@ -67,7 +64,6 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
 });
 
 // Endpoint di registrazione (sign-up)
-// Endpoint di registrazione (sign-up)
 app.post('/api/auth/signup', async (req, res) => {
     const { email, password, name, role, secret_token } = req.body;
 
@@ -78,7 +74,7 @@ app.post('/api/auth/signup', async (req, res) => {
                 return res.status(400).json({ error: 'Token segreto richiesto per registrarsi come operatore' });
             }
 
-            if (secret_token != SECRET_TOKEN) {
+            if (secret_token != process.env.DOLOMITI_TOKEN || secret_token != process.env.COMUNE_TOKEN) {
                 return res.status(400).json({ error: 'Token segreto non valido' });
             }
         }
@@ -108,6 +104,6 @@ app.post('/api/auth/signup', async (req, res) => {
 });
 
 
-app.listen(port, () => {
-    console.log(`Server in ascolto su http://localhost:${port}`);
+app.listen(() => {
+    console.log(`Server in ascolto su http://localhost:${process.env.PORT}`);
 });

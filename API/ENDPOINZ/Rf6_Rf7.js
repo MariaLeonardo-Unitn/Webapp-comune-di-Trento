@@ -5,12 +5,12 @@ const app = express();
 const port = 3000;
 
 // Cartella per i calendari
-const CalenDirectoryPath = path.join(__dirname, 'calendari');
+const CalenDirectoryPath = path.join(__dirname, 'CALENDARI');
 if (!fs.existsSync(CalenDirectoryPath)) {
     fs.mkdirSync(CalenDirectoryPath);
 }
 // Cartella per le disposizioni
-const DispDirectoryPath = path.join(__dirname, 'calendari');
+const DispDirectoryPath = path.join(__dirname, 'CALENDARI');
 if (!fs.existsSync(DispDirectoryPath)) {
     fs.mkdirSync(DispDirectoryPath);
 }
@@ -63,10 +63,10 @@ app.get('/api/rifiuti/calendari/:zona', (req, res) => {
     */
     /* 
     APRE IL FILE NEL BROWSER
+    */
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'inline; filename=' + `calendario_${zona}.pdf`); 
     res.sendFile(calendario.pdfFilePath);
-    */
 });
 app.post('/api/rifiuti/calendari/:zona', (req, res) => {
     const zona = req.params.zona;
@@ -94,8 +94,9 @@ app.post('/api/rifiuti/calendari/:zona', (req, res) => {
 
         // Salva i metadati come JSON
         fs.writeFileSync(jsonFilePath, JSON.stringify(nuovoCalendario));
-
-        res.json({ message: `Calendario caricato con successo per la zona ${zona}` });
+        
+        res.location(`/api/rifiuti/calendari/${nuovoCalendario.zona}`);
+        res.status(201).json({ message: `Calendario caricato con successo per la zona ${zona}` });
     });
 });
 
