@@ -1,23 +1,17 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose'); 
+const router = express.Router();
 const User = require('../MODELLI/user');
-require('dotenv').config();
-const app = express();
+const jwt = require('jsonwebtoken');
 
-// Connessione al database MongoDB
-mongoose.connect(process.env.DB_URI);
 
 // Specifiche
-app.use(express.json());
+router.use(express.json());
 
 // Endpoint di login
-app.post('/api/auth/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-
     try {
         const user = await User.findOne({ email, password });
-
         if (!user) {
             return res.status(401).json({ error: 'Credenziali non valide' });
         }
@@ -29,7 +23,7 @@ app.post('/api/auth/login', async (req, res) => {
                 permissions: user.permissions,
                 issuedAt: Date.now(),
             },
-            SECRET_KEY,
+            process.env.SECRET_KEY,
             { expiresIn: '60m' }
         );
 
@@ -43,11 +37,12 @@ app.post('/api/auth/login', async (req, res) => {
 // Middleware per autenticazione basato su JWT
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
+    console.log('Authorization Header:', authHeader); // Aggiungi questo log per il debug
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) return res.status(401).json({ error: 'Token mancante' });
 
-    jwt.verify(token, SECRET_KEY, (err, user) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
         if (err) return res.status(403).json({ error: 'Token non valido' });
         req.user = user;
         next();
@@ -55,7 +50,7 @@ function authenticateToken(req, res, next) {
 }
 
 // Endpoint per ottenere le informazioni dell'utente autenticato
-app.get('/api/auth/me', authenticateToken, (req, res) => {
+router.get('/me', authenticateToken, (req, res) => {
     res.json({
         user_id: req.user.email,
         role: req.user.role,
@@ -64,7 +59,7 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
 });
 
 // Endpoint di registrazione (sign-up)
-app.post('/api/auth/signup', async (req, res) => {
+router.post('/signup', async (req, res) => {
     const { email, password, name, role, secret_token } = req.body;
 
     try {
@@ -103,7 +98,4 @@ app.post('/api/auth/signup', async (req, res) => {
     }
 });
 
-
-app.listen(() => {
-    console.log(`Server in ascolto su http://localhost:${process.env.PORT}`);
-});
+module.exports = router;
