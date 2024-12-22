@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Calendar = require('../MODELLI/calendario');
 const multer = require('multer');
-const Upload = multer({ storage: multer.memoryStorage });
+const Upload = multer({ storage: multer.memoryStorage() });
 
 router.use(express.json());
 
