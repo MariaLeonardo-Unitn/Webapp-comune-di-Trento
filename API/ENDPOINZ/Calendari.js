@@ -43,7 +43,7 @@ router.post('/:zona', Upload.single('file'), async (req, res) => {
         res.status(201).send('File uploaded successfully');
     }
     catch (err) {
-        res.status(500).send(err);
+        res.status(500).send(err + "dioca");
     }
 });
 
