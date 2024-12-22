@@ -8,12 +8,11 @@ const AuthRouter = require('./Authentication');
 const CalendRouter = require('./Calendari');
 
 App.use('/api/auth', AuthRouter);
-App.use('/api/rifiuti/calendari', () => {console.log('ciao');} , CalendRouter);
+App.use('/api/rifiuti/calendari', CalendRouter);
 
 
 mongoose.connect(process.env.DB_URI)
 .then(() => { console.log('Connected to Database'); }) 
 .catch(err => { console.error('Database connection error:', err); });
 
-App.get('/', (req, res) => {res.json('ciao');});
 App.listen(process.env.PORT, () => { console.log('Server is running on port ' + process.env.PORT); }); 

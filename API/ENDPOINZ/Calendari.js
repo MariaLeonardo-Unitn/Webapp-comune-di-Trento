@@ -6,8 +6,6 @@ const Upload = multer({ storage: multer.memoryStorage });
 
 router.use(express.json());
 
-router.get('/', (req, res) => {res.json('cal funziona');});
-
 //utilizzabile dall'utenz
 router.get('/:zona', async (req, res) => {
     try{   
