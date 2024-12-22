@@ -2,21 +2,24 @@ const express = require('express');
 const router = express.Router();
 const Calendar = require('../MODELLI/calendario');
 const multer = require('multer');
-const Upload = multer({ storage: multer.memoryStorage() });
+const Upload = multer({ storage: multer.memoryStorage });
 
 router.use(express.json());
+
+router.get('/', (req, res) => {res.json('cal funziona');});
 
 //utilizzabile dall'utenz
 router.get('/:zona', async (req, res) => {
     try{   
-        const zona = req.params.zona;
-        const calendario = await Calendar.findOne({zona});
+        const zone = req.params.zona;
+        const calendario = await Calendar.findOne({zone});
+        console.log(calendario);
         if (!calendario) {
             return res.status(404).json({ error: 'Calendario non trovato per la zona specificata' });
         }
             
         res.set('Content-type', calendario.pdf.contentType); 
-        res.sendFile(calendario.pdf.data);
+        res.send(calendario.pdf.data);
     }
     catch (err) {
         res.status(500).send(err);
@@ -43,7 +46,7 @@ router.post('/:zona', Upload.single('file'), async (req, res) => {
         res.status(201).send('File uploaded successfully');
     }
     catch (err) {
-        res.status(500).send(err + "dioca");
+        res.status(500).send(err);
     }
 });
 
