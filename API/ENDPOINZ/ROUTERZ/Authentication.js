@@ -35,17 +35,19 @@ router.post('/login', async (req, res) => {
 });
 
 // Middleware per autenticazione basato su JWT
+//ricordarsi quindi che quando si fa una richiesta che vuole l'autenticazione (per esempio get dei calendari) bisogna passargli il proprio token 
+//che si riceve da una response di login, e bisogna inserirlo in un header della richiesta che si vuole eseguire. Questo header DEVE chiamarsi "access-token"
+//figata allucinante
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    console.log('Authorization Header:', authHeader); // Aggiungi questo log per il debug
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) return res.status(401).json({ error: 'Token mancante' });
+    var token = req.headers['access-token'];
+    if (!token) return res.status(401).json({ error: 'Token mancante.'});
 
     jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        if (err) return res.status(403).json({ error: 'Token non valido' });
-        req.user = user;
-        next();
+        if (err) return res.status(403).json({ error: 'Token non valido'});
+        else {
+            req.user = user;
+            next();
+        }
     });
 }
 
@@ -98,4 +100,4 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = {router, authenticateToken};

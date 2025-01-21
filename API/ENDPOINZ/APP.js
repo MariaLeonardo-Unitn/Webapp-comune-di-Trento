@@ -1,13 +1,20 @@
 const express = require('express');
 const App = express();
 require('dotenv').config();
+
+const cors = require('cors');
+App.use(cors());
+
+
 App.use(express.json());
 
 const mongoose = require('mongoose');
-const AuthRouter = require('./ROUTERZ/Authentication');
+const { router: AuthRouter, authenticateToken }= require('./ROUTERZ/Authentication');
 const CalendRouter = require('./ROUTERZ/Calendari');
 const DispRouter = require('./ROUTERZ/Disposizioni');
+App.use((req, res, next) => { console.log(`${req.method} ${req.url}`); next(); });
 App.use('/api/auth', AuthRouter);
+App.use('/api/rifiuti/calendari', authenticateToken);
 App.use('/api/rifiuti/calendari', CalendRouter);
 App.use('/api/rifiuti/disposizioni', DispRouter);
 
