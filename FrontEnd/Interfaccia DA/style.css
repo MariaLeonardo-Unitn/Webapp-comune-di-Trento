@@ -1,0 +1,159 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(to bottom, #a8e6cf, #dcedc1);
+    color: #ffffff; /* White text for better contrast */
+    min-height: 100vh;
+}
+
+header {
+    background-color: #4db6ac; /* Primary dark green */
+    color: #fff;
+    padding: 30px;
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Center the title */
+    border-radius: 10px 10px 0 0; /* Rounded top corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for better shading */
+    position: relative;
+}
+
+main {
+    padding: 30px;
+    max-width: 1200px;
+    width: 100%;
+    background-color: #ffffff;
+    color: #00796b; /* Primary dark green text */
+    margin-top: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Stronger shadow for main content */
+    border-radius: 0 0 10px 10px; /* Rounded bottom corners */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content */
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    justify-content: center; /* Center the controls */
+    gap: 10px; /* Space between button and input */
+}
+
+.controls select {
+    background-color: #4db6ac; /* Button light green */
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    border-radius: 25px; /* Rounded corners */
+    padding: 10px 20px;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.controls select:hover {
+    background-color: #00796b; /* Darker green on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.controls input.filter-input {
+    background-color: #ffffff; /* White background for input */
+    color: #00796b; /* Dark green text for input */
+    border: 1px solid #4db6ac; /* Light green border */
+    border-radius: 25px; /* Rounded corners */
+    padding: 10px 20px;
+    font-size: 1em;
+    transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+.controls input.filter-input:hover {
+    border-color: #00796b; /* Darker green on hover */
+    background-color: #f1f8e9; /* Slightly lighten background on hover */
+}
+
+.report-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    justify-items: center; /* Center the items */
+    width: 100%; /* Full width for better alignment */
+}
+
+.report-card {
+    width: 100%;
+    max-width: 300px;
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    background-color: #e0f2f1; /* Very light blue green */
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Soft shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.report-card:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Stronger shadow on hover */
+}
+
+.report-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px; /* Rounded corners for image */
+    margin-bottom: 15px; /* Spacing below image */
+}
+
+.report-card .status {
+    color: #00796b; /* Dark green for all statuses */
+    font-weight: bold;
+}
+
+.report-card .status.in-progress {
+    color: #fbc02d; /* Yellow for in progress */
+}
+
+.report-card .status.pending {
+    color: #d32f2f; /* Red for pending */
+}
+
+.report-card button {
+    background-color: #00796b; /* Dark green */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.report-card button:hover {
+    background-color: #4db6ac; /* Light green on hover */
+}
+
+.top-right-icons {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.top-right-icons img {
+    width: 30px; /* Uniform size for icons */
+    height: 30px;
+    cursor: pointer;
+    background-color: #4db6ac; /* Light green background */
+    border-radius: 50%;
+    padding: 5px;
+    margin-left: 10px; /* Space between icons */
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.top-right-icons img:hover {
+    opacity: 0.8;
+    background-color: #00796b; /* Darker background on hover */
+}
