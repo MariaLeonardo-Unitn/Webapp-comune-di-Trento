@@ -1,6 +1,7 @@
-document.getElementById('reservation-form').addEventListener('submit', function(event) {
-  event.preventDefault();
-  const reason = document.getElementById('reason').value;
-  const visibility = document.getElementById('visibility').value;
-  alert(`Segnalazione motivata: ${reason}. Visibilità: ${visibility}`);
-});
+function getCalendarioByZone(){
+  var zone = document.getElementById('Calzone').value;
+  fetch('../../API/ENDPOINTZ/ROUTERZ/Calendari', {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json())
+}

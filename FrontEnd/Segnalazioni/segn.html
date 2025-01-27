@@ -7,7 +7,7 @@
 <body>
   <h1 class="fade-in">Segnalazioni</h1>
   <form id="reservation-form" class="slide-in">
-    <label for="reason">Motivo Segnalazione:</label>
+    <label for="Calzone">zona calendario:</label>
     <textarea id="reason" name="reason" required></textarea>
     
     <label for="visibility">Pubblica o Privata:</label>
@@ -16,7 +16,7 @@
       <option value="privata">Privata</option>
     </select>
     
-    <button type="submit">Invia</button>
+    <button type="button" onclick="getCalendarioByZone()">get calendar</button>
   </form>
   <script src="script.js"></script>
 </body>
