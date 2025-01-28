@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const App = express();
 require('dotenv').config();
 
@@ -18,6 +19,15 @@ App.use('/api/rifiuti/calendari', authenticateToken);
 App.use('/api/rifiuti/calendari', CalendRouter);
 App.use('/api/rifiuti/disposizioni', DispRouter);
 
+
+App.use(express.static(path.join(__dirname, '..', '..', 'FrontEnd', 'Login')));
+App.get('/', (req, res) => { res.sendFile(path.join(__dirname, '..', '..', 'FrontEnd', 'Login', 'login.html')); });
+
+App.get('/loadPage', (req, res) => {
+    const page = req.query.page;
+    const dir = req.query.Dir;
+    res.sendFile(path.join(__dirname, '..', '..', 'FrontEnd', dir, page));
+});
 
 mongoose.connect(process.env.DB_URI)
 .then(() => { console.log('Connected to Database'); }) 
