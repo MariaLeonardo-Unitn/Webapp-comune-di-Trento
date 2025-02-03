@@ -15,7 +15,7 @@ const CalendRouter = require('./ROUTERZ/Calendari');
 const DispRouter = require('./ROUTERZ/Disposizioni');
 App.use((req, res, next) => { console.log(`${req.method} ${req.url}`); next(); });
 App.use('/api/auth', AuthRouter);
-App.use('/api/rifiuti/calendari', authenticateToken);
+//App.use('/api/rifiuti/calendari', authenticateToken);
 App.use('/api/rifiuti/calendari', CalendRouter);
 App.use('/api/rifiuti/disposizioni', DispRouter);
 

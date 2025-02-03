@@ -17,7 +17,7 @@ router.get('/:zona', async (req, res) => {
         
             
         res.set('Content-type', calendario.pdf.contentType); 
-        res.send(calendario.pdf.data);
+        res.sendFile(calendario.pdf.data);
     }
     catch (err) {
         res.status(500).send(err);
