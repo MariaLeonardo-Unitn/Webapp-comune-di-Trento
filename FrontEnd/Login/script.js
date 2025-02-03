@@ -7,38 +7,55 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, password: password })
+        body: JSON.stringify({ email, password })
     })
     .then(response => {
-        console.log('Response: ' + response);
         if (!response.ok) {
-            throw new Error('post response was not ok');
+            throw new Error('Login failed: ' + response.statusText);
         }
-        return response.json();
+        return response.json(); // Parse della risposta JSON
     })
     .then(data => {
         // Memorizza il token in localStorage
         localStorage.setItem('jwt', data.token);
 
-        // Effettua una richiesta GET per caricare la nuova pagina
-        return fetch('/loadPage/?Dir=Menu&page=men.html');
+        // Richiesta per recuperare i dati dell'utente
+        return fetch('/api/auth/me', {
+            method: 'GET',
+            headers: { 'access-token': data.token }
+        });
     })
     .then(response => {
-        console.log('GET Response:' + response);
         if (!response.ok) {
-            throw new Error('get response was not ok' + response);
+            throw new Error('Errore nel recupero dei dati utente: ' + response.statusText);
         }
-        return response.text();
+        return response.json(); // Dati utente in formato JSON
+    })
+    .then(userData => {
+        // Controlla il ruolo dell'utente
+        if (userData.role === 'operatore_Dolomiti') {
+            return fetch('/loadPage/?Dir=InterfacciaDA&page=DA.html');
+        } else if (userData.role === 'cittadino') {
+            return fetch('/loadPage/?Dir=Menu&page=menu.html');
+        } else {
+            throw new Error('Ruolo non riconosciuto: ' + userData.role);
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Errore nel recupero della pagina: ' + response.statusText);
+        }
+        return response.text(); // Il contenuto della pagina HTML
     })
     .then(html => {
-        // Aggiorna il contenuto della pagina con la nuova pagina
+        // Aggiorna il contenuto della pagina con il nuovo HTML
         document.open();
         document.write(html);
         document.close();
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Errore:', error);
         // Gestisci l'errore, ad esempio mostrando un messaggio all'utente
-        alert('Login fallito. Per favore, riprova.' + error );
+        alert('Login fallito. Per favore, riprova. ' + error.message);
     });
 });
