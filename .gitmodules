@@ -1,0 +1,3 @@
+[submodule "App-react"]
+	path = App-react
+	url = https://github.com/MariaLeonardo-Unitn/Webapp-comune-di-Trento.git
