@@ -8,6 +8,8 @@ module.exports = mongoose.model('Utente', new Schema({
     codiceFiscale: String,
     email: String,
     password: String,
+    telefono: String,  
     role: String,
-    permissions: [String]
+    permissions: [String],
+    prenotazioni: [{ type: Schema.Types.ObjectId, ref: 'Prenotazione' }] 
 }));
