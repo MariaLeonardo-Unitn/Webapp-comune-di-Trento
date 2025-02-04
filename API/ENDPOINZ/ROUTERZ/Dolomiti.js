@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Segnalazione = require('../../MODELLI/segnalazione');
-const Notifica = require('../../MODELLI/notifica');
-const Utente = require('../../MODELLI/utente');
+const jwt = require('jsonwebtoken');
 
 router.use(express.json());
 
@@ -24,7 +23,7 @@ function authenticateRoleViaToken(req, res, next) {
 
 
 
-router.get('/api/operatore_dol/segnalazioni', authenticateRoleViaToken, async (req,  res) => {
+router.get('/segnalazioni', authenticateRoleViaToken, async (req,  res) => {
     let lista_segn;
     lista_segn = await Segnalazione.find().exec();
     if(lista_segn.length == 0){
@@ -34,7 +33,7 @@ router.get('/api/operatore_dol/segnalazioni', authenticateRoleViaToken, async (r
     }
 });
 
-router.patch('/api/operatore_dol/segnalazioni/:segnalazioneId', authenticateRoleViaToken, async (req, res) => {
+router.patch('/segnalazioni/:segnalazioneId', authenticateRoleViaToken, async (req, res) => {
     const segnalazioneId = req.params.segnalazioneId;
     const { stato } = req.body;
     const statiPossibili = ['attiva', 'presa in carico', 'completata'];
@@ -54,7 +53,7 @@ router.patch('/api/operatore_dol/segnalazioni/:segnalazioneId', authenticateRole
     res.status(200).json(segnalazione);
 });
 
-router.delete('/api/operatore_dol/segnalazioni/:segnalazioneId', authenticateRoleViaToken, async (req, res) => {
+router.delete('/segnalazioni/:segnalazioneId', authenticateRoleViaToken, async (req, res) => {
     const segnalazioneId = req.params.segnalazioneId;
     const segnalazione = await Segnalazione.findOneAndDelete({ segnalazioneId: segnalazioneId });
     if(!segnalazione){

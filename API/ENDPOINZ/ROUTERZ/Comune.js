@@ -3,6 +3,8 @@ const router = express.Router();
 const Segnalazione = require('../../MODELLI/segnalazione');
 const Notifica = require('../../MODELLI/notifica');
 const Utente = require('../../MODELLI/utente');
+const jwt = require('jsonwebtoken');
+
 
 router.use(express.json());
 
@@ -24,7 +26,7 @@ function authenticateRoleViaToken(req, res, next) {
 
 
 
-router.get('/api/operatore_com/segnalazioni', authenticateRoleViaToken, async (req, res) => {
+router.get('/segnalazioni', authenticateRoleViaToken, async (req, res) => {
     let lista_segn;
     lista_segn = await Segnalazione.find({stato: { $in: ['presa in carico', 'completata']}});
     if(lista_segn.length == 0){
@@ -34,7 +36,7 @@ router.get('/api/operatore_com/segnalazioni', authenticateRoleViaToken, async (r
     res.status(200).json(lista_segn);
 })
 
-router.post('/api/operatore_com/segnalazioni', authenticateRoleViaToken, async (req, res) => {
+router.post('/segnalazioni', authenticateRoleViaToken, async (req, res) => {
     const { utenteId, message, segnalazioneId } = req.body;
     if (!utenteId || !message) {
         return res.status(400).json({ error: 'Mancano i parametri obbligatori (id utente o messaggio).' });

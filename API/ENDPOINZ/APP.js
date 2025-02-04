@@ -24,20 +24,21 @@ App.use('/api/rifiuti/calendari', authenticateToken);
 App.use('/api/rifiuti/calendari', CalendRouter);
 App.use('/api/rifiuti/disposizioni', DispRouter);
 App.use('/api/segnalazioni', SegnRouter);
-App.use('/api/operatore_dol/segnalazioni', DolSegnRouter);
-App.use('/api/operatore_com/segnalazioni', ComSegnRouter);
+App.use('/api/operatore_dol/', DolSegnRouter);
+App.use('/api/operatore_com/', ComSegnRouter);
 
-App.use(cors());
-App.use(express.json());
 
 //per stampare a console le richieste che vengono fatte (così per il meme)
 App.use((req, res, next) => { console.log(`${req.method} ${req.url}`); next(); });
 
 
 
+App.use(cors());
+App.use(express.json());
 App.use(express.static(path.join(__dirname, '..', '..', 'FrontEnd', 'Login')));
-App.get('/', (req, res) => { res.sendFile(path.join(__dirname, '..', '..', 'FrontEnd', 'Login', 'login.html')); });
 
+
+App.get('/', (req, res) => { res.sendFile(path.join(__dirname, '..', '..', 'FrontEnd', 'Login', 'login.html')); });
 App.get('/loadPage', (req, res) => {
     const page = req.query.page;
     const dir = req.query.Dir;

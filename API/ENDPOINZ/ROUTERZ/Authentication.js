@@ -11,16 +11,16 @@ router.use(express.json());
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const Utente = await Utente.findOne({ email, password });
-        if (!Utente) {
+        const User = await Utente.findOne({ email, password });
+        if (!User) {
             return res.status(401).json({ error: 'Credenziali non valide' });
         }
 
         const token = jwt.sign(
             {
-                email: Utente.email,
-                role: Utente.role,
-                permissions: Utente.permissions,
+                email: User.email,
+                role: User.role,
+                permissions: User.permissions,
                 issuedAt: Date.now(),
             },
             process.env.SECRET_KEY,
@@ -28,13 +28,13 @@ router.post('/login', async (req, res) => {
         );
         res.json({ 
             token,
-            utenteId: Utente.utenteId,
-            role: Utente.role,
-            permissions: Utente.permissions
+            utenteId: User.utenteId,
+            role: User.role,
+            permissions: User.permissions
         });
     } catch (error) {
         console.error('Errore durante il login:', error);
-        res.status(500).json({ error: 'Errore interno al server' });
+        res.status(500).json({ error: 'Errore interno al server' + error  });
     }
 });
 
@@ -75,7 +75,10 @@ router.post('/signup', async (req, res) => {
                 return res.status(400).json({ error: 'Token segreto richiesto per registrarsi come operatore' });
             }
 
-            if (secret_token != process.env.DOLOMITI_TOKEN || secret_token != process.env.COMUNE_TOKEN) {
+            if (role === "operatore_Dolomiti" && secret_token != process.env.DOLOMITI_TOKEN) {
+                return res.status(400).json({ error: 'Token segreto non valido' });
+            }
+            if (role === "operatore_comune" && secret_token != process.env.COMUNE_TOKEN) {
                 return res.status(400).json({ error: 'Token segreto non valido' });
             }
         }
