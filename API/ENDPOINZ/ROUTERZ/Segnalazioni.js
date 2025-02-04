@@ -1,16 +1,12 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const Segnalazione = require('../../MODELLI/segnalazione');
 const Notifica = require('../../MODELLI/notifica');
 const Utente = require('../../MODELLI/utente');
-const mongoose = require('mongoose');
-const uri = 'mongodb+srv://gabrielegonzato04:trentocleancity@cluster0.mdllo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
-mongoose.connect(uri);
-const jwt = require('jsonwebtoken');
-const router = express.Router();
-const port = 3000;
 
-app.get('/api/segnalazioni/utente', async (req, res) => {
+router.use(express.json());
+
+router.get('/api/segnalazioni/utente', async (req, res) => {
     let lista_segn;
     if(req.query.utenteId){
         lista_segn = await Segnalazione.find({
@@ -22,7 +18,7 @@ app.get('/api/segnalazioni/utente', async (req, res) => {
     }
 })
 
-app.get('/api/segnalazioni/:segnalazioneId', async (req, res) => {
+router.get('/api/segnalazioni/:segnalazioneId', async (req, res) => {
     const segnalazioneId = req.params.segnalazioneId;
     let segnalazione = await Segnalazione.findOne({ segnalazioneId }).exec();
     if(segnalazione){
@@ -32,7 +28,7 @@ app.get('/api/segnalazioni/:segnalazioneId', async (req, res) => {
     }
 });
 
-app.post('/api/segnalazioni', async (req, res) => {
+router.post('/api/segnalazioni', async (req, res) => {
     let utenteUrl = req.body.utente;
     let segnalazioneUrl = req.body.segnalazione;
     if(!utenteUrl){
@@ -76,7 +72,7 @@ app.post('/api/segnalazioni', async (req, res) => {
     res.location('/api/segnalazioni/' + id).status(201).send();
 })
 
-app.get('/api/operatore_dol/segnalazioni', async (req,  res) => {
+router.get('/api/operatore_dol/segnalazioni', async (req,  res) => {
     let lista_segn;
     lista_segn = await Segnalazione.find().exec();
     if(lista_segn.length == 0){
@@ -86,7 +82,7 @@ app.get('/api/operatore_dol/segnalazioni', async (req,  res) => {
     }
 })
 
-app.patch('/api/operatore_dol/segnalazioni/:segnalazioneId', async (req, res) => {
+router.patch('/api/operatore_dol/segnalazioni/:segnalazioneId', async (req, res) => {
     const segnalazioneId = req.params.segnalazioneId;
     const { stato } = req.body;
     const statiPossibili = ['attiva', 'presa in carico', 'completata'];
@@ -106,7 +102,7 @@ app.patch('/api/operatore_dol/segnalazioni/:segnalazioneId', async (req, res) =>
     res.status(200).json(segnalazione);
 })
 
-app.delete('/api/operatore_dol/segnalazioni/:segnalazioneId', async (req, res) => {
+router.delete('/api/operatore_dol/segnalazioni/:segnalazioneId', async (req, res) => {
     const segnalazioneId = req.params.segnalazioneId;
     const segnalazione = await Segnalazione.findOneAndDelete({ segnalazioneId: segnalazioneId });
     if(!segnalazione){
@@ -116,7 +112,7 @@ app.delete('/api/operatore_dol/segnalazioni/:segnalazioneId', async (req, res) =
     res.status(204).send();
 })
 
-app.get('/api/operatore_com/segnalazioni', async (req, res) => {
+router.get('/api/operatore_com/segnalazioni', async (req, res) => {
     let lista_segn;
     lista_segn = await Segnalazione.find({stato: { $in: ['presa in carico', 'completata']}});
     if(lista_segn.length == 0){
@@ -126,7 +122,7 @@ app.get('/api/operatore_com/segnalazioni', async (req, res) => {
     res.status(200).json(lista_segn);
 })
 
-app.post('/api/operatore_com/segnalazioni', async (req, res) => {
+router.post('/api/operatore_com/segnalazioni', async (req, res) => {
     const { utenteId, message, segnalazioneId } = req.body;
     if (!utenteId || !message) {
         return res.status(400).json({ error: 'Mancano i parametri obbligatori (id utente o messaggio).' });
@@ -152,8 +148,4 @@ app.post('/api/operatore_com/segnalazioni', async (req, res) => {
     res.status(201).json(notificaSalvata);
 })
 
-
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-})
+module.exports = router;
