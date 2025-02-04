@@ -1,16 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles/index.css'; // Assuming your CSS file is named index.css
+
 function TrentoCleanCity() {
   const navigate = useNavigate();
   return (
     <div className="container">
       <header>
-        <h1 >Trento Clean City</h1>
+        <h1>Trento Clean City</h1>
         <p>Making Trento greener, cleaner, and better.</p>
       </header>
       <main>
-        <div className="card" >
+        <div className="card">
           <img src="https://cdn-icons-png.flaticon.com/128/17938/17938494.png" alt="Segnalazioni" />
           <h2>Segnalazioni</h2>
         </div>
@@ -18,7 +19,7 @@ function TrentoCleanCity() {
           <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" alt="Prenotazioni" />
           <h2>Prenotazioni</h2>
         </div>
-        <div className="card" >
+        <div className="card">
           <img src="https://cdn-icons-png.flaticon.com/128/14601/14601199.png" alt="Informazioni Raccolta" />
           <h2>Informazioni Raccolta</h2>
         </div>
@@ -29,4 +30,5 @@ function TrentoCleanCity() {
     </div>
   );
 }
+
 export default TrentoCleanCity;

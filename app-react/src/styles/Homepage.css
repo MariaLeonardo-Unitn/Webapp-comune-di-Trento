@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    background: linear-gradient(to bottom, #a8e6cf, #dcedc1);
+    animation: gradientAnimation 15s ease infinite;
+}
+
+.page-title {
+    margin-top: 20px; /* Space above the title */
+    font-size: 2.5em; /* Increase font size for better visibility */
+    color: #1e5128; /* Ensure the title color is set */
+}
+
+#map {
+    flex-grow: 1; /* Allow map to take up available space */
+    height: 500px; /* Set a reasonable default height */
+    width: 100%;
+    border: 2px solid #a8e6cf;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 20px; /* Space above the map */
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 10px;
+}
+
+button {
+    background-color: #a8e6cf;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #dcedc1;
+}
+
+footer {
+    background-color: #dcedc1;
+    padding: 10px;
+    border-top: 2px solid #a8e6cf;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    z-index: 1000; /* Ensure footer is above the map */
+}
+
+.top-left-icons,
+.top-right-icons {
+    position: absolute;
+    top: 20px;
+    z-index: 1000; /* Ensure icons are above the map */
+}
+
+.top-left-icons {
+    left: 20px;
+}
+
+.top-right-icons {
+    right: 20px;
+}
+
+.top-left-icons img,
+.top-right-icons img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-color: #3ebd93; /* Slight sea green background */
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.top-left-icons img:hover,
+.top-right-icons img:hover {
+    opacity: 0.8; /* Slight transparency on hover */
+}
+
