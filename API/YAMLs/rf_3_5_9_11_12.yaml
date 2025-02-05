@@ -222,38 +222,12 @@ paths:
           description: Errore del server.
   /homepage:
     get:
-      summary: Mappa della città con luoghi significativi.
+      summary: Menu dell'app.
       description: >-
-        Homepage, mostra la mappa della città con evidenziti i punti significativi ed eventuali segnalazioni effettuate dall'utente se quest'ultimo è autenticato.
-      tags:
-        - Mappa
-      security:
-        - BearerAuth: []
-      parameters:
-        - in: query
-          name: include_segnalazioni
-          schema:
-            type: boolean
-            default: true
-          description: Indica se includere le segnalazioni dell'utente sulla mappa (richiede autenticazione)
+        Homepage, menu dell'app tra cui è possibile scegliere tra alcune azioni possibili.
       responses:
         '200':
-          description: Dati per la visualizzazione della mappa.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  punti_interesse:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/PuntoInteresse'
-                  segnalazioni:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Segnalazioni'
-        '401': 
-          description: Non autenticato
+          description: Menu dell'applicazione.
         '500':
           description: Errore del server
   /operatore_dol/segnalazioni:
