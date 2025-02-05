@@ -11,7 +11,7 @@ function TrentoCleanCity() {
         <p>Making Trento greener, cleaner, and better.</p>
       </header>
       <main>
-        <div className="card">
+        <div className="card" onClick={() => navigate('/mappa')}>
           <img src="https://cdn-icons-png.flaticon.com/128/17938/17938494.png" alt="Segnalazioni" />
           <h2>Segnalazioni</h2>
         </div>
