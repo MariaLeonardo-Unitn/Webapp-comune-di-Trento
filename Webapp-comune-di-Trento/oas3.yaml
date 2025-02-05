@@ -1,0 +1,43 @@
+"openapi": 3.0.0
+info:
+  version: '1.0'
+  title: "Trento Clean City"
+  description: API for managing public spaces
+  license: 
+    name: MIT
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Localhost
+components:
+  schemas:
+    Segnalazioni:
+      type: object
+      required:
+      - utente
+      - stato
+      properties:
+        utente:
+          type: string
+          description: 'Nome dell utente'
+        stato:
+          type: string
+          description: 'Stato della segnalazione'
+paths:
+  /segnalazioni:
+    post:
+      description: >-
+        Crea una nuova segnalazione.
+      summary: Crea una nuova segnalazione
+      responses:
+        '201':
+          description: 'Segnalazione creata.'
+          headers:
+            'Luogo':
+              schema:
+                type: string
+              description: Link alla nuova segnalazione
+      requestBody:
+        content:
+          "application/json":
+            schema: 
+              $ref: '#/components/schemas/segnalazioni'
