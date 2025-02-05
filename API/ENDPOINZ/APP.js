@@ -21,8 +21,10 @@ App.use('/api/rifiuti/calendari', authenticateToken);
 App.use('/api/rifiuti/calendari', CalendRouter);
 
 App.use('/api/rifiuti/disposizioni', DispRouter);
-App.use('/api/segnalazioni', SegnRouter);
+
 App.use('/api/prenotazione', PrenoRouter);
+
+App.use('/api/segnalazioni', SegnRouter);
 
 App.use('/api/operatore_dol/', authenticateDolRole);
 App.use('/api/operatore_dol/', DolSegnRouter);
@@ -30,7 +32,7 @@ App.use('/api/operatore_dol/', DolSegnRouter);
 App.use('/api/operatore_com/', authenticateComRole);
 App.use('/api/operatore_com/', ComSegnRouter);
 
-//per stampare a console le richieste che vengono fatte (così per il meme)
+//per stampare a console le richieste che vengono fatte 
 App.use((req, res, next) => { console.log(`${req.method} ${req.url}`); next(); });
 App.use(cors());
 App.use(express.json());
