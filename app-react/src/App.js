@@ -4,6 +4,8 @@ import MenuPage from './Menu'; // New menu component
 import PrenotazioniPage from './PrenotazioniPage';
 import Homepage from './Homepage'; // Import Homepage
 import Login from './Login'; // Import Login component
+import Mappa from './Mappa'; // Import Mappa component
+import Segnalazioni from './Segnalazioni'; // Import Mappa component
 
 function App() {
   return (
@@ -11,6 +13,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} /> {/* Set Homepage as the default route */}
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/mappa" element={<Mappa />} />
+        <Route path="/segnalazioni" element={<Segnalazioni />} />
         <Route path="/prenotazioni" element={<PrenotazioniPage />} />
         <Route path="/login" element={<Login />} /> {/* Add route for Login */}
       </Routes>
