@@ -4,6 +4,7 @@ const Calendar = require('../../MODELLI/calendario');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const Upload = multer({ storage });
+const { authenticateDolRole } = require('./Authentication');
 
 router.use(express.json());
 
@@ -26,7 +27,7 @@ router.get('/:zona', async (req, res) => {
 
 
 //utilizzabile dall'interfaccia di DOLOMITES
-router.post('/:zona', Upload.single('file'), async (req, res) => {
+router.post('/:zona', authenticateDolRole, Upload.single('file'), async (req, res) => {
     try{
         const zona = req.params.zona;
         if (!zona) 
@@ -49,7 +50,7 @@ router.post('/:zona', Upload.single('file'), async (req, res) => {
 });
 
 //utilizzabile dai DOLOMITES
-router.delete('/:zona', async (req, res) => {
+router.delete('/:zona', authenticateDolRole, async (req, res) => {
     try {
         const zona = req.params.zona;
         const calendario = await Calendar.findOneAndDelete({ zone: zona });
@@ -64,7 +65,7 @@ router.delete('/:zona', async (req, res) => {
 });
 
 //usable dalle dolomiti
-router.patch('/:zona', Upload.single('file'), async (req, res) => {
+router.patch('/:zona', authenticateDolRole, Upload.single('file'), async (req, res) => {
     try {
         const zona = req.params.zona;
         const calendario = await Calendar.findOne({ zone: zona });
