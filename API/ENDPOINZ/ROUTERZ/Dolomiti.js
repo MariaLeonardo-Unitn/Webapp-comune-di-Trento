@@ -6,24 +6,7 @@ const jwt = require('jsonwebtoken');
 router.use(express.json());
 
 
-function authenticateRoleViaToken(req, res, next) {
-    let token = req.headers['access-token'];
-    if (!token) return res.status(401).json({ error: 'Token mancante.' });
-
-    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        if (err) return res.status(403).json({ error: 'Token non valido' });
-        req.user = user; 
-        if (req.user.role === 'operatore_Dolomiti') {
-            next();
-        } else {
-            return res.status(409).json({ error: 'Operazione non consentita' });
-        }
-    });
-}
-
-
-
-router.get('/segnalazioni', authenticateRoleViaToken, async (req,  res) => {
+router.get('/segnalazioni', authenticateDolRole, async (req,  res) => {
     let lista_segn;
     lista_segn = await Segnalazione.find().exec();
     if(lista_segn.length == 0){
@@ -33,7 +16,7 @@ router.get('/segnalazioni', authenticateRoleViaToken, async (req,  res) => {
     }
 });
 
-router.patch('/segnalazioni/:segnalazioneId', authenticateRoleViaToken, async (req, res) => {
+router.patch('/segnalazioni/:segnalazioneId', authenticateDolRole, async (req, res) => {
     const segnalazioneId = req.params.segnalazioneId;
     const { stato } = req.body;
     const statiPossibili = ['attiva', 'presa in carico', 'completata'];
@@ -51,7 +34,7 @@ router.patch('/segnalazioni/:segnalazioneId', authenticateRoleViaToken, async (r
     res.status(200).json(segnalazione);
 });
 
-router.delete('/segnalazioni/:segnalazioneId', authenticateRoleViaToken, async (req, res) => {
+router.delete('/segnalazioni/:segnalazioneId', authenticateDolRole, async (req, res) => {
     const segnalazioneId = req.params.segnalazioneId;
     const segnalazione = await Segnalazione.findOneAndDelete({ segnalazioneId: segnalazioneId });
     if(!segnalazione){

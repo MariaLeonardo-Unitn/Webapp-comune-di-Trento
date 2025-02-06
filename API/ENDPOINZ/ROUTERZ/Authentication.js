@@ -7,14 +7,58 @@ const jwt = require('jsonwebtoken');
 // Specifiche
 router.use(express.json());
 
+
+// Middleware per autenticazione 
+//ricordarsi quindi che quando si fa una richiesta che vuole l'autenticazione (per esempio get dei calendari) bisogna passargli il proprio token 
+//che si riceve da una response di login, e bisogna inserirlo in un header della richiesta che si vuole eseguire. Questo header DEVE chiamarsi "access-token"
+function authenticateToken(req, res, next) {
+    let token = req.headers['access-token'];
+    if (!token) return res.status(401).json({ error: 'Token mancante.'});
+    
+    jwt.verify(token, process.env.SECRET_KEY, (err, Utente) => {
+        if (err) return res.status(403).json({ error: 'Token non valido'});
+        else {
+            req.Utente = Utente;
+            next();
+        }
+    });
+}
+function authenticateDolRole(req, res, next) {
+    let token = req.headers['access-token'];
+    if (!token) return res.status(401).json({ error: 'Token mancante.' });
+    
+    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+        if (err) return res.status(403).json({ error: 'Token non valido' });
+        req.user = user; 
+        if (req.user.role === 'operatore_Dolomiti') {
+            next();
+        } else {
+            return res.status(409).json({ error: 'Operazione non consentita' });
+        }
+    });
+}
+function authenticateComRole(req, res, next) {
+    let token = req.headers['access-token'];
+    if (!token) return res.status(401).json({ error: 'Token mancante.' });
+    
+    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+        if (err) return res.status(403).json({ error: 'Token non valido' });
+        req.user = user; 
+        if (req.user.role === 'operatore_comune') {
+            next();
+        } else {
+            return res.status(409).json({ error: 'Operazione non consentita' });
+        }
+    });
+}
+
 // Endpoint di login
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
         const User = await Utente.findOne({ email, password });
-        if (!User) {
+        if (!User) 
             return res.status(401).json({ error: 'Credenziali non valide' });
-        }
 
         const token = jwt.sign(
             {
@@ -37,23 +81,6 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Errore interno al server' + error  });
     }
 });
-
-// Middleware per autenticazione basato su JWT
-//ricordarsi quindi che quando si fa una richiesta che vuole l'autenticazione (per esempio get dei calendari) bisogna passargli il proprio token 
-//che si riceve da una response di login, e bisogna inserirlo in un header della richiesta che si vuole eseguire. Questo header DEVE chiamarsi "access-token"
-//figata allucinante
-function authenticateToken(req, res, next) {
-    let token = req.headers['access-token'];
-    if (!token) return res.status(401).json({ error: 'Token mancante.'});
-
-    jwt.verify(token, process.env.SECRET_KEY, (err, Utente) => {
-        if (err) return res.status(403).json({ error: 'Token non valido'});
-        else {
-            req.Utente = Utente;
-            next();
-        }
-    });
-}
 
 // Endpoint per ottenere le informazioni dell'utente autenticato
 router.get('/me', authenticateToken, (req, res) => {
@@ -112,4 +139,4 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-module.exports = {router, authenticateToken};
+module.exports = {router, authenticateToken, authenticateDolRole, authenticateComRole};
