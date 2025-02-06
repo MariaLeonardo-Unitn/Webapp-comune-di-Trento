@@ -6,6 +6,7 @@ import Homepage from './Homepage'; // Import Homepage
 import Login from './Login'; // Import Login component
 import Mappa from './Mappa'; // Import Mappa component
 import Segnalazioni from './Segnalazioni'; // Import Mappa component
+import Register from './Register';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/mappa" element={<Mappa />} />
         <Route path="/segnalazioni" element={<Segnalazioni />} />
         <Route path="/prenotazioni" element={<PrenotazioniPage />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} /> {/* Add route for Login */}
       </Routes>
     </Router>
