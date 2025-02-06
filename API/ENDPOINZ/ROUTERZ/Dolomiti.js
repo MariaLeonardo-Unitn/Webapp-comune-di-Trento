@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 router.use(express.json());
 
 
-router.get('/segnalazioni', authenticateDolRole, async (req,  res) => {
+router.get('/segnalazioni', async (req,  res) => {
     let lista_segn;
     lista_segn = await Segnalazione.find().exec();
     if(lista_segn.length == 0){
@@ -16,7 +16,7 @@ router.get('/segnalazioni', authenticateDolRole, async (req,  res) => {
     }
 });
 
-router.patch('/segnalazioni/:segnalazioneId', authenticateDolRole, async (req, res) => {
+router.patch('/segnalazioni/:segnalazioneId', async (req, res) => {
     const segnalazioneId = req.params.segnalazioneId;
     const { stato } = req.body;
     const statiPossibili = ['attiva', 'presa in carico', 'completata'];
@@ -34,7 +34,7 @@ router.patch('/segnalazioni/:segnalazioneId', authenticateDolRole, async (req, r
     res.status(200).json(segnalazione);
 });
 
-router.delete('/segnalazioni/:segnalazioneId', authenticateDolRole, async (req, res) => {
+router.delete('/segnalazioni/:segnalazioneId', async (req, res) => {
     const segnalazioneId = req.params.segnalazioneId;
     const segnalazione = await Segnalazione.findOneAndDelete({ segnalazioneId: segnalazioneId });
     if(!segnalazione){

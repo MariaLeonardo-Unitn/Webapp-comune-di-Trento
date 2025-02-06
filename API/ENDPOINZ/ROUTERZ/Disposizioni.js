@@ -4,13 +4,13 @@ const Disp = require('../../MODELLI/disposizione');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const Upload = multer({ storage });
-const { authenticateDolRole } = require('./Authentication');
+const { authenticateToken, authenticateDolRole } = require('./Authentication');
 
 
 router.use(express.json());
 
 //unica per l'utenz
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
     try{   
         const disposizione = await Disp.findOne().sort({_id: -1}); //trova l'ultima inserita
         if (!disposizione) {

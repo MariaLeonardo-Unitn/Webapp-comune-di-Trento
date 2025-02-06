@@ -20,10 +20,13 @@ App.use('/api/auth', AuthRouter);
 App.use('/api/rifiuti/calendari', authenticateToken);
 App.use('/api/rifiuti/calendari', CalendRouter);
 
+//l'autenticazione è specificata dentro al router perché alcuni endpoint sono per utenti loggati, altri per operatori
 App.use('/api/rifiuti/disposizioni', DispRouter);
 
+App.use('/api/prenotazione', authenticateToken);
 App.use('/api/prenotazione', PrenoRouter);
 
+App.use('/api/segnalazioni', authenticateToken);
 App.use('/api/segnalazioni', SegnRouter);
 
 App.use('/api/operatore_dol/', authenticateDolRole);
