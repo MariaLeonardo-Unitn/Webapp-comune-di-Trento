@@ -14,11 +14,16 @@ router.use(express.json());
 //che si riceve da una response di login, e bisogna inserirlo in un header della richiesta che si vuole eseguire. Questo header DEVE chiamarsi "access-token"
 function authenticateToken(req, res, next) {
     let token = req.headers['access-token'];
+    console.log('Token ricevuto:', token);
     if (!token) return res.status(401).json({ error: 'Token mancante.'});
     
     jwt.verify(token, process.env.SECRET_KEY, (err, Utente) => {
-        if (err) return res.status(403).json({ error: 'Token non valido'});
+        if (err) {
+            console.log('Errore nel token:', err);
+            return res.status(403).json({ error: 'Token non valido'});
+        }
         else {
+            console.log('Utente autenticato:', Utente);
             req.Utente = Utente;
             next();
         }
@@ -56,7 +61,6 @@ function authenticateComRole(req, res, next) {
 // Endpoint di login
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    console.log("Dati ricevuti:", email, password);
     try {
         const User = await Utente.findOne({ email, password });
         if (!User) 

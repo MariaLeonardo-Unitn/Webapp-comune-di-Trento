@@ -4,12 +4,13 @@ const Prenotazione = require('../../MODELLI/prenotazione');
 
 router.post('/', async (req, res) => {
     try {
-        const { tipoSacchetto, quantita, puntoRitiro } = req.body;
+        const { tipoSacchetto, quantita, dataPrenotazione, puntoRitiro } = req.body;
 
         const nuovaPrenotazione = new Prenotazione({
-            utente: req.user._id,
+            utente: req.Utente.utenteId,
             tipoSacchetto,
             quantita,
+            dataPrenotazione,
             puntoRitiro
         });
 

@@ -20,16 +20,17 @@ function PrenotazioniPage() {
       const response = await fetch("http://localhost:5000/api/auth/me", {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          "access-token": token,
           "Content-Type": "application/json",
         },
       });
-
+      console.log('Token inviato:', localStorage.getItem('token'));
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
       } else {
-        alert("Errore nel recupero dei dati dell'utente.");
+        const errorData = await response.json();
+        alert(errorData.error || "Errore nel recupero dei dati dell'utente.");
       }
     } catch (error) {
       console.error("Errore durante la richiesta:", error);
@@ -51,15 +52,16 @@ function PrenotazioniPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dataToSend = {
-      date: formData.date,
-      quantity: formData.quantity,
+      tipoSacchetto: formData.bagType,
+      quantita: formData.quantity,
       puntoRitiro: formData.puntoRitiro,
-      bagType: formData.bagType
+      dataPrenotazione: formData.date
     };
-    const response = await fetch("http://localhost:5000/api/prenotazioni", {
+    const response = await fetch("http://localhost:5000/api/prenotazione", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        'access-token': localStorage.getItem('token')
       },
       body: JSON.stringify(dataToSend),
     });

@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const App = express();
 require('dotenv').config();
-App.use((req, res, next) => { console.log(`${req.method} ${req.url}`); next(); });
 App.use(cors());
 App.use(express.json());
   
@@ -41,7 +40,7 @@ App.use('/api/operatore_com/', authenticateComRole);
 App.use('/api/operatore_com/', ComSegnRouter);
 
 //per stampare a console le richieste che vengono fatte 
-
+App.use((req, res, next) => { console.log(`${req.method} ${req.url}`); next(); });
 
 //COMMENTATO SOLO PERCHE' I SUPERTEST SE NO NON VANNO :)
 
