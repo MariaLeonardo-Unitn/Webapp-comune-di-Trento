@@ -4,8 +4,8 @@ function PrenotazioniPage() {
   return (
     <>
       <div> 
-        <h1>Prenotazioni</h1>
-        <form id="reservation-form">
+        <h1 className="fade-in">Prenotazioni</h1>
+        <form id="reservation-form" className="fade-in">
           <label htmlFor="name">Nome:</label>
           <input type="text" id="name" name="name" required />
           <label htmlFor="date">Data Prenotazione:</label>

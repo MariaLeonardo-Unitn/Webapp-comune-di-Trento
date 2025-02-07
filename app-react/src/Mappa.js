@@ -71,7 +71,7 @@ const Mappa = () => {
 
   return (
     <div>
-      <h1>Mappa con Centri di Raccolta</h1>
+      <h1 className="fade-in">Mappa con Centri di Raccolta</h1>
       <div id="map"></div>
       <footer>
         <p>Footer content</p>

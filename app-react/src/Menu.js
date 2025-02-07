@@ -7,7 +7,7 @@ function TrentoCleanCity() {
   return (
     <div className="container">
       <header>
-        <h1>Trento Clean City</h1>
+        <h1 className="fade-in">Trento Clean City</h1>
         <p>Making Trento greener, cleaner, and better.</p>
       </header>
       <main>

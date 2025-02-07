@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -22,6 +22,7 @@ L.Marker.prototype.options.icon = DefaultIcon; // Set default icon
 
 function Homepage() {
   const navigate = useNavigate(); // Initialize useNavigate
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false); // State for language dropdown visibility
 
   // Initialize the map when the component mounts
   useEffect(() => {
@@ -87,18 +88,22 @@ function Homepage() {
   };
 
   const handleLanguageClick = () => {
-    alert('Change language');
+    setShowLanguageDropdown(!showLanguageDropdown); // Toggle language dropdown visibility
   };
 
   const handleLoginClick = () => {
     navigate('/login');
   };
 
+  const handleLanguageSelect = (language) => {
+    setShowLanguageDropdown(false); // Hide the dropdown after selection
+    alert(`Language changed to ${language}`); // Placeholder for language change logic
+  };
+
   return (
     <div>
-      {/* Title */}
       <div className="page-title">
-        <h1 className="page-title">Trento Clean City</h1>
+        <h1 className="fade-in">Trento Clean City</h1>
       </div>
 
       {/* Map */}
@@ -107,27 +112,37 @@ function Homepage() {
       {/* Top-left icons */}
       <div className="top-left-icons">
         <img
-          src="https://cdn-icons-png.flaticon.com/128/6015/6015685.png"
+          src="https://cdn-icons-png.flaticon.com/128/1672/1672225.png"
           alt="Menu"
           id="verdeButton"
           onClick={handleVerdeClick}
+          style={{ width: '40px', height: '40px' }} 
         />
+        <p>Registrati</p> {/* Add text under the button */}
       </div>
 
       {/* Top-right icons */}
       <div className="top-right-icons">
-        <img
-          src="https://cdn-icons-png.flaticon.com/128/2014/2014826.png"
-          alt="Language"
-          id="languageIcon"
-          onClick={handleLanguageClick}
-        />
-        <img
-          src="https://cdn-icons-png.flaticon.com/128/1077/1077012.png"
-          alt="Login"
-          id="loginIcon"
-          onClick={handleLoginClick}
-        />
+        <div className="icon-container">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/2014/2014826.png"
+            alt="Language"
+            id="languageIcon"
+            onClick={handleLanguageClick}
+            style={{ width: '40px', height: '40px' }} // Make the button smaller
+          />
+          <p>Seleziona Lingua</p> {/* Add text under the button */}
+        </div>
+        <div className="icon-container">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1077/1077012.png"
+            alt="Login"
+            id="loginIcon"
+            onClick={handleLoginClick}
+            style={{ width: '40px', height: '40px' }} // Make the button smaller
+          />
+          <p>Login</p> {/* Add text under the button */}
+        </div>
       </div>
 
       {/* Footer */}
