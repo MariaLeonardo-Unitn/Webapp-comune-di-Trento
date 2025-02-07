@@ -1,4 +1,7 @@
-{
+{ 
+  "name": "webapp-comune-di-trento",
+  "version": "1.0.0",
+  "main": "/ENDPOINZ/APP.js",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -13,8 +16,11 @@
     "supertest": "^7.0.0"
   },
   "scripts": {
-    "start": "node ./ENDPOINZ/APP.js",                        
-    "dev": "node -r dotenv/config index.js",       
+    "start": "node ./ENDPOINZ/APP.js",
+    "dev": "node -r dotenv/config",
     "test": "jest --setupFiles dotenv/config"
+  },
+  "jest": {
+    "testTimeout": 30000  
   }
 }

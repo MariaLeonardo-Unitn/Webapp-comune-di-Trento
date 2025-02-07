@@ -40,18 +40,13 @@ App.use((req, res, next) => { console.log(`${req.method} ${req.url}`); next(); }
 App.use(cors());
 App.use(express.json());
 
-/*
-App.use(express.static(path.join(__dirname, '..', '..', 'FrontEnd', 'Login')));
-App.get('/', (req, res) => { res.sendFile(path.join(__dirname, '..', '..', 'FrontEnd', 'Login', 'login.html')); });
-App.get('/loadPage', (req, res) => {
-    const page = req.query.page;
-    const dir = req.query.Dir;
-    res.sendFile(path.join(__dirname, '..', '..', 'FrontEnd', dir, page));
-});
-*/
 
+//COMMENTATO SOLO PERCHE' I SUPERTEST SE NO NON VANNO :)
+/*
 mongoose.connect(process.env.DB_URI)
 .then(() => { console.log('Connected to Database'); }) 
 .catch(err => { console.error('Database connection error:', err); });
 
-App.listen(process.env.PORT, () => { console.log('Server is running on port ' + process.env.PORT); }); 
+App.listen(process.env.PORT, () => { console.log('Server is running on port ' + process.env.PORT); });
+*/
+module.exports = App;
