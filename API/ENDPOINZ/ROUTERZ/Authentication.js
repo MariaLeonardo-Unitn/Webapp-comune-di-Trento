@@ -9,13 +9,17 @@ router.use(express.json());
 
 // Endpoint di login
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    console.log("Dati ricevuti nel backend:", req.body);
+    const { username, password } = req.body;
+    const email = username;
     try {
         const user = await User.findOne({ email, password });
         if (!user) {
+            console.log("Utente non trovato");
             return res.status(401).json({ error: 'Credenziali non valide' });
         }
-
+        
+        console.log("Utente trovato, generazione token...");
         const token = jwt.sign(
             {
                 email: user.email,
@@ -26,7 +30,7 @@ router.post('/login', async (req, res) => {
             process.env.SECRET_KEY,
             { expiresIn: '60m' }
         );
-
+        console.log("✅ Login riuscito, token inviato:", token);
         res.json({ token, role: user.role, permissions: user.permissions });
     } catch (error) {
         console.error('Errore durante il login:', error);
@@ -69,7 +73,7 @@ router.post('/signup', async (req, res) => {
                 return res.status(400).json({ error: 'Token segreto richiesto per registrarsi come operatore' });
             }
 
-            if (secret_token != process.env.DOLOMITI_TOKEN || secret_token != process.env.COMUNE_TOKEN) {
+            if (secret_token != process.env.DOLOMITI_TOKEN && secret_token != process.env.COMUNE_TOKEN) {
                 return res.status(400).json({ error: 'Token segreto non valido' });
             }
         }

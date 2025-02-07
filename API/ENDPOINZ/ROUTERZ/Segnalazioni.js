@@ -71,3 +71,5 @@ router.post('/', async (req, res) => {
     let id = nuovaSegnalazione.id;
     res.location('/api/segnalazioni/' + id).status(201).send();
 })
+
+module.exports = router;

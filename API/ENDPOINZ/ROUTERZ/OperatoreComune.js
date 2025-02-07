@@ -41,3 +41,5 @@ router.post('/segnalazioni', async (req, res) => {
     const notificaSalvata = await nuovaNotifica.save();
     res.status(201).json(notificaSalvata);
 })
+
+module.exports = router;
