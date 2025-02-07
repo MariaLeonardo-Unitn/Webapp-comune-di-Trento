@@ -62,6 +62,7 @@ router.post('/login', async (req, res) => {
 
         const token = jwt.sign(
             {
+                utenteId: User.utenteId,
                 email: User.email,
                 role: User.role,
                 permissions: User.permissions,
@@ -70,8 +71,6 @@ router.post('/login', async (req, res) => {
             process.env.SECRET_KEY,
             { expiresIn: '60m' }
         );
-        console.log("token: " + token);
-        console.log(User);
         res.status(200).json({ 
             token,
             utenteId: User.utenteId,
@@ -86,7 +85,6 @@ router.post('/login', async (req, res) => {
 
 // Endpoint per ottenere le informazioni dell'utente autenticato
 router.get('/me', authenticateToken, (req, res) => {
-    console.log(req.Utente);
     res.status(200).json({
         Utente_id: req.Utente.utenteId,
         role: req.Utente.role,

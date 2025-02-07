@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const Segnalazione = require('../../MODELLI/segnalazione');
 const Utente = require('../../MODELLI/utente');
+const { authenticateToken, authenticateComRole } = require('./Authentication');
 
 router.use(express.json());
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     let utenteUrl = req.body.utente;
     let segnalazioneUrl = req.body.segnalazione;
     if(!utenteUrl){
@@ -45,7 +46,7 @@ router.post('/', async (req, res) => {
     return res.location('/api/segnalazioni/' + id).status(201).send();
 });
 
-router.get('/utenteId', async (req, res) => {
+router.get('/utenteId', authenticateToken, async (req, res) => {
     let lista_segn;
     if(req.query.utenteId){
         lista_segn = await Segnalazione.find({
@@ -57,7 +58,7 @@ router.get('/utenteId', async (req, res) => {
     }
 })
 
-router.get('/:segnalazioneId', async (req, res) => {
+router.get('/:segnalazioneId', authenticateComRole, async (req, res) => {
     const segnalazioneId = req.params.segnalazioneId;
     let segnalazione = await Segnalazione.findOne({ segnalazioneId }).exec();
     if(segnalazione){
