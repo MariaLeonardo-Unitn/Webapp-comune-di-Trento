@@ -20,13 +20,10 @@ function PrenotazioniPage() {
       const response = await fetch("http://localhost:5000/api/auth/me", {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-      })
-      .then(response => response.json())
-      .then(data => console.log("Dati utente:", data))
-      .catch(error => console.error("Errore:", error));
+      });
 
       if (response.ok) {
         const userData = await response.json();
@@ -89,7 +86,7 @@ function PrenotazioniPage() {
           <label htmlFor="quantity">Numero di sacchetti:</label>
           <input type="number" id="quantity" name="quantity" value={formData.quantity} onChange={handleChange} required />
           <label htmlFor="punto-ritiro">Punto di ritiro</label>
-          <select id="punto-ritiro" name="punto-ritiro" value={formData.puntoDiRitiro} onChange={handleChange} required>
+          <select id="puntoRitiro" name="puntoRitiro" value={formData.puntoRitiro} onChange={handleChange} required>
             <option value="centro">Trento Centro</option>
             <option value="cristore">Cristo Re</option>
             <option value="tangenziale">Tangenziale</option>

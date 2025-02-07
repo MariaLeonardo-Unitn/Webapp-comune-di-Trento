@@ -9,7 +9,7 @@ function Login() {
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const credentials = { username, password };
+    const credentials = { email: username, password };
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
@@ -25,8 +25,7 @@ function Login() {
         alert("Login effettuato con successo!");
         window.location.href = "/menu";
       } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || "Errore nel login.");
+        setErrorMessage(data.error || "Errore nel login.");
       }
     } catch (error) {
       console.error("Errore durante la richiesta:", error);
