@@ -70,7 +70,9 @@ router.post('/login', async (req, res) => {
             process.env.SECRET_KEY,
             { expiresIn: '60m' }
         );
-        res.json({ 
+        console.log("token: " + token);
+        console.log(User);
+        res.status(200).json({ 
             token,
             utenteId: User.utenteId,
             role: User.role,
