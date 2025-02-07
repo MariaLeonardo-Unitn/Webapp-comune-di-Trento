@@ -21,7 +21,7 @@ function Login() {
       const data = await response.json();
       console.log("Risposta ricevuta:", data);
       if (response.ok) {
-        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("token", data.token);
         alert("Login effettuato con successo!");
         window.location.href = "/menu";
       } else {
