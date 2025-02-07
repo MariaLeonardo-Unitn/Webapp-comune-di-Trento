@@ -110,7 +110,7 @@ router.post('/signup', async (req, res) => {
                 return res.status(400).json({ error: 'Token segreto non valido' });
             }
         }
-        let lastUser = await Utente.findOne().sort({ utenteId: -1 }).exec();
+        let lastUser = await Utente.findOne().sort({ utenteId: -1 }).collation({ locale: "en", numericOrdering: true }).exec();
         let newUtenteId = lastUser ? ( parseInt(lastUser.utenteId, 10 ) + 1 ).toString() : 1;
 
         // Creazione del nuovo utente nel database

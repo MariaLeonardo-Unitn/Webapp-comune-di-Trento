@@ -13,8 +13,8 @@ describe('test auth methods', () => {
 
     var utente = { 
         nome: "jonny",
-        cognome: "gionni",
-        codiceFiscale: "giovanni",
+        cognome: "jonny",
+        codiceFiscale: "jonny",
         email: "jonny@jonny.jonny", 
         password: "jonny",
         role: "cittadino"
