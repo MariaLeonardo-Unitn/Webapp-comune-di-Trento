@@ -1,12 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import MenuPage from './Menu'; // New menu component
+import MenuPage from './Menu'; 
 import PrenotazioniPage from './PrenotazioniPage';
-import Homepage from './Homepage'; // Import Homepage
-import Login from './Login'; // Import Login component
-import Mappa from './Mappa'; // Import Mappa component
-import Segnalazioni from './Segnalazioni'; // Import Mappa component
+import Homepage from './Homepage'; 
+import Login from './Login'; 
+import Mappa from './Mappa'; 
+import Segnalazioni from './Segnalazioni'; 
+import SegnalazioniAnonime from './SegnalazioniAnonime'; 
 import Register from './Register';
+import InterfacciaDA from './InterfacciaDA';
 
 function App() {
   return (
@@ -16,9 +18,11 @@ function App() {
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/mappa" element={<Mappa />} />
         <Route path="/segnalazioni" element={<Segnalazioni />} />
+        <Route path="/segnalazionianonime" element={<SegnalazioniAnonime />} />
         <Route path="/prenotazioni" element={<PrenotazioniPage />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} /> {/* Add route for Login */}
+        <Route path="/interfacciaDA" element={<InterfacciaDA />} />
+        <Route path="/login" element={<Login />} /> 
       </Routes>
     </Router>
   );

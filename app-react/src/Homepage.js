@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { useNavigate } from 'react-router-dom'; 
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './styles/Homepage.css'; // Import the CSS file
+import './styles/Homepage.css'; 
 
-// Fix for Leaflet marker icons
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// Fix for default Leaflet marker icons
 const DefaultIcon = L.icon({
   iconUrl: markerIcon,
   shadowUrl: markerIconShadow,
@@ -18,21 +16,19 @@ const DefaultIcon = L.icon({
   shadowSize: [41, 41], // Size of the shadow
 });
 
-L.Marker.prototype.options.icon = DefaultIcon; // Set default icon
+L.Marker.prototype.options.icon = DefaultIcon; 
 
 function Homepage() {
-  const navigate = useNavigate(); // Initialize useNavigate
-  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false); // State for language dropdown visibility
+  const navigate = useNavigate();
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false); 
 
-  // Initialize the map when the component mounts
   useEffect(() => {
-    const map = L.map('map').setView([46.0667, 11.1333], 12); // Coordinates for Trento, Italy
+    const map = L.map('map').setView([46.0667, 11.1333], 12); 
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
     }).addTo(map);
 
-    // Define the centriDiRaccolta data
     const centriDiRaccolta = [
       {
         nome: "Argentario",
@@ -61,34 +57,27 @@ function Homepage() {
       },
     ];
 
-    // Add markers for each centro di raccolta
     centriDiRaccolta.forEach((centro) => {
       L.marker(centro.coord)
         .addTo(map)
         .bindPopup(`<b>Centro di Raccolta</b><br><b>${centro.nome}</b><br>${centro.indirizzo}`);
     });
 
-    // Handle map clicks to show a popup with a button
     map.on('click', function (e) {
-      L.popup()
-        .setLatLng(e.latlng)
-        .setContent('<button onclick="window.location.href=\'/report\'">Segnala</button>')
-        .openOn(map);
+      navigate('/segnalazionianonime', { state: { coordinates: e.latlng } });
     });
 
-    // Cleanup the map when the component unmounts
     return () => {
       map.remove();
     };
-  }, []);
+  }, [navigate]); 
 
-  // Event handlers for the icons
   const handleVerdeClick = () => {
-    navigate('/menu'); // Redirect to the menu page
+    navigate('/interfacciaDA'); 
   };
 
   const handleLanguageClick = () => {
-    setShowLanguageDropdown(!showLanguageDropdown); // Toggle language dropdown visibility
+    setShowLanguageDropdown(!showLanguageDropdown); 
   };
 
   const handleLoginClick = () => {
@@ -96,8 +85,8 @@ function Homepage() {
   };
 
   const handleLanguageSelect = (language) => {
-    setShowLanguageDropdown(false); // Hide the dropdown after selection
-    alert(`Language changed to ${language}`); // Placeholder for language change logic
+    setShowLanguageDropdown(false); 
+    alert(`Language changed to ${language}`); 
   };
 
   return (
@@ -106,10 +95,8 @@ function Homepage() {
         <h1 className="fade-in">Trento Clean City</h1>
       </div>
 
-      {/* Map */}
       <div id="map"></div>
 
-      {/* Top-left icons */}
       <div className="top-left-icons">
         <img
           src="https://cdn-icons-png.flaticon.com/128/1672/1672225.png"
@@ -118,10 +105,9 @@ function Homepage() {
           onClick={handleVerdeClick}
           style={{ width: '40px', height: '40px' }} 
         />
-        <p>Registrati</p> {/* Add text under the button */}
+        <p>Registrati</p>
       </div>
 
-      {/* Top-right icons */}
       <div className="top-right-icons">
         <div className="icon-container">
           <img
@@ -129,9 +115,9 @@ function Homepage() {
             alt="Language"
             id="languageIcon"
             onClick={handleLanguageClick}
-            style={{ width: '40px', height: '40px' }} // Make the button smaller
+            style={{ width: '40px', height: '40px' }}
           />
-          <p>Seleziona Lingua</p> {/* Add text under the button */}
+          <p>Seleziona Lingua</p> 
         </div>
         <div className="icon-container">
           <img
@@ -139,13 +125,12 @@ function Homepage() {
             alt="Login"
             id="loginIcon"
             onClick={handleLoginClick}
-            style={{ width: '40px', height: '40px' }} // Make the button smaller
+            style={{ width: '40px', height: '40px' }} 
           />
-          <p>Login</p> {/* Add text under the button */}
+          <p>Login</p> 
         </div>
       </div>
 
-      {/* Footer */}
       <footer>
         <p>Footer content</p>
       </footer>

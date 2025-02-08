@@ -17,7 +17,13 @@ const Segnalazioni = () => {
     event.preventDefault();
     const reason = event.target.reason.value;
     const visibility = event.target.visibility.value;
-    alert(`Segnalazione motivata: ${reason}. Visibilità: ${visibility}`);
+    const photo = event.target.photo.files[0]; 
+
+    if (photo) {
+      alert(`Segnalazione motivata: ${reason}. Visibilità: ${visibility}. Foto: ${photo.name}`);
+    } else {
+      alert(`Segnalazione motivata: ${reason}. Visibilità: ${visibility}. Nessuna foto caricata.`);
+    }
   };
 
   return (
@@ -32,6 +38,14 @@ const Segnalazioni = () => {
           <option value="pubblica">Pubblica</option>
           <option value="privata">Privata</option>
         </select>
+
+        <label htmlFor="photo">Carica una fotografia :</label>
+        <input
+          type="file"
+          id="photo"
+          name="photo"
+          accept="image/*" 
+        />
 
         <button type="submit">Invia</button>
       </form>
