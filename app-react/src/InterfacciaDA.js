@@ -26,11 +26,8 @@ const InterfacciaDA = () => {
   );
 
   return (
-    <div className="container">
-      <header>
-        <h1 className="fade-in">Trento Clean City</h1>
-      </header>
-
+    <div className="container">      
+      <h1 className="fade-in">Trento Clean City</h1>
       <main>
         <h2 className="fade-in">Interfaccia operatore Dolomiti Ambiente</h2>
         <div className="controls">

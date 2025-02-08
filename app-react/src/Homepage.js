@@ -64,9 +64,20 @@ function Homepage() {
     });
 
     map.on('click', function (e) {
+      const button = document.createElement('button');
+      button.textContent = 'Segnala';
+      button.style.cursor = 'pointer'; // Cambia il cursore per indicare che è cliccabile
+    
+      button.addEventListener('click', () => {
+        navigate('/segnalazionianonime', { state: { coordinates: e.latlng } });
+      });
+    
+      const container = document.createElement('div');
+      container.appendChild(button);
+    
       L.popup()
         .setLatLng(e.latlng)
-        .setContent('<button onclick="window.location.href=\'/segnalazionianonime\'">Segnala</button>')
+        .setContent(container)
         .openOn(map);
     });
 
@@ -76,7 +87,7 @@ function Homepage() {
   }, [navigate]);
 
   const handleVerdeClick = () => {
-    navigate('/register');
+    navigate('/interfacciaDA');
   };
 
   const handleLanguageClick = () => {

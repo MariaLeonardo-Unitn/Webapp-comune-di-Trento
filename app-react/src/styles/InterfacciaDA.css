@@ -6,134 +6,143 @@ body {
     flex-direction: column;
     align-items: center;
     background: linear-gradient(to bottom, #a8e6cf, #dcedc1);
-    color: #ffffff; /* White text for better contrast */
+    color: #ffffff; 
     min-height: 100vh;
   }
+
+  .container { 
+    width: 100%; 
+    max-width: 1800px; 
+    margin: 0 auto; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
   
   header {
-    background-color: #4db6ac; /* Primary dark green */
+    background-color: #4db6ac; 
     color: #fff;
     padding: 30px;
     width: 100%;
-    max-width: 1200px;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center; /* Center the title */
-    border-radius: 10px 10px 0 0; /* Rounded top corners */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for better shading */
+    text-align: center; 
+    border-radius: 10px 10px 0 0; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     position: relative;
+    width: 100%;
   }
   
   main {
     padding: 30px;
-    max-width: 1200px;
-    width: 100%;
+    max-width: 1800px;
+    width: 200%;
     background-color: #ffffff;
-    color: #00796b; /* Primary dark green text */
+    color: #00796b; 
     margin-top: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Stronger shadow for main content */
-    border-radius: 0 0 10px 10px; /* Rounded bottom corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+    border-radius: 10px 10px 10px 10px; 
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center the content */
+    align-items: center; 
   }
   
   .controls {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-    justify-content: center; /* Center the controls */
-    gap: 10px; /* Space between button and input */
+    justify-content: center; 
+    gap: 10px; 
   }
   
   .controls select {
-    background-color: #4db6ac; /* Button light green */
+    background-color: #00796b;
     color: #fff;
     cursor: pointer;
     border: none;
-    border-radius: 25px; /* Rounded corners */
+    border-radius: 25px; 
     padding: 10px 20px;
     font-size: 1em;
     transition: background-color 0.3s ease, transform 0.3s ease;
   }
   
   .controls select:hover {
-    background-color: #00796b; /* Darker green on hover */
-    transform: scale(1.05); /* Slight zoom effect */
+    background-color: #00796b; 
+    transform: scale(1.05); 
   }
   
   .controls input.filter-input {
-    background-color: #ffffff; /* White background for input */
-    color: #00796b; /* Dark green text for input */
-    border: 1px solid #4db6ac; /* Light green border */
-    border-radius: 25px; /* Rounded corners */
+    background-color: #ffffff;
+    color: #00796b; 
+    border: 1px solid #4db6ac; 
+    border-radius: 25px; 
     padding: 10px 20px;
     font-size: 1em;
     transition: border 0.3s ease, background-color 0.3s ease;
   }
   
   .controls input.filter-input:hover {
-    border-color: #00796b; /* Darker green on hover */
-    background-color: #f1f8e9; /* Slightly lighten background on hover */
+    border-color: #00796b; 
+    background-color: #f1f8e9; 
   }
   
   .report-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
-    justify-items: center; /* Center the items */
-    width: 100%; /* Full width for better alignment */
+    justify-items: center; 
+    width: 100%; 
   }
   
   .report-card {
     width: 100%;
     max-width: 300px;
     padding: 20px;
-    border-radius: 10px; /* Rounded corners */
-    background-color: #e0f2f1; /* Very light blue green */
+    border-radius: 10px; 
+    background-color: #e0f2f1; 
     text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Soft shadow */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
   .report-card:hover {
-    transform: scale(1.05); /* Slight zoom effect on hover */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Stronger shadow on hover */
+    transform: scale(1.05); 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
   
   .report-card img {
     width: 100%;
     height: auto;
-    border-radius: 8px; /* Rounded corners for image */
-    margin-bottom: 15px; /* Spacing below image */
+    border-radius: 8px; 
+    margin-bottom: 15px; 
   }
   
   .report-card .status {
-    color: #00796b; /* Dark green for all statuses */
+    color: #00796b; 
     font-weight: bold;
   }
   
   .report-card .status.in-progress {
-    color: #fbc02d; /* Yellow for in progress */
+    color: #fbc02d;
   }
   
   .report-card .status.pending {
-    color: #d32f2f; /* Red for pending */
+    color: #d32f2f; 
   }
   
   .report-card button {
-    background-color: #00796b; /* Dark green */
+    background-color: #00796b; 
     color: #fff;
     border: none;
     padding: 10px 20px;
-    border-radius: 25px; /* Rounded corners */
+    border-radius: 25px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
   
   .report-card button:hover {
-    background-color: #4db6ac; /* Light green on hover */
+    background-color: #4db6ac; 
   }
   
   .top-right-icons {
@@ -143,17 +152,17 @@ body {
   }
   
   .top-right-icons img {
-    width: 30px; /* Uniform size for icons */
+    width: 30px; 
     height: 30px;
     cursor: pointer;
-    background-color: #4db6ac; /* Light green background */
+    background-color: #4db6ac; 
     border-radius: 50%;
     padding: 5px;
-    margin-left: 10px; /* Space between icons */
+    margin-left: 10px; 
     transition: opacity 0.3s ease, background-color 0.3s ease;
   }
   
   .top-right-icons img:hover {
     opacity: 0.8;
-    background-color: #00796b; /* Darker background on hover */
+    background-color: #00796b;
   }
