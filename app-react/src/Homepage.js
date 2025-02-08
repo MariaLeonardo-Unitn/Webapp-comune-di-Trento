@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './styles/Homepage.css'; 
+import './styles/Homepage.css';
 
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIconShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -10,20 +10,20 @@ import markerIconShadow from 'leaflet/dist/images/marker-shadow.png';
 const DefaultIcon = L.icon({
   iconUrl: markerIcon,
   shadowUrl: markerIconShadow,
-  iconSize: [25, 41], // Size of the icon
-  iconAnchor: [12, 41], // Point of the icon which will correspond to marker's location
-  popupAnchor: [1, -34], // Point from which the popup should open relative to the iconAnchor
-  shadowSize: [41, 41], // Size of the shadow
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
 });
 
-L.Marker.prototype.options.icon = DefaultIcon; 
+L.Marker.prototype.options.icon = DefaultIcon;
 
 function Homepage() {
   const navigate = useNavigate();
-  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false); 
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
   useEffect(() => {
-    const map = L.map('map').setView([46.0667, 11.1333], 12); 
+    const map = L.map('map').setView([46.0667, 11.1333], 12);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
@@ -70,14 +70,14 @@ function Homepage() {
     return () => {
       map.remove();
     };
-  }, [navigate]); 
+  }, [navigate]);
 
   const handleVerdeClick = () => {
-    navigate('/interfacciaDA'); 
+    navigate('/register');
   };
 
   const handleLanguageClick = () => {
-    setShowLanguageDropdown(!showLanguageDropdown); 
+    setShowLanguageDropdown(!showLanguageDropdown);
   };
 
   const handleLoginClick = () => {
@@ -85,8 +85,8 @@ function Homepage() {
   };
 
   const handleLanguageSelect = (language) => {
-    setShowLanguageDropdown(false); 
-    alert(`Language changed to ${language}`); 
+    setShowLanguageDropdown(false);
+    alert(`Language changed to ${language}`);
   };
 
   return (
@@ -103,7 +103,7 @@ function Homepage() {
           alt="Menu"
           id="verdeButton"
           onClick={handleVerdeClick}
-          style={{ width: '40px', height: '40px' }} 
+          style={{ width: '40px', height: '40px' }}
         />
         <p>Registrati</p>
       </div>
@@ -117,7 +117,7 @@ function Homepage() {
             onClick={handleLanguageClick}
             style={{ width: '40px', height: '40px' }}
           />
-          <p>Seleziona Lingua</p> 
+          <p>Seleziona Lingua</p>
         </div>
         <div className="icon-container">
           <img
@@ -125,15 +125,11 @@ function Homepage() {
             alt="Login"
             id="loginIcon"
             onClick={handleLoginClick}
-            style={{ width: '40px', height: '40px' }} 
+            style={{ width: '40px', height: '40px' }}
           />
-          <p>Login</p> 
+          <p>Login</p>
         </div>
       </div>
-
-      <footer>
-        <p>Footer content</p>
-      </footer>
     </div>
   );
 }

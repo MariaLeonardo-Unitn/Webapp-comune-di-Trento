@@ -5,6 +5,7 @@ function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [codice, setCodice] = useState('');
+  const [codicefiscale, setCodiceFiscale] = useState('');
 
   // Handle form submission
   const handleSubmit = (event) => {
@@ -14,7 +15,7 @@ function Register() {
 
   return (
     <div>
-      <h1 className="fade-in">Register</h1>
+      <h1 className="fade-in">Registrati</h1>
       <form id="reservation-form" className="slide-in" onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
         <textarea
@@ -31,6 +32,15 @@ function Register() {
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <label htmlFor="codicefiscale">Codice Fiscale:</label>
+        <textarea
+          id="codicefiscale"
+          name="codicefiscale"
+          value={codicefiscale}
+          onChange={(e) => setCodiceFiscale(e.target.value)}
           required
         />
 
