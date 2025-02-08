@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import './styles/Login.css'; // Import the CSS file
+import React, { useState } from "react";
+import "./styles/Login.css"; 
 
 function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const credentials = { email: username, password };
+    setErrorMessage(""); 
+
+    const credentials = { email: username, password: password };
+
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
@@ -18,18 +20,23 @@ function Login() {
         },
         body: JSON.stringify(credentials),
       });
-      const data = await response.json();
-      console.log("Risposta ricevuta:", data);
-      if (response.ok) {
+
+      if (!response.ok) {
+        throw new Error(`Errore: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json(); 
+
+      if (data.token) {
         localStorage.setItem("token", data.token);
         alert("Login effettuato con successo!");
-        window.location.href = "/menu";
+        window.location.href = "/menu"; 
       } else {
-        setErrorMessage(data.error || "Errore nel login.");
+        throw new Error("Token non ricevuto");
       }
     } catch (error) {
       console.error("Errore durante la richiesta:", error);
-      setErrorMessage("Errore nella comunicazione con il server.");
+      setErrorMessage("Credenziali errate o problema di connessione.");
     }
   };
 

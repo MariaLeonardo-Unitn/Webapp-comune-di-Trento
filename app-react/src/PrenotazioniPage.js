@@ -10,7 +10,7 @@ function PrenotazioniPage() {
   });
 
   const fetchUser = async () => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     if (!token) {
       alert("Utente non loggato.");
       return;
