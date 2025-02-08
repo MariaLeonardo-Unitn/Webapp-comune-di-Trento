@@ -54,8 +54,8 @@ function PrenotazioniPage() {
     const dataToSend = {
       tipoSacchetto: formData.bagType,
       quantita: formData.quantity,
-      puntoRitiro: formData.puntoRitiro,
-      dataPrenotazione: formData.date
+      dataPrenotazione: formData.date,
+      puntoRitiro: formData.puntoRitiro
     };
     const response = await fetch("http://localhost:5000/api/prenotazione", {
       method: "POST",
