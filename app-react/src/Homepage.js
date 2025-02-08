@@ -87,7 +87,7 @@ function Homepage() {
   }, [navigate]);
 
   const handleVerdeClick = () => {
-    navigate('/interfacciaDA');
+    navigate('/interfacciaC');
   };
 
   const handleLanguageClick = () => {
@@ -104,9 +104,9 @@ function Homepage() {
   };
 
   return (
-    <div>
+    <div className="container">
       <div className="page-title">
-        <h1 className="fade-in">Trento Clean City</h1>
+        <h1 className="fade-in">Trento Clean City Homepage</h1>
       </div>
 
       <div id="map"></div>

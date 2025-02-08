@@ -14,10 +14,21 @@ body {
   
   #map {
     height: 100vh;
-    width: 100%;
+    width: 100%; /* Let the map take its natural width */
+    max-width: 1800px; /* Ensure map is at least 100% of viewport width */
+    margin: 0 auto; /* Center the map */
     border: 2px solid #a8e6cf;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
+}
+
+  .map-container { 
+    width: 200%; 
+    max-width: 1800px; 
+    margin: 0 auto; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .leaflet-popup-content-wrapper {

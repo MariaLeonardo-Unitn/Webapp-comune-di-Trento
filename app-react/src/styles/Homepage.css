@@ -16,8 +16,7 @@ body {
   #map {
     flex-grow: 1; 
     height: 500px; 
-    width: 95%; 
-    max-width: 1200px; 
+    width: 200%; 
     border: 2px solid #a8e6cf;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     margin: 40px auto; 
@@ -25,6 +24,15 @@ body {
   
   .leaflet-popup-content-wrapper {
     border-radius: 10px;
+  }
+
+  .container { 
+    width: 100%; 
+    max-width: 1800px; 
+    margin: 0 auto; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   button {

@@ -70,8 +70,8 @@ const Mappa = () => {
   }, [navigate]);
 
   return (
-    <div>
-      <h1 className="fade-in">Mappa per Segnalazioni</h1>
+    <div className>
+      <h1 className="fade-in">Mappa per Segnalazioni Utente</h1>
       <div id="map"></div>
     </div>
   );

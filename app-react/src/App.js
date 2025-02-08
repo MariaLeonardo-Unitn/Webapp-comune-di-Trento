@@ -9,6 +9,7 @@ import Segnalazioni from './Segnalazioni';
 import SegnalazioniAnonime from './SegnalazioniAnonime'; 
 import Register from './Register';
 import InterfacciaDA from './InterfacciaDA';
+import InterfacciaC from './InterfacciaC';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/prenotazioni" element={<PrenotazioniPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/interfacciaDA" element={<InterfacciaDA />} />
+        <Route path="/interfacciaC" element={<InterfacciaC />} />
         <Route path="/login" element={<Login />} /> 
       </Routes>
     </Router>
