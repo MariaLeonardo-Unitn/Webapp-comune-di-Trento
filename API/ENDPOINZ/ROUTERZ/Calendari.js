@@ -1,25 +1,24 @@
-
 const express = require('express');
 const router = express.Router();
 const Calendar = require('../../MODELLI/calendario');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const Upload = multer({ storage });
-const { authenticateDolRole } = require('./Authentication');
+const { authenticateToken, authenticateDolRole } = require('./Authentication');
+const calendario = require('../../MODELLI/calendario');
 
 router.use(express.json());
 
 //utilizzabile dall'utenz
-router.get('/:zona', async (req, res) => {
+router.get('/:zona', authenticateToken, async (req, res) => {
     try{   
         const zone = req.params.zona;
         const calendario = await Calendar.findOne({zone});
         if (!calendario) 
             return res.status(404).json({ error: 'Calendario non trovato o non ancora presente per la zona specificata' });
-        
-            
+
         res.set('Content-type', calendario.pdf.contentType); 
-        res.sendFile(calendario.pdf.data);
+        res.status(200).send(calendario.pdf.data.buffer);
     }
     catch (err) {
         res.status(500).send(err);

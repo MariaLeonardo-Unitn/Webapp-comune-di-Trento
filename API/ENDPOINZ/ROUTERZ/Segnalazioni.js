@@ -2,35 +2,35 @@ const express = require('express');
 const router = express.Router();
 const Segnalazione = require('../../MODELLI/segnalazione');
 const Utente = require('../../MODELLI/utente');
+const { authenticateToken, authenticateComRole } = require('./Authentication');
 
 router.use(express.json());
 
-router.post('/', async (req, res) => {
-    let utenteUrl = req.body.utente;
+router.post('/', authenticateToken, async (req, res) => {
+    let utenteId = req.body.utente;
     let segnalazioneUrl = req.body.segnalazione;
-    if(!utenteUrl){
-        return res.status(400).json({error: 'Utente non specificato'});
+    if(!utenteId){
+        return res.status(403).json({error: 'Utente non specificato'});
     }
     if(!segnalazioneUrl){
-        return res.status(400).json({error: 'Segnalazione non specificata'})
+        return res.status(405).json({error: 'Segnalazione non specificata'})
     }
-    let idUtente = utenteUrl.substring(utenteUrl.lastIndexOf('/') + 1);
-    let utente = await Utente.findOne({
-        utenteId: idUtente
-    }).exec();
-    if(utente == null){
-        return res.status(400).json({ error: 'Utente non esistente' });
+    
+    let utente = await Utente.findOne({ utenteId: utenteId }).exec();
+    if (!utente) {
+        return res.status(406).json({ error: 'Utente non esistente' });
     }
-    let idSegnalazione = segnalazioneUrl.substring(segnalazioneUrl.lastIndexOf('/') + 1);
-    let segnalazione = await Utente.findOne({
-        segnalazioneId: idSegnalazione
-    }).exec();
+
+    let lastSegn = await Segnalazione.findOne().sort({ segnalazioneId: -1 }).collation({ locale: "en", numericOrdering: true }).exec();
+    let idSegnalazione = lastSegn ? ( parseInt(lastSegn.segnalazioneId, 10 ) + 1 ).toString() : 1;
+
+    let segnalazione = await Segnalazione.findOne({ segnalazioneId: idSegnalazione }).exec();
     if(segnalazione != null){
-        return res.status(400).json({error: 'Segnalazione già esistente'});
+        return res.status(409).json({error: 'Segnalazione già esistente'});
     }
     let nuovaSegnalazione = new Segnalazione({
         segnalazioneId: idSegnalazione,
-        utenteId: idUtente,
+        utenteId: utenteId,
         luogo: req.body.luogo,
         descrizione: req.body.descrizione,
         stato: req.body.stato || 'attiva',
@@ -41,11 +41,11 @@ router.post('/', async (req, res) => {
         }
     });
     nuovaSegnalazione = await nuovaSegnalazione.save();
-    let id = nuovaSegnalazione.id;
-    return res.location('/api/segnalazioni/' + id).status(201).send();
+    let id = nuovaSegnalazione.segnalazioneId;
+    return res.location('/api/segnalazioni/' + id).status(201).json(nuovaSegnalazione);
 });
 
-router.get('/utenteId', async (req, res) => {
+router.get('/utenteId', authenticateToken, async (req, res) => {
     let lista_segn;
     if(req.query.utenteId){
         lista_segn = await Segnalazione.find({
@@ -57,9 +57,11 @@ router.get('/utenteId', async (req, res) => {
     }
 })
 
-router.get('/:segnalazioneId', async (req, res) => {
+router.get('/:segnalazioneId', authenticateComRole, async (req, res) => {
+
     const segnalazioneId = req.params.segnalazioneId;
     let segnalazione = await Segnalazione.findOne({ segnalazioneId }).exec();
+
     if(segnalazione){
         res.status(200).json(segnalazione);
     }else{
