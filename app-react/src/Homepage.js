@@ -64,7 +64,10 @@ function Homepage() {
     });
 
     map.on('click', function (e) {
-      navigate('/segnalazionianonime', { state: { coordinates: e.latlng } });
+      L.popup()
+        .setLatLng(e.latlng)
+        .setContent('<button onclick="window.location.href=\'/segnalazionianonime\'">Segnala</button>')
+        .openOn(map);
     });
 
     return () => {
@@ -118,6 +121,12 @@ function Homepage() {
             style={{ width: '40px', height: '40px' }}
           />
           <p>Seleziona Lingua</p>
+          {showLanguageDropdown && (
+            <div className="language-dropdown">
+              <button onClick={() => handleLanguageSelect('Italiano')}>Italiano</button>
+              <button onClick={() => handleLanguageSelect('English')}>English</button>
+            </div>
+          )}
         </div>
         <div className="icon-container">
           <img

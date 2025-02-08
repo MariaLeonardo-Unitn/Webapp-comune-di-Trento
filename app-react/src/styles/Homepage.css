@@ -91,7 +91,7 @@ body {
     position: absolute;
     top: 40px; 
     right: 0;
-    background-color: white;
+    background-color: #3ebd93;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -100,21 +100,22 @@ body {
   
   .language-dropdown button {
     display: block;
-    width: 100%;
+    width: 95%;
     padding: 10px;
+    color: black;
     text-align: left;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border: none;
     cursor: pointer;
   }
   
   .language-dropdown button:hover {
-    background-color: #f0f0f0;
+    background-color: #ffffff;
   }
   
   .top-right-icons {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
   }
   
   .icon-container {
@@ -122,4 +123,5 @@ body {
     flex-direction: column;
     align-items: center;
     margin-left: 10px;
+    position: relative;
   }
