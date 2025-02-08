@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../APP');
-const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 describe('test pren methods', () => {

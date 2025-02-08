@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
             return res.status(407).json({ error: 'Punto di ritiro non esistente' });
         }
 
-        let lastPren = await Prenotazione.findOne().sort({ prenotazioneId: -1 }).exec();
+        let lastPren = await Prenotazione.findOne().sort({ prenotazioneId: -1 }).collation({ locale: "en", numericOrdering: true }).exec();
         let newPrenId = lastPren ? ( parseInt(lastPren.prenotazioneId, 10 ) + 1 ).toString() : 1;
         
 

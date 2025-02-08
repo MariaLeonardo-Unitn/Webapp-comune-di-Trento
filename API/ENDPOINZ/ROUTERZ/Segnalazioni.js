@@ -21,7 +21,7 @@ router.post('/', authenticateToken, async (req, res) => {
         return res.status(406).json({ error: 'Utente non esistente' });
     }
 
-    let lastSegn = await Segnalazione.findOne().sort({ segnalazioneId: -1 }).exec();
+    let lastSegn = await Segnalazione.findOne().sort({ segnalazioneId: -1 }).collation({ locale: "en", numericOrdering: true }).exec();
     let idSegnalazione = lastSegn ? ( parseInt(lastSegn.segnalazioneId, 10 ) + 1 ).toString() : 1;
 
     let segnalazione = await Segnalazione.findOne({ segnalazioneId: idSegnalazione }).exec();

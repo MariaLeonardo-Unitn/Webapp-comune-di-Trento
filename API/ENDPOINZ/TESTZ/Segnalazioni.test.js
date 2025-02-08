@@ -1,13 +1,10 @@
 const request = require('supertest');
 const app = require('../APP');
-const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const Test = require('supertest/lib/test');
 
 
 
 describe('Test segn methods', () => {
-    //questo utente possiede i requisiti per chiamare OGNI metodo
     var fakeSegnalazione = {
         utente: "1",
         segnalazione: "uso abusivo",
@@ -20,6 +17,7 @@ describe('Test segn methods', () => {
         }
     }
     var fakeSegnalazioneId;
+    //questo utente possiede i requisiti per chiamare OGNI metodo
     var utente = { email: "mvb@milan.olandesi", password: "28", };
     var utenteId;
     var token;

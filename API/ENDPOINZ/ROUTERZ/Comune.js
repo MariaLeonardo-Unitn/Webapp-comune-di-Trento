@@ -20,10 +20,10 @@ router.get('/segnalazioni', async (req, res) => {
 router.get('/prenotazioni', async (req, res) => {
     let lista_pren;
     lista_pren = await Prenotazione.find();
-    if(lista_segn.length == 0){
+    if(lista_pren.length == 0){
         return res.status(404).send( 'Non è presente nessuna prenotazione.');
     }
-    res.status(200).json(lista_segn);
+    res.status(200).json(lista_pren);
 });
 
 router.delete('/prenotazione/:prenotazioneId', async (req, res) => {

@@ -10,13 +10,14 @@ router.get('/segnalazioni', async (req,  res) => {
     let lista_segn;
     lista_segn = await Segnalazione.find().exec();
     if(lista_segn.length == 0){
-        return res.status(200).send('Non sono presenti segnalazioni al momento');
+        return res.status(404).send('Non sono presenti segnalazioni al momento');
     }else{
         return res.status(200).json(lista_segn);
     }
 });
 
 router.patch('/segnalazioni/:segnalazioneId', async (req, res) => {
+    
     const segnalazioneId = req.params.segnalazioneId;
     const { stato } = req.body;
     const statiPossibili = ['attiva', 'presa in carico', 'completata'];
@@ -28,6 +29,7 @@ router.patch('/segnalazioni/:segnalazioneId', async (req, res) => {
         { stato: stato },
         { new: true}
     );
+    
     if(!segnalazione){
         return res.status(404).send({ error: 'Segnalazione non trovata '});
     }

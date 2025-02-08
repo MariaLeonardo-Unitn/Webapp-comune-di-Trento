@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../APP');
-const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 
@@ -8,7 +7,7 @@ describe('test disp methods', () => {
     
     var fakePdf = Buffer.from('%PDF-1.4\n%Fake PDF file');
     //questo utente possiede i requisiti per chiamare ogni metodo
-    var utente = { email: "capo@gang.it", password: "bordello", };
+    var utente = { email: "capo@gang.it", password: "clang", };
     var token;
 
     beforeAll( async () => {
