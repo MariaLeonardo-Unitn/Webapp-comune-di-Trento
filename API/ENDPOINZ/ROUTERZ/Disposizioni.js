@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 const Disp = require('../../MODELLI/disposizione');
@@ -18,7 +19,7 @@ router.get('/', authenticateToken, async (req, res) => {
         }
             
         res.set('Content-type', disposizione.pdf.contentType); 
-        res.send(disposizione.pdf.data);
+        res.status(200).send(disposizione.pdf.data.buffer);
     }
     catch (err) {
         res.status(500).send(err);

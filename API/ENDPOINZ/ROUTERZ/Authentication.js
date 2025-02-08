@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const Utente = require('../../MODELLI/utente');
@@ -14,16 +13,12 @@ router.use(express.json());
 //che si riceve da una response di login, e bisogna inserirlo in un header della richiesta che si vuole eseguire. Questo header DEVE chiamarsi "access-token"
 function authenticateToken(req, res, next) {
     let token = req.headers['access-token'];
-    console.log('Token ricevuto:', token);
+    console.log("Token ricevuto nel middleware:", token);
     if (!token) return res.status(401).json({ error: 'Token mancante.'});
     
     jwt.verify(token, process.env.SECRET_KEY, (err, Utente) => {
-        if (err) {
-            console.log('Errore nel token:', err);
-            return res.status(403).json({ error: 'Token non valido'});
-        }
+        if (err) return res.status(403).json({ error: 'Token non valido'});
         else {
-            console.log('Utente autenticato:', Utente);
             req.Utente = Utente;
             next();
         }
@@ -68,6 +63,7 @@ router.post('/login', async (req, res) => {
 
         const token = jwt.sign(
             {
+                utenteId: User.utenteId,
                 email: User.email,
                 role: User.role,
                 permissions: User.permissions,
@@ -76,7 +72,7 @@ router.post('/login', async (req, res) => {
             process.env.SECRET_KEY,
             { expiresIn: '60m' }
         );
-        res.json({ 
+        res.status(200).json({ 
             token,
             utenteId: User.utenteId,
             role: User.role,
@@ -90,7 +86,6 @@ router.post('/login', async (req, res) => {
 
 // Endpoint per ottenere le informazioni dell'utente autenticato
 router.get('/me', authenticateToken, (req, res) => {
-    console.log(req.Utente);
     res.status(200).json({
         Utente_id: req.Utente.utenteId,
         role: req.Utente.role,
@@ -116,7 +111,7 @@ router.post('/signup', async (req, res) => {
                 return res.status(400).json({ error: 'Token segreto non valido' });
             }
         }
-        let lastUser = await Utente.findOne().sort({ utenteId: -1 }).exec();
+        let lastUser = await Utente.findOne().sort({ utenteId: -1 }).collation({ locale: "en", numericOrdering: true }).exec();
         let newUtenteId = lastUser ? ( parseInt(lastUser.utenteId, 10 ) + 1 ).toString() : 1;
 
         // Creazione del nuovo utente nel database
