@@ -96,7 +96,7 @@ router.get('/me', authenticateToken, (req, res) => {
 // Endpoint di registrazione (sign-up)
 router.post('/signup', async (req, res) => {
     const { nome, cognome, codiceFiscale, email, password, role, secret_token } = req.body;
-
+    console.log("Dati ricevuti:", req.body);
     try {
         // Validazione del ruolo e token segreto
         if (['operatore_Dolomiti', 'operatore_comune'].includes(role)) {
@@ -104,10 +104,10 @@ router.post('/signup', async (req, res) => {
                 return res.status(400).json({ error: 'Token segreto richiesto per registrarsi come operatore' });
             }
 
-            if (role === "operatore_Dolomiti" && secret_token != process.env.DOLOMITI_TOKEN) {
+            if (role === "operatore_Dolomiti" && String(secret_token) != String(process.env.DOLOMITI_TOKEN)) {
                 return res.status(400).json({ error: 'Token segreto non valido' });
             }
-            if (role === "operatore_comune" && secret_token != process.env.COMUNE_TOKEN) {
+            if (role === "operatore_comune" && String(secret_token) != String(process.env.COMUNE_TOKEN)) {
                 return res.status(400).json({ error: 'Token segreto non valido' });
             }
         }

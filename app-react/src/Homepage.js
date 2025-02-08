@@ -1,37 +1,34 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './styles/Homepage.css'; // Import the CSS file
+import './styles/Homepage.css';
 
-// Fix for Leaflet marker icons
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// Fix for default Leaflet marker icons
 const DefaultIcon = L.icon({
   iconUrl: markerIcon,
   shadowUrl: markerIconShadow,
-  iconSize: [25, 41], // Size of the icon
-  iconAnchor: [12, 41], // Point of the icon which will correspond to marker's location
-  popupAnchor: [1, -34], // Point from which the popup should open relative to the iconAnchor
-  shadowSize: [41, 41], // Size of the shadow
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
 });
 
-L.Marker.prototype.options.icon = DefaultIcon; // Set default icon
+L.Marker.prototype.options.icon = DefaultIcon;
 
 function Homepage() {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
-  // Initialize the map when the component mounts
   useEffect(() => {
-    const map = L.map('map').setView([46.0667, 11.1333], 12); // Coordinates for Trento, Italy
+    const map = L.map('map').setView([46.0667, 11.1333], 12);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
     }).addTo(map);
 
-    // Define the centriDiRaccolta data
     const centriDiRaccolta = [
       {
         nome: "Argentario",
@@ -60,80 +57,99 @@ function Homepage() {
       },
     ];
 
-    // Add markers for each centro di raccolta
     centriDiRaccolta.forEach((centro) => {
       L.marker(centro.coord)
         .addTo(map)
         .bindPopup(`<b>Centro di Raccolta</b><br><b>${centro.nome}</b><br>${centro.indirizzo}`);
     });
 
-    // Handle map clicks to show a popup with a button
     map.on('click', function (e) {
+      const button = document.createElement('button');
+      button.textContent = 'Segnala';
+      button.style.cursor = 'pointer'; 
+    
+      button.addEventListener('click', () => {
+        navigate('/segnalazionianonime', { state: { coordinates: e.latlng } });
+      });
+    
+      const container = document.createElement('div');
+      container.appendChild(button);
+    
       L.popup()
         .setLatLng(e.latlng)
-        .setContent('<button onclick="window.location.href=\'/report\'">Segnala</button>')
+        .setContent(container)
         .openOn(map);
     });
 
-    // Cleanup the map when the component unmounts
     return () => {
       map.remove();
     };
-  }, []);
+  }, [navigate]);
 
-  // Event handlers for the icons
   const handleVerdeClick = () => {
-    navigate('/menu'); // Redirect to the menu page
+    navigate('/register');
   };
 
   const handleLanguageClick = () => {
-    alert('Change language');
+    setShowLanguageDropdown(!showLanguageDropdown);
   };
 
   const handleLoginClick = () => {
     navigate('/login');
   };
 
+  const handleLanguageSelect = (language) => {
+    setShowLanguageDropdown(false);
+    alert(`Language changed to ${language}`);
+  };
+
   return (
-    <div>
-      {/* Title */}
+    <div className="container">
       <div className="page-title">
-        <h1 className="page-title">Trento Clean City</h1>
+        <h1 className="fade-in">Trento Clean City Homepage</h1>
       </div>
 
-      {/* Map */}
       <div id="map"></div>
 
-      {/* Top-left icons */}
       <div className="top-left-icons">
         <img
-          src="https://cdn-icons-png.flaticon.com/128/6015/6015685.png"
+          src="https://cdn-icons-png.flaticon.com/128/1672/1672225.png"
           alt="Menu"
           id="verdeButton"
           onClick={handleVerdeClick}
+          style={{ width: '40px', height: '40px' }}
         />
+        <p>Registrati</p>
       </div>
 
-      {/* Top-right icons */}
       <div className="top-right-icons">
-        <img
-          src="https://cdn-icons-png.flaticon.com/128/2014/2014826.png"
-          alt="Language"
-          id="languageIcon"
-          onClick={handleLanguageClick}
-        />
-        <img
-          src="https://cdn-icons-png.flaticon.com/128/1077/1077012.png"
-          alt="Login"
-          id="loginIcon"
-          onClick={handleLoginClick}
-        />
+        <div className="icon-container">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/2014/2014826.png"
+            alt="Language"
+            id="languageIcon"
+            onClick={handleLanguageClick}
+            style={{ width: '40px', height: '40px' }}
+          />
+          <p>Seleziona Lingua</p>
+          {showLanguageDropdown && (
+            <div className="language-dropdown">
+              <button onClick={() => handleLanguageSelect('Italiano')}>Italiano</button>
+              <button onClick={() => handleLanguageSelect('English')}>English</button>
+            </div>
+          )}
+        </div>
+        <div className="icon-container">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1077/1077012.png"
+            alt="Login"
+            id="loginIcon"
+            onClick={handleLoginClick}
+            style={{ width: '40px', height: '40px' }}
+          />
+          <p>Login</p>
+        </div>
       </div>
-
-      {/* Footer */}
-      <footer>
-        <p>Footer content</p>
-      </footer>
     </div>
   );
 }

@@ -59,7 +59,7 @@ const Mappa = () => {
       const button = document.getElementById('segnalaButton');
       if (button) {
         button.onclick = () => {
-          navigate('/segnalazioni'); // Navigate to Segnalazioni page
+          navigate('/segnalazioni'); 
         };
       }
     });
@@ -70,12 +70,9 @@ const Mappa = () => {
   }, [navigate]);
 
   return (
-    <div>
-      <h1>Mappa con Centri di Raccolta</h1>
+    <div className>
+      <h1 className="fade-in">Mappa per Segnalazioni Utente</h1>
       <div id="map"></div>
-      <footer>
-        <p>Footer content</p>
-      </footer>
     </div>
   );
 };
