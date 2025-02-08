@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/Prenotazioni_index.css'; // Importing the CSS file
+import './styles/Prenotazioni_index.css'; 
 function PrenotazioniPage() {
   return (
     <>

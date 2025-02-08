@@ -3,7 +3,6 @@ import "./styles/Segnalazioni.css";
 
 const Segnalazioni = () => {
   useEffect(() => {
-    // Add fade-in and slide-in animations after the component mounts
     const h1Element = document.querySelector("h1");
     const formElement = document.querySelector("form");
 

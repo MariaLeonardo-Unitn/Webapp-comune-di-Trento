@@ -59,7 +59,7 @@ const Mappa = () => {
       const button = document.getElementById('segnalaButton');
       if (button) {
         button.onclick = () => {
-          navigate('/segnalazioni'); // Navigate to Segnalazioni page
+          navigate('/segnalazioni'); 
         };
       }
     });

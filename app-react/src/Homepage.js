@@ -66,7 +66,7 @@ function Homepage() {
     map.on('click', function (e) {
       const button = document.createElement('button');
       button.textContent = 'Segnala';
-      button.style.cursor = 'pointer'; // Cambia il cursore per indicare che è cliccabile
+      button.style.cursor = 'pointer'; 
     
       button.addEventListener('click', () => {
         navigate('/segnalazionianonime', { state: { coordinates: e.latlng } });
@@ -87,7 +87,7 @@ function Homepage() {
   }, [navigate]);
 
   const handleVerdeClick = () => {
-    navigate('/interfacciaC');
+    navigate('/register');
   };
 
   const handleLanguageClick = () => {
