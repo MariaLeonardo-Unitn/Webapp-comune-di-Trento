@@ -4,7 +4,6 @@ const Prenotazione = require('../../MODELLI/prenotazione');
 const PuntoRitiro = require('../../MODELLI/puntoRitiro');
 const Utente = require('../../MODELLI/utente');
 
-router.use(express.json());
 
 router.post('/', async (req, res) => {
     try {

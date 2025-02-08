@@ -87,7 +87,7 @@ router.post('/login', async (req, res) => {
 // Endpoint per ottenere le informazioni dell'utente autenticato
 router.get('/me', authenticateToken, (req, res) => {
     res.status(200).json({
-        Utente_id: req.Utente.utenteId,
+        utenteId: req.Utente.utenteId,
         role: req.Utente.role,
         permissions: req.Utente.permissions,
     });
