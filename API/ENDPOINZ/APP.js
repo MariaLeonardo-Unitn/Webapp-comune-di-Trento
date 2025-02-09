@@ -30,7 +30,7 @@ App.use('/api/rifiuti/disposizioni', DispRouter);
 App.use('/api/prenotazione', authenticateToken);
 App.use('/api/prenotazione', PrenoRouter);
 
-App.use('/api/segnalazioni', authenticateToken);
+//App.use('/api/segnalazioni', authenticateToken);
 App.use('/api/segnalazioni', SegnRouter);
 
 App.use('/api/operatore_dol/', authenticateDolRole);
