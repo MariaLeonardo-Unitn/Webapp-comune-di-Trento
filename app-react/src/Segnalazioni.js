@@ -4,7 +4,7 @@ import "./styles/Segnalazioni.css";
 
 const Segnalazioni = () => {
   const location = useLocation();
-  const coords = location.state?.coordinates;
+  const coords = location.state?.coords;
   useEffect(() => {
     const h1Element = document.querySelector("h1");
     const formElement = document.querySelector("form");
@@ -20,7 +20,7 @@ const Segnalazioni = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
+    const formData = new FormData();
     const reason = event.target.reason.value;
     const photo = event.target.photo.files[0];
     if (!coords.lat || !coords.lng) {
@@ -35,9 +35,17 @@ const Segnalazioni = () => {
       return;
     }
     formData.append("photo", photo);
+    const token = localStorage.getItem("token"); 
+    if (!token) {
+        alert("Errore: utente non autenticato.");
+        return;
+    }
     try {
       const response = await fetch("http://localhost:5000/api/segnalazioni", {
         method: "POST",
+        headers: {
+          "access-token": token
+        },
         body: formData,
       });
 

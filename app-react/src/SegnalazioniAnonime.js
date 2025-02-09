@@ -4,7 +4,7 @@ import './styles/Segnalazioni.css';
 
 const SegnalazioniAnonime = () => {
   const location = useLocation();
-  const coords = location.state?.coordinates;
+  const coords = location.state?.coords;
   useEffect(() => {
     const h1Element = document.querySelector('h1');
     const formElement = document.querySelector('form');
@@ -36,7 +36,7 @@ const SegnalazioniAnonime = () => {
     }
     formData.append("photo", photo);
     try {
-      const response = await fetch("http://localhost:5000/api/segnalazioni", {
+      const response = await fetch("http://localhost:5000/api/segnalazioni/anonime", {
         method: "POST",
         body: formData,
       });

@@ -59,7 +59,7 @@ const Mappa = () => {
     
       // Directly navigate after setting the coordinates
       if (latlng) {
-        navigate('/segnalazionianonime', { state: { coords: { lat: latlng.lat, lng: latlng.lng } } });
+        navigate('/segnalazioni', { state: { coords: { lat: latlng.lat, lng: latlng.lng } } });
       }
     });
 

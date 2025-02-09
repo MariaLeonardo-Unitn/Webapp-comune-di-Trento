@@ -69,7 +69,7 @@ function Homepage() {
       button.style.cursor = 'pointer'; 
     
       button.addEventListener('click', () => {
-        navigate('/segnalazionianonime', { state: { coordinates: e.latlng } });
+        navigate('/segnalazionianonime', { state: { coords: e.latlng } });
       });
     
       const container = document.createElement('div');
