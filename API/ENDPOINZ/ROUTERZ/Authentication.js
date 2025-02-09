@@ -4,7 +4,6 @@ const Utente = require('../../MODELLI/utente');
 const jwt = require('jsonwebtoken');
 
 
-// Specifiche
 router.use(express.json());
 
 

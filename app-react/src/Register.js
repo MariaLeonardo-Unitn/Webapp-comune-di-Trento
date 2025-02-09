@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './styles/Login.css'; // Import the CSS file
+import { useNavigate } from 'react-router-dom';
+import './styles/Login.css'; 
 
 function Register() {
   const [message, setMessage] = useState('');
@@ -10,12 +11,11 @@ function Register() {
   const [cognome, setCognome] = useState('');
   const [role, setRole] = useState('cittadino');
   const [secret_token, setSecretToken] = useState('');
+  const navigate = useNavigate();
 
-  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Creiamo l'oggetto con i dati da inviare al backend
     const userData = {
       nome,
       cognome,
@@ -23,7 +23,7 @@ function Register() {
       password,
       codiceFiscale,
       role,
-      ...(role !== 'cittadino' && { secret_token }) // Aggiunge `secretToken` solo se necessario
+      ...(role !== 'cittadino' && { secret_token }) 
     };
 
     try {
@@ -38,7 +38,9 @@ function Register() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage(` ${data.message}`);  // Mostra messaggio di successo
+        alert("Registrazione avvenuta con successo!");
+
+        // Reset dei campi dopo la registrazione
         setNome('');
         setCognome('');
         setCodiceFiscale('');
@@ -46,7 +48,9 @@ function Register() {
         setPassword('');
         setRole('cittadino');
         setSecretToken('');
-        alert("Registrazione avvenuta con successo!");
+
+        // Esegui automaticamente il login con i dati inseriti
+        handleLogin({ email, password });
       } else {
         setMessage(`Errore: ${data.error || 'Registrazione fallita'}`);
         alert("Registrazione fallita");
@@ -54,6 +58,41 @@ function Register() {
     } catch (error) {
       setMessage('Errore di connessione al server.');
       console.error('Errore:', error);
+    }
+  };
+
+  const handleLogin = async (credentials) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Errore di login");
+      }
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+
+        // Reindirizzamento in base al ruolo
+        if (data.role === "operatore_Dolomiti") {
+          navigate("/interfacciaDA");
+        } else if (data.role === "operatore_comune") {
+          navigate("/interfacciaC");
+        } else {
+          navigate("/menu");
+        }
+      }
+    } catch (error) {
+      console.error("Errore durante il login:", error);
+      setMessage("Errore di login dopo la registrazione.");
     }
   };
 
@@ -113,13 +152,13 @@ function Register() {
           required
         />
         <label htmlFor="role">Seleziona il tuo ruolo:</label>
-          <select id="role" name="role" value={role} onChange={handleChangeRole} required>
-            <option value="cittadino">Cittadino</option>
-            <option value="operatore_Dolomiti">Operatore Dolomiti Ambiente</option>
-            <option value="operatore_comune">Operatore comunale</option>
-          </select>
+        <select id="role" name="role" value={role} onChange={handleChangeRole} required>
+          <option value="cittadino">Cittadino</option>
+          <option value="operatore_Dolomiti">Operatore Dolomiti Ambiente</option>
+          <option value="operatore_comune">Operatore comunale</option>
+        </select>
 
-          {role === 'operatore_Dolomiti' || role === 'operatore_comune' ? (
+        {role === 'operatore_Dolomiti' || role === 'operatore_comune' ? (
           <>
             <label htmlFor="secret_token">Codice Operatore:</label>
             <input
@@ -130,7 +169,7 @@ function Register() {
               onChange={(e) => setSecretToken(e.target.value)}
             />
           </>
-          ) : null}
+        ) : null}
 
         <button type="submit">Invia</button>
       </form>

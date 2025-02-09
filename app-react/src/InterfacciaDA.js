@@ -1,11 +1,23 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useSegnalazioni } from './SegnalazioniContext';
-import './styles/InterfacciaDA.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; 
+import { useSegnalazioni } from "./SegnalazioniContext";
+import "./styles/InterfacciaDA.css";
 
 const InterfacciaDA = () => {
+  const navigate = useNavigate();
   const { segnalazioni } = useSegnalazioni();
-  const [sortOrder, setSortOrder] = useState('desc');
-  const [filterText, setFilterText] = useState('');
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [filterText, setFilterText] = useState("");
+
+  // Protezione della pagina: verifica token e ruolo
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    if (!token || role !== "operatore_Dolomiti") {
+      navigate("/login"); // Se non è un operatore, torna al login
+    }
+  }, [navigate]);
 
   useEffect(() => {
     sortReports(sortOrder);
@@ -13,20 +25,20 @@ const InterfacciaDA = () => {
 
   const sortReports = (order) => {
     const sortedReports = [...segnalazioni].sort((a, b) => {
-      const dateA = new Date(a.date.split('/').reverse().join('-'));
-      const dateB = new Date(b.date.split('/').reverse().join('-'));
-      return order === 'asc' ? dateA - dateB : dateB - dateA;
+      const dateA = new Date(a.date.split("/").reverse().join("-"));
+      const dateB = new Date(b.date.split("/").reverse().join("-"));
+      return order === "asc" ? dateA - dateB : dateB - dateA;
     });
     return sortedReports;
   };
 
-  const filteredReports = sortReports(sortOrder).filter(report =>
-    report.reason.toLowerCase().includes(filterText.toLowerCase()) ||
-    report.location.toLowerCase().includes(filterText.toLowerCase())
+  const filteredReports = sortReports(sortOrder).filter( (report) =>
+      report.reason.toLowerCase().includes(filterText.toLowerCase()) ||
+      report.location.toLowerCase().includes(filterText.toLowerCase())
   );
 
   return (
-    <div className="container">      
+    <div className="container">
       <h1 className="fade-in">Trento Clean City</h1>
       <main>
         <h2 className="fade-in">Interfaccia operatore Dolomiti Ambiente</h2>
@@ -46,7 +58,7 @@ const InterfacciaDA = () => {
         </div>
 
         <div className="report-list">
-          {filteredReports.map(report => (
+          {filteredReports.map((report) => (
             <div key={report.id} className="report-card">
               {report.image && <img src={report.image} alt="Report" />}
               <p>Data: {report.date}</p>
