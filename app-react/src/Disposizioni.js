@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './styles/Login.css'; 
 
 function Disposizioni() {
   const [file, setFile] = useState(null);
+  const navigate = useNavigate(); 
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -28,8 +30,19 @@ function Disposizioni() {
     }
   };
 
+  const handleRedirect = () => {
+    navigate('/interfacciaDA');
+  };
+
   return (
     <div>
+      <button onClick={handleRedirect} class="back-button">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/507/507257.png"
+          alt="Back to Interfaccia DA"
+          style={{ width: '30px', height: '30px' }}
+        />
+      </button>
       <h1 className="fade-in">Disposizioni</h1>
       <form id="reservation-form" className="slide-in" onSubmit={handleSubmit}>
 

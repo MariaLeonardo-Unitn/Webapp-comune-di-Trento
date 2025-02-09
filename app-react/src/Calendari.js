@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import './styles/Login.css'; 
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import './styles/Login.css';
 
 function Calendari() {
   const [zona, setZona] = useState('');
   const [file, setFile] = useState(null);
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -31,8 +33,21 @@ function Calendari() {
     }
   };
 
+  // Handle redirection to /interfacciaDA
+  const handleRedirect = () => {
+    navigate('/interfacciaDA');
+  };
+
   return (
     <div>
+      <button onClick={handleRedirect} class="back-button">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/507/507257.png"
+          alt="Back to Interfaccia DA"
+          style={{ width: '30px', height: '30px' }}
+        />
+      </button>
+
       <h1 className="fade-in">Calendari</h1>
       <form id="reservation-form" className="slide-in" onSubmit={handleSubmit}>
         <label htmlFor="zona">Zona:</label>

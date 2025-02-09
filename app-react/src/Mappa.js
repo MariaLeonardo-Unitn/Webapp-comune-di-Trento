@@ -69,8 +69,19 @@ const Mappa = () => {
     };
   }, [navigate]);
 
+  const handleRedirect = () => {
+    navigate('/menu');
+  };
+
   return (
     <div className>
+      <button onClick={handleRedirect} class="back-button">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/507/507257.png"
+          alt="Back to Interfaccia DA"
+          style={{ width: '30px', height: '30px' }}
+        />
+      </button>
       <h1 className="fade-in">Mappa per Segnalazioni Utente</h1>
       <div id="map"></div>
     </div>
