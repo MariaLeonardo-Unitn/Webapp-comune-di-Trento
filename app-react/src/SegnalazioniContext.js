@@ -12,7 +12,9 @@ export const SegnalazioniProvider = ({ children }) => {
   };
 
   return (
-    <SegnalazioniContext.Provider value={{ segnalazioni, addSegnalazione }}>
+    <SegnalazioniContext.Provider
+      value={{ segnalazioni, addSegnalazione, setSegnalazioni }}
+    >
       {children}
     </SegnalazioniContext.Provider>
   );

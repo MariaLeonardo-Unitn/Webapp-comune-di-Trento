@@ -5,37 +5,93 @@ import "./styles/InterfacciaDA.css";
 
 const InterfacciaDA = () => {
   const navigate = useNavigate();
-  const { segnalazioni } = useSegnalazioni();
+  const { segnalazioni, setSegnalazioni } = useSegnalazioni();
   const [sortOrder, setSortOrder] = useState("desc");
   const [filterText, setFilterText] = useState("");
 
-  // Protezione della pagina: verifica token e ruolo
   useEffect(() => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
 
     if (!token || role !== "operatore_Dolomiti") {
-      navigate("/login"); // Se non è un operatore, torna al login
+      navigate("/login");
     }
   }, [navigate]);
 
   useEffect(() => {
-    sortReports(sortOrder);
-  }, [sortOrder, segnalazioni]);
+    fetchSegnalazioni();
+  }, []);
 
-  const sortReports = (order) => {
-    const sortedReports = [...segnalazioni].sort((a, b) => {
-      const dateA = new Date(a.date.split("/").reverse().join("-"));
-      const dateB = new Date(b.date.split("/").reverse().join("-"));
-      return order === "asc" ? dateA - dateB : dateB - dateA;
-    });
-    return sortedReports;
+  const fetchSegnalazioni = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5000/api/operatore_dol/segnalazioni", {
+        method: "GET",
+        headers: {
+          "access-token": token,
+          "Content-Type": "application/json"
+        }
+      });
+      if (!response.ok) throw new Error("Errore nel recupero delle segnalazioni");
+      const data = await response.json();
+      console.log("Segnalazioni ricevute dal server:", data);  // Aggiunto log
+      setSegnalazioni(data); 
+    } catch (error) {
+      console.error("Errore nel recupero delle segnalazioni:", error);
+    }
   };
 
-  const filteredReports = sortReports(sortOrder).filter( (report) =>
-      report.reason.toLowerCase().includes(filterText.toLowerCase()) ||
-      report.location.toLowerCase().includes(filterText.toLowerCase())
-  );
+  const patchSegnalazione = async (segnalazioneId, nuovoStato) => {
+    try {
+      console.log("Chiamata PATCH con segnalazioneId:", segnalazioneId, "e nuovo stato:", nuovoStato);  // Aggiunto log
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5000/api/operatore_dol/segnalazioni/" + segnalazioneId, {
+        method: "PATCH",
+        headers: {
+          "access-token": token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ stato: nuovoStato }),
+      });
+
+      if (!response.ok) throw new Error("Errore nell'aggiornamento dello stato");
+
+      const updatedSegnalazione = await response.json();
+      setSegnalazioni(prevSegnalazioni => 
+        prevSegnalazioni.map(segnalazione => 
+          segnalazione.segnalazioneId === segnalazioneId 
+            ? { ...segnalazione, stato: nuovoStato } // Modifica lo stato della segnalazione aggiornata
+            : segnalazione
+        )
+      );
+    } catch (error) {
+      console.error("Errore aggiornamento stato:", error);
+    }
+  };
+
+  const deleteSegnalazione = async (segnalazioneId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5000/api/operatore_dol/segnalazioni/" + segnalazioneId, {
+        method: "DELETE",
+        headers: {
+          "access-token": token,
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!response.ok) throw new Error("Errore nella cancellazione della segnalazione");
+  
+      console.log(`Segnalazione con ID ${segnalazioneId} eliminata con successo`);
+  
+      setSegnalazioni(prevSegnalazioni => 
+        prevSegnalazioni.filter(segnalazione => segnalazione.segnalazioneId !== segnalazioneId)
+      );
+    } catch (error) {
+      console.error("Errore nell'eliminazione della segnalazione:", error);
+    }
+  };
+  
 
   return (
     <div className="container">
@@ -58,17 +114,43 @@ const InterfacciaDA = () => {
         </div>
 
         <div className="report-list">
-          {filteredReports.map((report) => (
-            <div key={report.id} className="report-card">
-              {report.image && <img src={report.image} alt="Report" />}
-              <p>Data: {report.date}</p>
-              <p>Motivo: {report.reason}</p>
-              <p>Luogo: {report.location}</p>
-              <p className={`status ${report.status.toLowerCase()}`}>{report.status}</p>
-              <button>Visualizza foto</button>
-            </div>
-          ))}
+          {segnalazioni.length === 0 ? (
+            <p>Nessuna segnalazione disponibile.</p>
+          ) : (
+            segnalazioni
+              .filter((report) => {
+                const descrizione = report.descrizione || '';  
+                const luogo = report.luogo || ''; 
+                return (
+                  descrizione.toLowerCase().includes(filterText.toLowerCase()) ||
+                  luogo.toLowerCase().includes(filterText.toLowerCase())
+                );
+              })
+              .sort((a, b) => (sortOrder === 'asc' ? new Date(a.data) - new Date(b.data) : new Date(b.data) - new Date(a.data)))
+              .map((report) => {
+                console.log("Report nella mappatura:", report);  // Aggiunto log
+                return (
+                  <div key={report.segnalazioneId} className="report-card">
+                    {report.foto && <img src={report.foto} alt="Segnalazione" />}
+                    <p>Data: {new Date(report.data).toLocaleString()}</p>
+                    <p>Descrizione: {report.descrizione}</p>
+                    <p>Luogo: {report.luogo}</p>
+                    <p className={`status ${report.stato.toLowerCase()}`}>{report.stato}</p>
+                    <select onChange={(e) => {
+                      console.log("Selezionato segnalazioneId:", report.segnalazioneId);  // Aggiunto log
+                      patchSegnalazione(report.segnalazioneId, e.target.value);
+                    }}>
+                      <option value="attiva">Attiva</option>
+                      <option value="presa in carico">Presa in carico</option>
+                      <option value="completata">Completata</option>
+                    </select>
+                    <button onClick={() => deleteSegnalazione(report.segnalazioneId)}>Elimina</button>
+                  </div>
+                );
+              })
+          )}
         </div>
+
       </main>
     </div>
   );
