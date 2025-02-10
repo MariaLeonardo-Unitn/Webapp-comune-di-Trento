@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 const Notifiche = () => {
 
-    const navigate = useNavigate(); 
+  const navigate = useNavigate(); 
 
-    const handleRedirect = () => {
-        navigate('/mappa');
-      };
+  const handleRedirect = () => {
+      navigate('/mappa');
+  };
     
 
   return (

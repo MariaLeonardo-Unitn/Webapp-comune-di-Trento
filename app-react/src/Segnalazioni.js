@@ -1,7 +1,21 @@
 import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./styles/Segnalazioni.css";
 
 const Segnalazioni = () => {
+  const location = useLocation();
+  const coords = location.state?.coords;
+  const navigate = useNavigate();
+  
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   useEffect(() => {
     const h1Element = document.querySelector("h1");
     const formElement = document.querySelector("form");
@@ -11,8 +25,11 @@ const Segnalazioni = () => {
       formElement.classList.add("slide-in");
     }
   }, []);
+  if (!coords || !coords.lat || !coords.lng) {
+    return <div>Posizione non disponibile. Si prega di selezionare una posizione sulla mappa.</div>;
+  }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const reason = event.target.reason.value;
     const visibility = event.target.visibility.value;
@@ -30,13 +47,16 @@ const Segnalazioni = () => {
       <h1>Segnalazioni</h1>
       <form id="reservation-form" onSubmit={handleSubmit}>
         <label htmlFor="reason">Motivo Segnalazione:</label>
-        <textarea id="reason" name="reason" required></textarea>
+        <input id="reason" name="reason" required/>
 
-        <label htmlFor="visibility">Pubblica o Privata:</label>
-        <select id="visibility" name="visibility" required>
-          <option value="pubblica">Pubblica</option>
-          <option value="privata">Privata</option>
-        </select>
+        <label htmlFor="photo">Carica una fotografia :</label>
+        <input
+          type="file"
+          id="photo"
+          name="photo"
+          accept="image/*" 
+          required
+        />
 
         <label htmlFor="photo">Carica una fotografia :</label>
         <input

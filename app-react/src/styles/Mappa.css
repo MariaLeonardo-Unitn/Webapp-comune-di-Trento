@@ -84,6 +84,7 @@ body {
     width: 30px;
     height: 30px;
     }
+<<<<<<< HEAD
     
     .notifiche-button {
       position: absolute;
@@ -102,3 +103,5 @@ body {
     .notifiche-button:hover {
       background-color: #dcedc1;
     }
+=======
+>>>>>>> ConnBackFront2

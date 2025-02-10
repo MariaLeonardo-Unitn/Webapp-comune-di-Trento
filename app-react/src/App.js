@@ -19,7 +19,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Homepage />} /> {/* Set Homepage as the default route */}
+        <Route path="/" element={<Homepage />} /> 
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/mappa" element={<Mappa />} />
         <Route path="/segnalazioni" element={<Segnalazioni />} />
