@@ -149,26 +149,6 @@ function Homepage() {
           />
           <p>Login</p>
         </div>
-        <div className="icon-container">
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/2014/2014826.png"
-            alt="Language"
-            id="languageIcon"
-            onClick={handleLanguageClick}
-            style={{ width: '40px', height: '40px' }} // Make the button smaller
-          />
-          <p>Seleziona Lingua</p> {/* Add text under the button */}
-        </div>
-        <div className="icon-container">
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/1077/1077012.png"
-            alt="Login"
-            id="loginIcon"
-            onClick={handleLoginClick}
-            style={{ width: '40px', height: '40px' }} // Make the button smaller
-          />
-          <p>Login</p> {/* Add text under the button */}
-        </div>
       </div>
     </div>
   );
