@@ -1,0 +1,689 @@
+openapi: '3.0.0'
+info:
+  version: '1.0'
+  title: "Trento Clean City OpeanAPI 3.0"
+  description: API per gestire l'ambiente pubblico di Trento
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Localhost
+components:
+  parameters:
+    Zona:
+      name: zona
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Identificativo della zona
+  responses:
+    Success:
+      description: Operazione completata con successo
+    NotFound:
+      description: Risorsa non trovata
+    InternalError:
+      description: Errore interno del server
+    ValidationError:
+      description: Errore di validazione dei dati
+  requestBodies:
+    FileUpload:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+                description: Il file PDF da caricare
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    PuntoInteresse:
+      type: object
+      properties:
+        PuntoId:
+          type: string
+          description: ID del punto significativo
+        tipo:
+          type: string
+          enum: [centro_ecologico, bidone_pubblico]
+          description: Tipo di punto significativo
+        nome:
+          type: string
+          description: Nome o descrizione del punto di interesse
+        posizione:
+          type: object
+          properties:
+            latitudine:
+              type: number
+              format: float
+              description: Latitudine del punto
+            longitudine:
+              type: number
+              format: float
+              description: Longitudine del punto
+      required:
+        - puntoId
+        - tipo
+        - nome
+        - posizione
+    Segnalazioni:
+      type: object
+      required:
+      - segnalazioneId
+      - utenteId
+      - luogo
+      - data
+      - descrizione
+      - stato
+      - foto
+      - posizione
+      properties:
+        segnalazioneId:
+          type: string
+          description: 'Identificatore della segnalazione'
+        utenteId:
+          type: string
+          description: 'Link allo user'
+        luogo:
+          type: string
+          description: 'Luogo della segnalazione'
+        data:
+          type: string
+          format: date-time
+          description: 'Data della segnalazione'
+        descrizione:
+          type: string
+          description: 'Descrizione del problema'
+        stato:
+          type: string
+          enum: [attiva, presa in carico, completata]
+          description: 'Stato della segnalazione'
+        foto:
+          type: string
+          format: uri
+          description: foto dell'irregolarità
+        posizione:
+          type: object
+          properties:
+            latitudine:
+              type: number
+              format: float
+              description: latitudine del luogo della segnalazione.
+            longitudine:
+              type: number
+              format: float
+              description: longitudine del luogo della segnalazione.
+    LoginRequest:
+      type: object
+      properties:
+        email: 
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+    LoginResponse:
+      type: object
+      properties:
+        token: 
+          type: string
+        role: 
+          type: string
+          enum: [cittadino, operatore_Dolomiti, operatore_comune]
+        permission:
+          type: array
+          items: 
+            type: string
+    UserInfoResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+        role:
+          type: string
+          enum: [cittadino, operatore_dolomiti, operatore_comune]
+        permissions:
+          type: array
+          items:
+            type: string
+    SignupRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        name:
+          type: string
+        role:
+          type: string
+          enum: [cittadino, operatore_Dolomiti, operatore_comune]
+        secret_token:
+          type: string
+          description: Token segreto richiesto per registrarsi come operatore.
+      required:
+        - email
+        - password
+        - name
+        - role
+      anyOf:
+        - properties:
+            role:
+              enum: [operatore_Dolomiti, operatore_comune]
+            secret_token:
+              type: string
+          required:
+            - secret_token
+        - properties:
+            role:
+              enum: [cittadino]
+    SignupResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        user_id:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+    User:
+      type: object
+      properties:
+        nome:
+          type: string
+        cognome:
+          type: string
+        codiceFiscale:
+          type: string
+        telefono:
+          type: string
+        prenotazioni:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prenotazione'
+    
+    Prenotazione:
+      type: object
+      properties:
+        utente:
+          $ref: '#/components/schemas/User'
+        tipoSacchetto:
+          type: string
+        quantita:
+          type: integer
+        dataPrenotazione:
+          type: string
+          format: date-time
+        puntoRitiro:
+          $ref: '#/components/schemas/PuntoRitiro'
+        stato:
+          type: string
+          enum: ["in attesa", "confermato", "ritirato", "annullato"]
+
+    PuntoRitiro:
+      type: object
+      properties:
+        nome:
+          type: string
+        indirizzo:
+          type: string
+        orari:
+          type: array
+          items:
+            type: object
+            properties:
+              giorno:
+                type: string
+              apertura:
+                type: string
+              chiusura:
+                type: string
+        tipiSacchetti:
+          type: array
+          items:
+            type: string
+
+paths:
+  /api/auth/login:
+    post: 
+      summary: Permette l'accesso a cittadini, operatori ecologici di Dolomiti Ambiente e operatori del Comune di Trento.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Autenticazione avvenuta con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+  /api/auth/me:
+    get:
+      summary: Ottieni informazioni sull'utente autenticato
+      description: Restituisce le informazioni sull'utente corrente e i suoi permessi.
+      security:
+        - bearerAuth: []  # Richiede autenticazione con token
+      responses:
+        '200':
+          description: Informazioni sull'utente autenticato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoResponse'
+        '401':
+          description: Utente non autenticato
+  /api/auth/signup:
+    post:
+      summary: Permette la registrazione di nuovi utenti.
+      description: Endpoint per creare un nuovo account per cittadini, operatori ecologici di Dolomiti Ambiente o operatori del Comune di Trento. Gli operatori devono fornire un token segreto per garantire la sicurezza.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '201':
+          description: Registrazione avvenuta con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignupResponse'
+        '400':
+          description: Errore nella richiesta di registrazione
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /segnalazioni:
+      post:
+        description: >-
+          Permette agli utenti di creare una nuova segnalazione.
+        summary: Crea una nuova segnalazione.
+        tags:
+          - Segnalazioni
+        requestBody:
+          required: true
+          content:
+            multipart/form-data:
+              schema:
+                type: object
+                properties:
+                  descrizione:
+                    type: string
+                    description: descrizione dettagliata dell'irregolarità.
+                  luogo:
+                    type: string
+                    description: Luogo in cui si è verificata l'irregolarità.
+                  foto: 
+                    type: string
+                    format: binary
+                    description: foto dell'irregolarità.
+                  posizione:
+                    type: object
+                    properties:
+                      latitudine:
+                        type: number
+                        format: float
+                        description: latitudine del luogo della segnalazione.
+                      longitudine:
+                        type: number
+                        format: float
+                        description: longitudine del luogo della segnalazione.
+                required:
+                  - descrizione
+                  - luogo
+                  - foto
+                  - posizione
+        responses:
+          '201':
+            description: 'Segnalazione creata con successo.'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Segnalazioni'
+          '400':
+            description: Richiesta non valida.
+          '500':
+            description: Errore del server.
+  /segnalazioni/utente:
+    get:
+      summary: Ottiene la lista delle segnalazioni dell'utente.
+      description: Mostra la lista delle segnalazioni effettuate in passato dall'utente, con il relativo stato attuale della segnalazione.
+      tags:
+        - Segnalazioni
+      security: 
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: stato
+          schema:
+            type: string
+            enum: [attiva, presa in carico, completata]
+          description: Filtra le segnalazioni in base allo stato (facoltativo).
+          required: false
+      responses:
+        '200':
+          description: Lista delle segnalazioni dell'utente con relativo stato attuale.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  segnalazioni:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Segnalazioni'
+        '401':
+          description: Non autenticato.
+        '500':
+          description: Errore del server.
+  /segnalazioni/{segnalazioneId}:
+    get:
+      description: >-
+        Mostra la segnalazione specificata tramite ID.
+      summary: Mostra segnalazione selezionata
+      tags:
+        - Segnalazioni
+      parameters:
+        - name: segnalazioneId
+          in: path
+          required: true
+          description: ID della segnalazione da visualizzare
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Dettagli della segnalazione selezionata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Segnalazioni'
+        '404':
+          description: Segnalazione non trovata.
+        '500':
+          description: Errore del server.
+          
+  /operatore_dol/segnalazioni:
+    get:
+      summary: Lista delle segnalazioni visibile dagli operatori di Dolomiti Ambiente.
+      description: >-
+        Lista delle segnalazioni visibile e modificabile dagli operatori di Dolomiti Ambiente.
+      tags:
+        - Interfacce operatori
+      parameters:
+        - in: query
+          required: false
+          name: stato
+          schema:
+            type: string
+            enum: [attiva, presa in carico, completata]
+          description: Filtra le segnalazioni in base allo stato.
+        - in: query
+          required: false
+          name: ordina
+          schema:
+            type: string
+            enum: [data_cresc, data_decresc]
+          description: Ordina le segnalazioni in base alla data (più o meno recente).
+      responses:
+        '200':
+          description: Lista delle segnalazioni
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Segnalazioni'
+  /operatore_dol/segnalazioni/{segnalazioneId}:
+    patch:
+      summary: Aggiorna lo stato della segnalazione.
+      description: >-
+        Aggiorna lo stato della segnalazione selezionata.
+      tags:
+        - Interfacce operatori
+      parameters: 
+        - in: path
+          name: segnalazioneId
+          required: true
+          schema:
+            type: string
+          description: ID della segnalazione da aggiornare
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stato:
+                  type: string
+                  enum: [attiva, presa in carico, completata]
+                  description: Nuovo stato della segnalazione
+      responses:
+        '200':
+          description: Stato della segnalazione aggiornato con successo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Segnalazioni'
+    delete:
+      summary: Rimuove una segnalazione
+      description: >-
+        Rimuove una segnalazione selezionata
+      tags:
+        - Interfacce operatori
+      parameters:
+        - in: path
+          name: segnalazioneId
+          required: true
+          schema:
+            type: string
+          description: ID della segnalazione da rimuovere
+      responses:
+        '204':
+          description: Segnalazione rimossa con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Segnalazioni'
+  /operatore_com/segnalazioni:
+    get:
+      summary: Lista segnalazioni completate o prese in carico da Dolomiti Ambiente.
+      description: >-
+        Lista segnalazioni completate o prese in carico da Dolomiti Ambiente.
+      tags:
+        - Interfacce operatori
+      parameters:
+        - in: query
+          name: stato
+          schema:
+            type: string
+            enum: [presa in carico, completata]
+          description: Filtra le segnalazioni in base allo stato.
+      responses:
+        '200':
+          description: Lista delle segnalazioni prese in carico o completate
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Segnalazioni'
+  /api/rifiuti/calendari/{zona}:
+    get:
+      tags:
+        - Cittadini
+      summary: Ottieni il calendario della raccolta differenziata per una zona specifica
+      description: Restituisce il calendario per la raccolta differenziata di una zona specificata come file PDF.
+      parameters:
+        - $ref: '#/components/parameters/Zona'
+      responses:
+        '200':
+          description: Calendario della raccolta differenziata per la zona specificata
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags:
+        - Operatori Dolomiti Ambiente
+      summary: Carica un nuovo file PDF con il calendario per la raccolta differenziata di una zona specificata
+      description: Permette di caricare il calendario per la raccolta differenziata per una zona specificata come file PDF.
+      requestBody:
+        $ref: '#/components/requestBodies/FileUpload'
+      responses:
+        '201':
+          description: File caricato correttamente
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags:
+        - Operatori Dolomiti Ambiente
+      summary: Elimina il calendario per una zona specifica
+      description: Permette di eliminare un calendario della raccolta differenziata per una zona specificata.
+      parameters:
+        - $ref: '#/components/parameters/Zona'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    patch:
+      tags:
+        - Operatori Dolomiti Ambiente
+      summary: Sostituisci il file PDF del calendario per una zona specifica
+      description: Permette di sostituire il file PDF del calendario per la zona specificata con un nuovo file.
+      parameters:
+        - $ref: '#/components/parameters/Zona'
+      requestBody:
+        $ref: '#/components/requestBodies/FileUpload'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/rifiuti/disposizioni:
+    get:
+      tags:
+        - Cittadini
+      summary: Ottieni le disposizioni per la raccolta differenziata
+      description: Restituisce un file scaricabile con le informazioni sulle normative e disposizioni comunali per la raccolta differenziata.
+      responses:
+        '200':
+          description: File PDF scaricabile con le normative per la raccolta differenziata
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags:
+        - Operatori Dolomiti Ambiente
+      summary: Carica un nuovo file PDF con le disposizioni per la raccolta differenziata
+      description: Permette di caricare un file PDF con le normative comunali.
+      requestBody:
+        $ref: '#/components/requestBodies/FileUpload'
+      responses:
+        '201':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags:
+        - Operatori Dolomiti Ambiente
+      summary: Elimina la disposizione meno recente
+      description: Permette di eliminare la disposizione meno recente per la raccolta differenziata.
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    patch:
+      tags:
+        - Operatori Dolomiti Ambiente
+      summary: Sostituisce il file PDF delle disposizioni più recente
+      description: Permette di sostituire il file PDF delle ultime disposizioni con un nuovo file PDF.
+      requestBody:
+        $ref: '#/components/requestBodies/FileUpload'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /prenotazioni:
+    post:
+      tags: 
+        - Cittadini
+      summary: Crea una nuova prenotazione
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tipoSacchetto:
+                  type: string
+                quantita:
+                  type: integer
+                puntoRitiro:
+                  type: string
+      responses:
+        '201':
+          description: Prenotazione creata con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prenotazione'
+        '401':
+          description: Accesso non autorizzato
+        '500':
+          description: Errore durante la creazione della prenotazione
+
+  
