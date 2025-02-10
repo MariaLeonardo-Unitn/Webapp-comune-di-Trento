@@ -4,11 +4,13 @@ const Disp = require('../../MODELLI/disposizione');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const Upload = multer({ storage });
+const { authenticateToken, authenticateDolRole } = require('./Authentication');
+
 
 router.use(express.json());
 
 //unica per l'utenz
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
     try{   
         const disposizione = await Disp.findOne().sort({_id: -1}); //trova l'ultima inserita
         if (!disposizione) {
@@ -16,7 +18,7 @@ router.get('/', async (req, res) => {
         }
             
         res.set('Content-type', disposizione.pdf.contentType); 
-        res.send(disposizione.pdf.data);
+        res.status(200).send(disposizione.pdf.data.buffer);
     }
     catch (err) {
         res.status(500).send(err);
@@ -25,7 +27,7 @@ router.get('/', async (req, res) => {
 
 
 //utilizzabile dall'interfaccia di DOLOMITES
-router.post('/', Upload.single('file'), async (req, res) => {
+router.post('/', authenticateDolRole, Upload.single('file'), async (req, res) => {
     try{
         const disposizione = new Disp({
             title: req.body.title,
@@ -43,7 +45,7 @@ router.post('/', Upload.single('file'), async (req, res) => {
 });
 
 //sempre e solo dolomiti
-router.patch('/', Upload.single('file'), async (req, res) => {
+router.patch('/', authenticateDolRole, Upload.single('file'), async (req, res) => {
     try {
         const disposizione = await Disp.findOne().sort({ _id: -1 }); // Trova la più recente
         if (!disposizione) 
@@ -61,7 +63,7 @@ router.patch('/', Upload.single('file'), async (req, res) => {
 });
 
 // dolomitus
-router.delete('/', async (req, res) => {
+router.delete('/', authenticateDolRole, async (req, res) => {
     try {
         const disposizione = await Disp.findOne().sort({ _id: 1 }); // Trova la meno recente
         if (!disposizione) 

@@ -6,7 +6,7 @@ info:
   license:
     name: MIT
 servers:
-  - url: http://localhost:8000/api/v1
+  - url: http://localhost:3000/api/v1
     description: Localhost
 components:
   securitySchemes:
@@ -91,26 +91,6 @@ components:
               type: number
               format: float
               description: longitudine del luogo della segnalazione.
-    Notifiche:
-      type: object
-      properties:
-        utenteId:
-          type: string
-          description: ID dell'utente a cui è stata inviata la notifica.
-        message:
-          type: string
-          description: Descrizione del contenuto della notifica.
-        segnalazioneId:
-          type: string
-          description: ID della segnalazione associata alla notifica, se presente.
-        data:
-          type: string
-          format: date-time
-          description: La data di creazione della notifica.
-      required:
-        - utenteId
-        - message
-        - data
 paths:
   /segnalazioni:
     post:
@@ -220,16 +200,7 @@ paths:
           description: Segnalazione non trovata.
         '500':
           description: Errore del server.
-  /homepage:
-    get:
-      summary: Menu dell'app.
-      description: >-
-        Homepage, menu dell'app tra cui è possibile scegliere tra alcune azioni possibili.
-      responses:
-        '200':
-          description: Menu dell'applicazione.
-        '500':
-          description: Errore del server
+          
   /operatore_dol/segnalazioni:
     get:
       summary: Lista delle segnalazioni visibile dagli operatori di Dolomiti Ambiente.
@@ -336,32 +307,4 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Segnalazioni'
-    post:
-      summary: Invia notifiche agli utenti.
-      description: >-
-        Invia notifiche agli utenti riguardo le segnalazioni o in generale riguardanti gli ambienti pubblici.
-      tags:
-        - Interfacce operatori
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                utenteId:
-                  type: string
-                  description: ID dell'utente a cui si vuole mandare la notifica
-                message:
-                  type: string
-                  description: descrizione della notifica.
-                segnalazioneId:
-                  type: string
-                  description: ID della segnalazione riguardante la notifica, se necessario
-      responses:
-        '201':
-          description: notifica inviata con successo.
-          content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Notifiche'
+    

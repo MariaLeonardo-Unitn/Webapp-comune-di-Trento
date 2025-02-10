@@ -4,20 +4,21 @@ const Calendar = require('../../MODELLI/calendario');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const Upload = multer({ storage });
+const { authenticateToken, authenticateDolRole } = require('./Authentication');
+const calendario = require('../../MODELLI/calendario');
 
 router.use(express.json());
 
 //utilizzabile dall'utenz
-router.get('/:zona', async (req, res) => {
+router.get('/:zona', authenticateToken, async (req, res) => {
     try{   
         const zone = req.params.zona;
         const calendario = await Calendar.findOne({zone});
         if (!calendario) 
             return res.status(404).json({ error: 'Calendario non trovato o non ancora presente per la zona specificata' });
-        
-            
+
         res.set('Content-type', calendario.pdf.contentType); 
-        res.send(calendario.pdf.data);
+        res.status(200).send(calendario.pdf.data.buffer);
     }
     catch (err) {
         res.status(500).send(err);
@@ -26,7 +27,7 @@ router.get('/:zona', async (req, res) => {
 
 
 //utilizzabile dall'interfaccia di DOLOMITES
-router.post('/:zona', Upload.single('file'), async (req, res) => {
+router.post('/:zona', authenticateDolRole, Upload.single('file'), async (req, res) => {
     try{
         const zona = req.params.zona;
         if (!zona) 
@@ -49,7 +50,7 @@ router.post('/:zona', Upload.single('file'), async (req, res) => {
 });
 
 //utilizzabile dai DOLOMITES
-router.delete('/:zona', async (req, res) => {
+router.delete('/:zona', authenticateDolRole, async (req, res) => {
     try {
         const zona = req.params.zona;
         const calendario = await Calendar.findOneAndDelete({ zone: zona });
@@ -64,7 +65,7 @@ router.delete('/:zona', async (req, res) => {
 });
 
 //usable dalle dolomiti
-router.patch('/:zona', Upload.single('file'), async (req, res) => {
+router.patch('/:zona', authenticateDolRole, Upload.single('file'), async (req, res) => {
     try {
         const zona = req.params.zona;
         const calendario = await Calendar.findOne({ zone: zona });

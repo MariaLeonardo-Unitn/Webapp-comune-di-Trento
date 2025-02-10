@@ -3,9 +3,16 @@ info:
   title: API per la Raccolta Differenziata
   version: 1.0.0
   description: API per la gestione dei calendari e delle disposizioni per la raccolta differenziata.
-paths:    
+tags:
+  - name: Cittadini
+    description: Metodi accessibili ai cittadini
+  - name: Operatori Dolomiti Ambiente
+    description: Metodi riservati agli operatori autorizzati
+paths:
   /api/rifiuti/calendari/{zona}:
     get:
+      tags:
+        - Cittadini
       summary: Ottieni il calendario della raccolta differenziata per una zona specifica
       description: Restituisce il calendario per la raccolta differenziata di una zona specificata come file PDF.
       parameters:
@@ -27,77 +34,57 @@ paths:
           description: Calendario non trovato per la zona specificata
         '500':
           description: Errore interno
-    post: 
+    post:
+      tags:
+        - Operatori Dolomiti Ambiente
       summary: Carica un nuovo file PDF con il calendario per la raccolta differenziata di una zona specificata
-      description: Permette di caricare il calendario per la raccolta differenziata per una zona specificata come file PDF 
-      requestBody: 
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-                  description: Il file PDF del calendario
+      description: Permette di caricare il calendario per la raccolta differenziata per una zona specificata come file PDF.
+      requestBody:
+        $ref: '#/components/requestBodies/FileUpload'
       responses:
         '201':
           description: File caricato correttamente
         '400':
-          description: Errore di validazione del file caricato
+          $ref: '#/components/responses/ValidationError'
         '500':
-          description: Errore interno del server      
+          $ref: '#/components/responses/InternalError'
     delete:
+      tags:
+        - Operatori Dolomiti Ambiente
       summary: Elimina il calendario per una zona specifica
       description: Permette di eliminare un calendario della raccolta differenziata per una zona specificata.
       parameters:
-        - in: path
-          name: zona
-          required: true
-          schema:
-            type: string
-          description: Identificativo della zona per la quale si vuole eliminare il calendario
+        - $ref: '#/components/parameters/Zona'
       responses:
         '200':
           description: Calendario eliminato correttamente
         '404':
-          description: Calendario non trovato per la zona specificata
+          $ref: '#/components/responses/NotFound'
         '500':
-          description: Errore interno del server
+          $ref: '#/components/responses/InternalError'
     patch:
+      tags:
+        - Operatori Dolomiti Ambiente
       summary: Sostituisci il file PDF del calendario per una zona specifica
       description: Permette di sostituire il file PDF del calendario per la zona specificata con un nuovo file.
       parameters:
-        - in: path
-          name: zona
-          required: true
-          schema:
-            type: string
-          description: Identificativo della zona per la quale si vuole sostituire il calendario
+        - $ref: '#/components/parameters/Zona'
       requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-                  description: Il nuovo file PDF del calendario da caricare
+        $ref: '#/components/requestBodies/FileUpload'
       responses:
         '200':
           description: Calendario aggiornato correttamente
         '400':
-          description: Errore di validazione del file caricato
+          $ref: '#/components/responses/ValidationError'
         '404':
-          description: Calendario non trovato per la zona specificata
+          $ref: '#/components/responses/NotFound'
         '500':
-          description: Errore interno del server      
+          $ref: '#/components/responses/InternalError'
 
   /api/rifiuti/disposizioni:
     get:
+      tags:
+        - Cittadini
       summary: Ottieni le disposizioni per la raccolta differenziata
       description: Restituisce un file scaricabile con le informazioni sulle normative e disposizioni comunali per la raccolta differenziata.
       responses:
@@ -109,61 +96,52 @@ paths:
                 type: string
                 format: binary
         '404':
-          description: File non trovato
+          $ref: '#/components/responses/NotFound'
         '500':
-          description: Errore del server interno
+          $ref: '#/components/responses/InternalError'
     post:
+      tags:
+        - Operatori Dolomiti Ambiente
       summary: Carica un nuovo file PDF con le disposizioni per la raccolta differenziata
       description: Permette di caricare un file PDF con le normative comunali.
       requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-                  description: Il file PDF con le disposizioni da caricare
+        $ref: '#/components/requestBodies/FileUpload'
       responses:
         '201':
           description: File caricato correttamente
         '400':
-          description: Errore di validazione del file caricato
+          $ref: '#/components/responses/ValidationError'
         '500':
-          description: Errore interno del server      
+          $ref: '#/components/responses/InternalError'
     delete:
+      tags:
+        - Operatori Dolomiti Ambiente
       summary: Elimina la disposizione meno recente
       description: Permette di eliminare la disposizione meno recente per la raccolta differenziata.
       responses:
         '200':
           description: Disposizione eliminata correttamente
         '404':
-          description: Disposizione non trovata
+          $ref: '#/components/responses/NotFound'
         '500':
-          description: Errore interno del server
+          $ref: '#/components/responses/InternalError'
     patch:
+      tags:
+        - Operatori Dolomiti Ambiente
       summary: Sostituisce il file PDF delle disposizioni più recente
       description: Permette di sostituire il file PDF delle ultime disposizioni con un nuovo file PDF.
       requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-                  description: Il nuovo file PDF delle disposizioni da caricare
+        $ref: '#/components/requestBodies/FileUpload'
       responses:
         '200':
           description: Disposizione aggiornata correttamente
         '400':
-          description: Errore di validazione del file caricato
+          $ref: '#/components/responses/ValidationError'
         '404':
-          description: Disposizione non trovata
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
 components:
   parameters:
     Zona:
