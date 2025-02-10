@@ -31,13 +31,46 @@ const Segnalazioni = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const reason = event.target.reason.value;
-    const photo = event.target.photo.files[0]; 
+    const formData = new FormData();
+    const photo = event.target.photo.files[0];
+    const token = localStorage.getItem("token"); 
 
-    if (photo) {
-      alert(`Segnalazione motivata: ${reason}.  Foto: ${photo.name}`);
-    } else {
-      alert(`Segnalazione motivata: ${reason}.  Nessuna foto caricata.`);
+    if (!coords.lat || !coords.lng) {
+      return;
+    }
+    if (!token) {
+        alert("Errore: utente non autenticato.");
+        return;
+    }
+    if (!photo) {
+        alert("Errore: nessuna foto selezionata.");
+        return;
+    }
+    formData.append("foto", photo);
+    formData.append("utenteId", localStorage.getItem("utenteId"));
+    formData.append("lat", coords.lat);
+    formData.append("lng", coords.lng);
+    formData.append("descrizione", event.target.reason.value);
+
+
+    console.error(localStorage.getItem("utenteId"));
+    try {
+      const response = await fetch("http://localhost:5000/api/segnalazioni", {
+        method: "POST",
+        headers: {
+          "access-token": token
+        },
+        body: formData
+      });
+
+      if (response.ok) {
+        alert(`Segnalazione inviata con successo!`);
+      } else {
+        alert("Errore nell'invio della segnalazione.");
+      }
+    } catch (error) {
+      console.error("Errore:", error);
+      alert("Errore di connessione con il server.");
     }
   };
 

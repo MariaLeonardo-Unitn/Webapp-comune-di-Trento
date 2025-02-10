@@ -78,6 +78,7 @@ function Register() {
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
+        localStorage.setItem("utenteId", data.utenteId);
 
         if (data.role === "operatore_Dolomiti") {
           navigate("/interfacciaDA");

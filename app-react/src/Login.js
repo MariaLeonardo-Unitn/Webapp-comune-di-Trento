@@ -30,6 +30,7 @@ function Login() {
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
+        localStorage.setItem("utenteId", data.utenteId);
         alert("Login effettuato con successo!");
       
         if (data.role === "operatore_Dolomiti") 
