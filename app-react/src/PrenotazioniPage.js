@@ -1,108 +1,157 @@
-import React, { useState, useEffect } from 'react';
-import './styles/Prenotazioni_index.css'; // Importing the CSS file
-function PrenotazioniPage() {
-  const [user, setUser] = useState(null);
-  const [formData, setFormData] = useState({
-    date: "",
-    quantity: "",
-    puntoRitiro: "Trento Centro",
-    bagType: "secco"
-  });
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import './styles/Homepage.css';
 
-  const fetchUser = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Utente non loggato.");
-      return;
-    }
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/me", {
-        method: "GET",
-        headers: {
-          "access-token": token,
-          "Content-Type": "application/json",
-        },
-      });
-      console.log('Token inviato:', localStorage.getItem('token'));
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-      } else {
-        const errorData = await response.json();
-        alert(errorData.error || "Errore nel recupero dei dati dell'utente.");
-      }
-    } catch (error) {
-      console.error("Errore durante la richiesta:", error);
-      alert("Errore nella comunicazione con il server.");
-    }
-  };
+const DefaultIcon = L.icon({
+  iconUrl: markerIcon,
+  shadowUrl: markerIconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
+
+function Homepage() {
+  const navigate = useNavigate();
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    const map = L.map('map').setView([46.0667, 11.1333], 12);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+    }).addTo(map);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const dataToSend = {
-      tipoSacchetto: formData.bagType,
-      quantita: formData.quantity,
-      dataPrenotazione: formData.date,
-      puntoRitiro: formData.puntoRitiro
-    };
-    const response = await fetch("http://localhost:5000/api/prenotazione", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        'access-token': localStorage.getItem('token')
+    const centriDiRaccolta = [
+      {
+        nome: "Argentario",
+        coord: [46.0897, 11.1212],
+        indirizzo: "Via Pradiscola, 22",
       },
-      body: JSON.stringify(dataToSend),
+      {
+        nome: "Mattarello",
+        coord: [46.0023, 11.1361],
+        indirizzo: "Via della Gotarda",
+      },
+      {
+        nome: "Meano",
+        coord: [46.1112, 11.1556],
+        indirizzo: "Via Bellaria, 44/B",
+      },
+      {
+        nome: "Povo",
+        coord: [46.0605, 11.1508],
+        indirizzo: "Via Castel di Pietrapiana, 8",
+      },
+      {
+        nome: "Sopramonte",
+        coord: [46.0811, 11.0974],
+        indirizzo: "Via Strada di Campedél",
+      },
+    ];
+
+    centriDiRaccolta.forEach((centro) => {
+      L.marker(centro.coord)
+        .addTo(map)
+        .bindPopup(`<b>Centro di Raccolta</b><br><b>${centro.nome}</b><br>${centro.indirizzo}`);
     });
 
-    if (response.ok) {
-      alert("Prenotazione effettuata con successo!");
-      setFormData({date: "", quantity: "", puntoRitiro: "Trento Centro", bagType: "secco" }); // Resetta il form
-    } else {
-      alert("Errore nell'invio della prenotazione");
-    }
+    map.on('click', function (e) {
+      const button = document.createElement('button');
+      button.textContent = 'Segnala';
+      button.style.cursor = 'pointer'; 
+    
+      button.addEventListener('click', () => {
+        navigate('/segnalazionianonime', { state: { coords: e.latlng } });
+      });
+    
+      const container = document.createElement('div');
+      container.appendChild(button);
+    
+      L.popup()
+        .setLatLng(e.latlng)
+        .setContent(container)
+        .openOn(map);
+    });
+
+    return () => {
+      map.remove();
+    };
+  }, [navigate]);
+
+  const handleVerdeClick = () => {
+    navigate('/register');
   };
 
-  if (!user) {
-    return <div>Caricamento...</div>;
-  }
+  const handleLanguageClick = () => {
+    setShowLanguageDropdown(!showLanguageDropdown);
+  };
+
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
+
+  const handleLanguageSelect = (language) => {
+    setShowLanguageDropdown(false);
+    alert(`Language changed to ${language}`);
+  };
 
   return (
-    <>
-      <div> 
-        <h1 className="fade-in">Prenotazioni</h1>
-        <form id="reservation-form" className="fade-in" onSubmit={handleSubmit}>
-          <label htmlFor="date">Data Prenotazione:</label>
-          <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} required />
-          <label htmlFor="quantity">Numero di sacchetti:</label>
-          <input type="number" id="quantity" name="quantity" value={formData.quantity} onChange={handleChange} required />
-          <label htmlFor="puntoRitiro">Punto di ritiro</label>
-          <select id="puntoRitiro" name="puntoRitiro" value={formData.puntoRitiro} onChange={handleChange} required>
-            <option value="Trento Centro">Trento Centro</option>
-            <option value="Cristo Re">Cristo Re</option>
-            <option value="Tangenziale">Tangenziale</option>
-          </select>
-          <label htmlFor="bagType">Tipo:</label>
-          <select id="bagType" name="bagType" value={formData.bagType} onChange={handleChange} required>
-            <option value="secco">Secco</option>
-            <option value="umido">Umido</option>
-            <option value="plastica">Plastica</option>
-          </select>
-          <button type="submit">Prenota</button>
-        </form>
+    <div>
+      <div className="page-title">
+        <h1 className="fade-in">Trento Clean City</h1>
       </div>
-    </>
+
+      <div id="map"></div>
+
+      <div className="top-left-icons">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/1672/1672225.png"
+          alt="Menu"
+          id="verdeButton"
+          onClick={handleVerdeClick}
+          style={{ width: '40px', height: '40px' }}
+        />
+        <p>Registrati</p>
+      </div>
+
+      <div className="top-right-icons">
+        <div className="icon-container">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/2014/2014826.png"
+            alt="Language"
+            id="languageIcon"
+            onClick={handleLanguageClick}
+            style={{ width: '40px', height: '40px' }}
+          />
+          <p>Seleziona Lingua</p>
+          {showLanguageDropdown && (
+            <div className="language-dropdown">
+              <button onClick={() => handleLanguageSelect('Italiano')}>Italiano</button>
+              <button onClick={() => handleLanguageSelect('English')}>English</button>
+            </div>
+          )}
+        </div>
+        <div className="icon-container">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1077/1077012.png"
+            alt="Login"
+            id="loginIcon"
+            onClick={handleLoginClick}
+            style={{ width: '40px', height: '40px' }}
+          />
+          <p>Login</p>
+        </div>
+      </div>
+    </div>
   );
 }
-export default PrenotazioniPage;
+
+export default Homepage;

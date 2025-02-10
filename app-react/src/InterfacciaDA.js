@@ -7,6 +7,7 @@ const InterfacciaDA = () => {
   const navigate = useNavigate();
   const { segnalazioni, setSegnalazioni } = useSegnalazioni();
   const [sortOrder, setSortOrder] = useState("desc");
+  const [showDropdown, setShowDropdown] = useState(false); 
   const [filterText, setFilterText] = useState("");
 
   useEffect(() => {
@@ -21,6 +22,18 @@ const InterfacciaDA = () => {
   useEffect(() => {
     fetchSegnalazioni();
   }, []);
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+  
+  const handleRedirect = (path) => {
+    navigate(path);
+    setShowDropdown(false); // Close dropdown after redirection
+  };
+
+
+
 
   const fetchSegnalazioni = async () => {
     try {
@@ -43,7 +56,6 @@ const InterfacciaDA = () => {
 
   const patchSegnalazione = async (segnalazioneId, nuovoStato) => {
     try {
-      console.log("Chiamata PATCH con segnalazioneId:", segnalazioneId, "e nuovo stato:", nuovoStato);  // Aggiunto log
       const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:5000/api/operatore_dol/segnalazioni/" + segnalazioneId, {
         method: "PATCH",
@@ -98,6 +110,21 @@ const InterfacciaDA = () => {
       <h1 className="fade-in">Trento Clean City</h1>
       <main>
         <h2 className="fade-in">Interfaccia operatore Dolomiti Ambiente</h2>
+
+        <div className="top-right-icons">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/3652/3652267.png"
+            alt="Disposizioni e Calendari"
+            onClick={toggleDropdown}
+          />
+          {showDropdown && (
+            <div className="dropdown-menu">
+              <button onClick={() => handleRedirect('/disposizioni')}>Disposizioni</button>
+              <button onClick={() => handleRedirect('/calendari')}>Calendari</button>
+            </div>
+          )}
+        </div>
+
         <div className="controls">
           Ordina per:
           <select className="sort-dropdown" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
@@ -128,7 +155,7 @@ const InterfacciaDA = () => {
               })
               .sort((a, b) => (sortOrder === 'asc' ? new Date(a.data) - new Date(b.data) : new Date(b.data) - new Date(a.data)))
               .map((report) => {
-                console.log("Report nella mappatura:", report);  // Aggiunto log
+                
                 return (
                   <div key={report.segnalazioneId} className="report-card">
                     {report.foto && <img src={report.foto} alt="Segnalazione" />}
@@ -137,7 +164,6 @@ const InterfacciaDA = () => {
                     <p>Luogo: {report.luogo}</p>
                     <p className={`status ${report.stato.toLowerCase()}`}>{report.stato}</p>
                     <select onChange={(e) => {
-                      console.log("Selezionato segnalazioneId:", report.segnalazioneId);  // Aggiunto log
                       patchSegnalazione(report.segnalazioneId, e.target.value);
                     }}>
                       <option value="attiva">Attiva</option>

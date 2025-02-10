@@ -52,6 +52,8 @@ router.patch('/', authenticateDolRole, Upload.single('file'), async (req, res) =
         if (!disposizione) 
             return res.status(404).json({ error: 'Disposizione non trovata' });
 
+
+        disposizione.title = req.body.title;
         disposizione.pdf.data = req.file.buffer;
         disposizione.pdf.contentType = req.file.mimetype;
         await disposizione.save();

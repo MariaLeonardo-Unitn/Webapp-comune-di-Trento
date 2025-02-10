@@ -41,6 +41,8 @@ router.post('/:zona', authenticateDolRole, Upload.single('file'), async (req, re
                 contentType: req.file.mimetype
             }
         });
+        console.log(calendario);
+
         await calendario.save();
         res.status(201).send('File uploaded successfully');
     }

@@ -56,10 +56,14 @@ const Mappa = () => {
         .setLatLng(latlng)
         .setContent('<button id="segnalaButton">Segnala</button>')
         .openOn(map);
-    
-      // Directly navigate after setting the coordinates
-      if (latlng) {
-        navigate('/segnalazioni', { state: { coords: { lat: latlng.lat, lng: latlng.lng } } });
+    });
+
+    map.on('popupopen', function() {
+      const button = document.getElementById('segnalaButton');
+      if (button) {
+        button.onclick = () => {
+          navigate('/segnalazioni'); 
+        };
       }
     });
 
@@ -68,8 +72,19 @@ const Mappa = () => {
     };
   }, [navigate]);
 
+  const handleRedirect = () => {
+    navigate('/menu');
+  };
+
   return (
     <div className>
+      <button onClick={handleRedirect} class="back-button">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/507/507257.png"
+          alt="Back to Interfaccia DA"
+          style={{ width: '30px', height: '30px' }}
+        />
+      </button>
       <h1 className="fade-in">Mappa per Segnalazioni Utente</h1>
       <div id="map"></div>
     </div>
