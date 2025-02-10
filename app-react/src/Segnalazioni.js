@@ -31,7 +31,6 @@ const Segnalazioni = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
     const reason = event.target.reason.value;
     const visibility = event.target.visibility.value;
     const photo = event.target.photo.files[0]; 

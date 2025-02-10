@@ -12,6 +12,7 @@ router.use(express.json());
 //utilizzabile dall'utenz
 router.get('/:zona', authenticateToken, async (req, res) => {
     try{   
+
         const zone = req.params.zona;
         const calendario = await Calendar.findOne({zone});
         if (!calendario) 
@@ -19,6 +20,7 @@ router.get('/:zona', authenticateToken, async (req, res) => {
 
         res.set('Content-type', calendario.pdf.contentType); 
         res.status(200).send(calendario.pdf.data.buffer);
+        console.log(calendario);
     }
     catch (err) {
         res.status(500).send(err);
@@ -32,6 +34,11 @@ router.post('/:zona', authenticateDolRole, Upload.single('file'), async (req, re
         const zona = req.params.zona;
         if (!zona) 
             return res.status(400).json({ error: 'Zona non specificata' });
+
+
+        // Verifica il MIME type e il buffer
+        console.log('MIME type:', req.file.mimetype);
+        console.log('File size:', req.file.buffer.length);
 
         const calendario = new Calendar({
             title: req.body.title,

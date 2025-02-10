@@ -13,6 +13,38 @@ function TrentoCleanCity() {
     }
   }, [navigate]);
 
+
+  const DownloadDisposizioni = async (e) => {
+    e.preventDefault(); 
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch("http://localhost:5000/api/rifiuti/disposizioni/", {
+        method: "GET",
+        headers: {
+          "access-token": token,
+        },
+      });
+
+      if (response.ok) {
+        const contentDisposition = response.headers.get('Content-Disposition');
+        const filename = contentDisposition && contentDisposition.split('filename=')[1];
+
+        const blob = await response.blob();
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = filename || "disposzione.pdf"; 
+        link.click();
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || "Errore durante il download del calendario.");
+      }
+    } catch (error) {
+      alert("Errore durante il download.");
+      console.error(error);
+    }
+  };
+
   return (
     <div className="container">
       <h1 className="fade-in">Trento Clean City</h1>
@@ -31,7 +63,7 @@ function TrentoCleanCity() {
           <img src="https://cdn-icons-png.flaticon.com/128/3634/3634595.png" alt="Informazioni Raccolta" />
           <h2>Calendari</h2>
         </div>
-        <div className="card">
+        <div className="card" onClick={(e) => DownloadDisposizioni(e)}>
           <img src="https://cdn-icons-png.flaticon.com/128/14601/14601199.png" alt="Informazioni Raccolta" />
           <h2>Disposizioni</h2>
         </div>
