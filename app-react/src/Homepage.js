@@ -87,7 +87,7 @@ function Homepage() {
   }, [navigate]);
 
   const handleVerdeClick = () => {
-    navigate('/interfacciaDA');
+    navigate('/register');
   };
 
   const handleLanguageClick = () => {

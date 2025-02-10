@@ -32,13 +32,12 @@ const Segnalazioni = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const reason = event.target.reason.value;
-    const visibility = event.target.visibility.value;
     const photo = event.target.photo.files[0]; 
 
     if (photo) {
-      alert(`Segnalazione motivata: ${reason}. Visibilità: ${visibility}. Foto: ${photo.name}`);
+      alert(`Segnalazione motivata: ${reason}.  Foto: ${photo.name}`);
     } else {
-      alert(`Segnalazione motivata: ${reason}. Visibilità: ${visibility}. Nessuna foto caricata.`);
+      alert(`Segnalazione motivata: ${reason}.  Nessuna foto caricata.`);
     }
   };
 
