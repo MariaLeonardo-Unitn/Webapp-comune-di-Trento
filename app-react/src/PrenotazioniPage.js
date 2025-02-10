@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './styles/Prenotazioni_index.css'; // Importing the CSS file
+import { useNavigate } from 'react-router-dom';
 function PrenotazioniPage() {
+  const navigate = useNavigate();
+  const handleRedirect = () => {
+    navigate('/menu');
+  };
   const [user, setUser] = useState(null);
   const [formData, setFormData] = useState({
     date: "",
@@ -81,6 +86,13 @@ function PrenotazioniPage() {
   return (
     <>
       <div> 
+      <button onClick={handleRedirect} class="back-button">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/507/507257.png"
+          alt="Back to Interfaccia DA"
+          style={{ width: '30px', height: '30px' }}
+        />
+      </button>
         <h1 className="fade-in">Prenotazioni</h1>
         <form id="reservation-form" className="fade-in" onSubmit={handleSubmit}>
           <label htmlFor="date">Data Prenotazione:</label>

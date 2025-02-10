@@ -1,135 +1,132 @@
-/* Global Styles */
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    background: linear-gradient(to bottom, #a8e6cf, #dcedc1);
-  }
-  
-  .page-title {
-    margin-top: 20px; 
-    font-size: 2.5em; 
-    color: #1e5128; 
-  }
-  
-  /* Map Container */
-  #map {
-    flex-grow: 1; 
-    height: 500px; 
-    width: 200%; 
-    border: 2px solid #a8e6cf;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    margin: 40px auto; 
-  }
-  
-  .leaflet-popup-content-wrapper {
-    border-radius: 10px;
-  }
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  background: linear-gradient(to bottom, #a8e6cf, #dcedc1);
+}
 
-  .container { 
-    width: 100%; 
-    max-width: 1800px; 
-    margin: 0 auto; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  button {
-    background-color: #a8e6cf;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #dcedc1;
-  }
-  
-  footer {
-    background-color: #dcedc1;
-    padding: 10px;
-    border-top: 2px solid #a8e6cf;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    z-index: 1000; 
-  }
-  
-  .top-left-icons,
-  .top-right-icons {
-    position: absolute;
-    top: 20px;
-    z-index: 1000; 
-  }
-  
-  .top-left-icons {
-    left: 20px;
-  }
-  
-  .top-right-icons {
-    right: 20px;
-  }
-  
-  .top-left-icons img,
-  .top-right-icons img {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    background-color: #3ebd93;
-    border-radius: 50%;
-    padding: 5px;
-  }
-  
-  .top-left-icons img:hover,
-  .top-right-icons img:hover {
-    opacity: 0.8; 
-  }
-  
-  .language-dropdown {
-    position: absolute;
-    top: 40px; 
-    right: 0;
-    background-color: #3ebd93;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1001; 
-  }
-  
-  .language-dropdown button {
-    display: block;
-    width: 95%;
-    padding: 10px;
-    color: black;
-    text-align: left;
-    background-color: rgb(255, 255, 255);
-    border: none;
-    cursor: pointer;
-  }
-  
-  .language-dropdown button:hover {
-    background-color: #ffffff;
-  }
-  
-  .top-right-icons {
-    display: flex;
-    align-items: flex-start;
-  }
-  
-  .icon-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left: 10px;
-    position: relative;
-  }
+.page-title {
+  margin-top: 20px; 
+  font-size: 2.5em; 
+  color: #1e5128; 
+}
+
+#map {
+  flex-grow: 1; 
+  height: 500px; 
+  width: 200%; 
+  border: 2px solid #a8e6cf;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  margin: 40px auto; 
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 10px;
+}
+
+.container { 
+  width: 100%; 
+  max-width: 1800px; 
+  margin: 0 auto; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  background-color: #a8e6cf;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #dcedc1;
+}
+
+footer {
+  background-color: #dcedc1;
+  padding: 10px;
+  border-top: 2px solid #a8e6cf;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  z-index: 1000; 
+}
+
+.top-left-icons,
+.top-right-icons {
+  position: absolute;
+  top: 20px;
+  z-index: 1000; 
+}
+
+.top-left-icons {
+  left: 20px;
+}
+
+.top-right-icons {
+  right: 20px;
+}
+
+.top-left-icons img,
+.top-right-icons img {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background-color: #3ebd93;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.top-left-icons img:hover,
+.top-right-icons img:hover {
+  opacity: 0.8; 
+}
+
+.language-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px; 
+}
+
+.language-dropdown button {
+  background-color: #00796b;
+color: #fff;
+border: none;
+padding: 10px 20px;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.top-right-icons {
+  display: flex;
+  align-items: flex-start;
+}
+
+.icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10px;
+  position: relative;
+}

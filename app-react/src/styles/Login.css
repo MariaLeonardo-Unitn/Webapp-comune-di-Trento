@@ -60,8 +60,17 @@ button {
   box-shadow: 0 4px 8px rgba(0, 128, 128, 0.2);
 }
 
+input[type="file"] {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 button:hover {
-  background-color: #004d40;
+  background-color: #148b78;
   transform: translateY(-2px);
 }
 
@@ -81,4 +90,19 @@ button:hover {
 
 .slide-in {
   animation: slideIn 1.5s ease-in-out forwards;
+}
+
+.back-button {
+position: absolute;
+top: 20px;
+left: 20px;
+background: none;
+border: none;
+cursor: pointer;
+border-radius: 50%; 
+}
+
+.back-button img {
+width: 30px;
+height: 30px;
 }

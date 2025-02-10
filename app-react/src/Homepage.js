@@ -69,7 +69,7 @@ function Homepage() {
       button.style.cursor = 'pointer'; 
     
       button.addEventListener('click', () => {
-        navigate('/segnalazionianonime', { state: { coords: e.latlng } });
+        navigate('/segnalazionianonime', { state: { coordinates: e.latlng } });
       });
     
       const container = document.createElement('div');
@@ -87,7 +87,7 @@ function Homepage() {
   }, [navigate]);
 
   const handleVerdeClick = () => {
-    navigate('/register');
+    navigate('/interfacciaDA');
   };
 
   const handleLanguageClick = () => {

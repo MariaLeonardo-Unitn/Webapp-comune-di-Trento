@@ -10,6 +10,8 @@ import SegnalazioniAnonime from './SegnalazioniAnonime';
 import Register from './Register';
 import InterfacciaDA from './InterfacciaDA';
 import InterfacciaC from './InterfacciaC';
+import Disposizioni from './Disposizioni';
+import Calendari from './Calendari';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/interfacciaDA" element={<InterfacciaDA />} />
         <Route path="/interfacciaC" element={<InterfacciaC />} />
         <Route path="/login" element={<Login />} /> 
+        <Route path="/disposizioni" element={<Disposizioni />} /> 
+        <Route path="/calendari" element={<Calendari />} /> 
       </Routes>
     </Router>
   );
