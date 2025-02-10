@@ -5,7 +5,7 @@ import './styles/Login.css';
 function Calendari() {
   const [zona, setZona] = useState('');
   const [file, setFile] = useState(null);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate(); 
 
   const handleSubmit = (event) => {
     event.preventDefault();

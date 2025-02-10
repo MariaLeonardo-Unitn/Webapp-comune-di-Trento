@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './styles/Mappa.css';
@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Mappa = () => {
   const navigate = useNavigate();
+  const [message, setMessage] = useState(null); // State for the message
 
   useEffect(() => {
     const map = L.map('map').setView([46.0667, 11.1333], 12);
@@ -73,14 +74,21 @@ const Mappa = () => {
     navigate('/menu');
   };
 
+  const handleNotificheRedirect = () => {
+    navigate('/notifiche');
+  };
+
   return (
-    <div className>
-      <button onClick={handleRedirect} class="back-button">
+    <div className="mappa-container">
+      <button onClick={handleRedirect} className="back-button">
         <img
           src="https://cdn-icons-png.flaticon.com/128/507/507257.png"
           alt="Back to Interfaccia DA"
           style={{ width: '30px', height: '30px' }}
         />
+      </button>
+      <button onClick={handleNotificheRedirect} className="notifiche-button">
+        Notifiche
       </button>
       <h1 className="fade-in">Mappa per Segnalazioni Utente</h1>
       <div id="map"></div>

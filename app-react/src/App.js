@@ -12,6 +12,7 @@ import InterfacciaDA from './InterfacciaDA';
 import InterfacciaC from './InterfacciaC';
 import Disposizioni from './Disposizioni';
 import Calendari from './Calendari';
+import Notifiche from './Notifiche';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/interfacciaC" element={<InterfacciaC />} />
         <Route path="/login" element={<Login />} /> 
         <Route path="/disposizioni" element={<Disposizioni />} /> 
+        <Route path="/notifiche" element={<Notifiche />} /> 
         <Route path="/calendari" element={<Calendari />} /> 
       </Routes>
     </Router>
