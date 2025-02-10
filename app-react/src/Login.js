@@ -29,8 +29,15 @@ function Login() {
 
       if (data.token) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
         alert("Login effettuato con successo!");
-        window.location.href = "/menu"; 
+      
+        if (data.role === "operatore_Dolomiti") 
+          window.location.href = "/interfacciaDA";
+        if (data.role === "operatore_comune") 
+          window.location.href = "/interfacciaC";        
+        if (data.role === "cittadino") 
+          window.location.href = "/menu";
       } else {
         throw new Error("Token non ricevuto");
       }

@@ -1,54 +1,114 @@
 import React, { useState, useEffect } from 'react';
-import { useSegnalazioni } from './SegnalazioniContext';
 import './styles/InterfacciaDA.css';
+import { useNavigate } from 'react-router-dom';
 
 const InterfacciaC = () => {
-    const { segnalazioni } = useSegnalazioni();
+    const navigate = useNavigate();
+    const [segnalazioni, setSegnalazioni] = useState([]);
+    const [prenotazioni, setPrenotazioni] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
+    
     const [sortOrderSegnalazioni, setSortOrderSegnalazioni] = useState('desc');
     const [filterTextSegnalazioni, setFilterTextSegnalazioni] = useState('');
+    
     const [sortOrderPrenotazioni, setSortOrderPrenotazioni] = useState('desc');
     const [filterTextPrenotazioni, setFilterTextPrenotazioni] = useState('');
-    const [prenotazioni, setPrenotazioni] = useState([]); 
+    const fetchUser = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("Utente non loggato.");
+          return;
+        }
+    
+        try {
+          const response = await fetch("http://localhost:5000/api/auth/me", {
+            method: "GET",
+            headers: {
+              "access-token": token,
+              "Content-Type": "application/json",
+            },
+          });
+          console.log('Token inviato:', localStorage.getItem('token'));
+          if (response.ok) {
+            const userData = await response.json();
+            setUser(userData);
+          } else {
+            const errorData = await response.json();
+            alert(errorData.error || "Errore nel recupero dei dati dell'utente.");
+          }
+        } catch (error) {
+          console.error("Errore durante la richiesta:", error);
+          alert("Errore nella comunicazione con il server.");
+        }
+      };
 
     useEffect(() => {
-        if (segnalazioni) {
-            sortReports(sortOrderSegnalazioni, segnalazioni, setPrenotazioni);
+        fetchUser();
+        const token = localStorage.getItem("token");
+        const role = localStorage.getItem("role");
+        if(!token || role != "operatore_comune"){
+            navigate("/login");
         }
-    }, [sortOrderSegnalazioni, segnalazioni]);
-
-    useEffect(() => {
-        if (prenotazioni) {
-            sortReports(sortOrderPrenotazioni, prenotazioni, setPrenotazioni);
-        }
-    }, [sortOrderPrenotazioni, prenotazioni]);
-
-    const sortReports = (order, reports, setReports) => {
-        if (reports) { 
-            const sortedReports = [...reports].sort((a, b) => {
-                const dateA = new Date(a.date.split('/').reverse().join('-'));
-                const dateB = new Date(b.date.split('/').reverse().join('-'));
-                return order === 'asc' ? dateA - dateB : dateB - dateA;
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const resSegnalazioni = await fetch('http://localhost:5000/api/operatore_com/segnalazioni', {
+                    method: "GET",
+                    headers:{
+                        "access-token": token,
+                        "Content-Type": "application/json",
+                    }
+                });
+                const resPrenotazioni = await fetch('http://localhost:5000/api/operatore_com/prenotazioni', {
+                    method: "GET",
+                    headers:{
+                        "access-token": token,
+                        "Content-Type": "application/json",
+                    }
             });
-            setReports(sortedReports);
+
+                const segnalazioniData = await resSegnalazioni.json();
+                const prenotazioniData = await resPrenotazioni.json();
+
+                setSegnalazioni(segnalazioniData);
+                setPrenotazioni(prenotazioniData);
+            } catch (error) {
+                console.error('Errore nel recupero dati:', error);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, []);
+    const sortReports = (order, reports) => {
+        if (!Array.isArray(reports)) {  // Controllo per evitare errori
+            console.error("sortReports: reports is not an array", reports);
+            return;
         }
+        return [...reports].sort((a, b) => {
+            const dateA = new Date(a.data || a.dataPrenotazione); 
+            const dateB = new Date(b.data || b.dataPrenotazione); 
+            return order === 'asc' ? dateA - dateB : dateB - dateA;
+        });
     };
 
-    const filteredSegnalazioni = segnalazioni && segnalazioni.length > 0 ?  
-        segnalazioni.filter(report =>
-            report.reason.toLowerCase().includes(filterTextSegnalazioni.toLowerCase()) ||
-            report.location.toLowerCase().includes(filterTextSegnalazioni.toLowerCase())
-        ) : []; 
-    const filteredPrenotazioni = prenotazioni && prenotazioni.length > 0 ? 
-        prenotazioni.filter(prenotazione =>
-            prenotazione.reason.toLowerCase().includes(filterTextPrenotazioni.toLowerCase()) ||
-            prenotazione.location.toLowerCase().includes(filterTextPrenotazioni.toLowerCase())
-        ) : []; 
+    const sortedSegnalazioni = sortReports(sortOrderSegnalazioni, segnalazioni);
+    const sortedPrenotazioni = sortReports(sortOrderPrenotazioni, prenotazioni);
+
+    const filteredSegnalazioni = sortedSegnalazioni.filter(report =>
+        report.descrizione.toLowerCase().includes(filterTextSegnalazioni.toLowerCase())
+    );
+    const filteredPrenotazioni = sortedPrenotazioni.filter(prenotazione =>
+        prenotazione.tipoSacchetto.toLowerCase().includes(filterTextPrenotazioni.toLowerCase()) ||
+        prenotazione.puntoRitiro.toLowerCase().includes(filterTextPrenotazioni.toLowerCase())
+    );
     return (
         <div className="container">
             <h1 className="fade-in">Trento Clean City</h1>
             <main>
                 <h2 className="fade-in">Interfaccia operatore Comunale</h2>
-
+                {loading ? <p>Caricamento dati...</p> : (
+                    <>
                 <h3>Segnalazioni</h3>
                 <div className="controls">
                     Ordina per:
@@ -67,11 +127,10 @@ const InterfacciaC = () => {
                 <div className="report-list">
                     {filteredSegnalazioni.map(report => (
                         <div key={report.id} className="report-card">
-                            {report.image && <img src={report.image} alt="Report" />}
-                            <p>Data: {report.date}</p>
-                            <p>Motivo: {report.reason}</p>
-                            <p>Luogo: {report.location}</p>
-                            <p className={`status ${report.status.toLowerCase()}`}>{report.status}</p>
+                            {report.foto && <img src={report.foto} alt="Report" />}
+                            <p>Data: {report.data}</p>
+                            <p>Motivo: {report.descrizione}</p>
+                            <p className={`status ${report.stato.toLowerCase()}`}>{report.stato}</p>
                             <button>Visualizza foto</button>
                         </div>
                     ))}
@@ -94,15 +153,18 @@ const InterfacciaC = () => {
                 </div>
                 <div className="report-list">
                     {filteredPrenotazioni.map(prenotazione => (
-                        <div key={prenotazione.id} className="report-card">
-                            <p>Data: {prenotazione.date}</p>
-                            <p>NumeroSacchetti: {prenotazione.number}</p>
-                            <p>Tipo: {prenotazione.type}</p>
-                            <p className={`status ${prenotazione.status.toLowerCase()}`}>{prenotazione.status}</p>
+                        <div key={prenotazione.prenotazioneId} className="report-card">
+                            <p>Data: {new Date(prenotazione.dataPrenotazione).toLocaleDateString()}</p>
+                            <p>NumeroSacchetti: {prenotazione.quantita}</p>
+                            <p>Tipo: {prenotazione.tipoSacchetto}</p>
+                            <p>Punto di Ritiro: {prenotazione.puntoRitiro}</p>
+                            <p className={`status ${prenotazione.stato.toLowerCase()}`}>{prenotazione.stato}</p>
                             <button>Visualizza dettagli</button> 
                         </div>
                     ))}
                 </div>
+                </>
+                )}
             </main>
         </div>
     );

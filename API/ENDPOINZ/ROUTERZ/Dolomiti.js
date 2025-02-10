@@ -6,43 +6,13 @@ const jwt = require('jsonwebtoken');
 router.use(express.json());
 
 
-router.get('/segnalazioni', async (req,  res) => {
+router.get('/segnalazioni', async (req, res) => {
     let lista_segn;
-    lista_segn = await Segnalazione.find().exec();
+    lista_segn = await Segnalazione.find({stato: { $in: ['presa in carico', 'completata']}});
     if(lista_segn.length == 0){
-        return res.status(404).send('Non sono presenti segnalazioni al momento');
-    }else{
-        return res.status(200).json(lista_segn);
+        return res.status(404).send( 'Non è presente nessuna segnalazione.');
     }
-});
-
-router.patch('/segnalazioni/:segnalazioneId', async (req, res) => {
-    
-    const segnalazioneId = req.params.segnalazioneId;
-    const { stato } = req.body;
-    const statiPossibili = ['attiva', 'presa in carico', 'completata'];
-    if(!statiPossibili.includes(stato)){
-        return res.status(400).send( { error: 'Stato non valido.'} );
-    }
-    const segnalazione = await Segnalazione.findOneAndUpdate(
-        { segnalazioneId: segnalazioneId },
-        { stato: stato },
-        { new: true}
-    );
-    
-    if(!segnalazione){
-        return res.status(404).send({ error: 'Segnalazione non trovata '});
-    }
-    res.status(200).json(segnalazione);
-});
-
-router.delete('/segnalazioni/:segnalazioneId', async (req, res) => {
-    const segnalazioneId = req.params.segnalazioneId;
-    const segnalazione = await Segnalazione.findOneAndDelete({ segnalazioneId: segnalazioneId });
-    if(!segnalazione){
-        return res.status(404).send( { error: 'Segnalazione non trovata.' });
-    }
-    res.status(204).send();
+    res.status(200).json(lista_segn);
 });
 
 module.exports = router;
