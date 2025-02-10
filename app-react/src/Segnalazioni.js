@@ -58,14 +58,6 @@ const Segnalazioni = () => {
           required
         />
 
-        <label htmlFor="photo">Carica una fotografia :</label>
-        <input
-          type="file"
-          id="photo"
-          name="photo"
-          accept="image/*" 
-        />
-
         <button type="submit">Invia</button>
       </form>
     </div>

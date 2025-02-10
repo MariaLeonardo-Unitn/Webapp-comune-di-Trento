@@ -7,6 +7,6 @@ module.exports = mongoose.model('Prenotazione', new Schema({
     tipoSacchetto: String,
     quantita: Number,
     dataPrenotazione: { type: Date, default: Date.now },
-    puntoRitiro: { type: Schema.Types.ObjectId, ref: 'PuntoRitiro'},
+    puntoRitiro: String,
     stato: { type: String, enum: ["in attesa", "confermato", "ritirato", "annullato"], default: "in attesa" }
 }));

@@ -49,22 +49,22 @@ const Mappa = () => {
         .bindPopup(`<b>Centro di Raccolta</b><br><b>${centro.nome}</b><br>${centro.indirizzo}`);
     });
 
-    map.on('click', function(e) {
-      const latlng = e.latlng;
-      setCoords(latlng);
+    map.on('click', function (e) {
+      const button = document.createElement('button');
+      button.textContent = 'Segnala';
+      button.style.cursor = 'pointer'; 
+    
+      button.addEventListener('click', () => {
+        navigate('/segnalazioni', { state: { coords: e.latlng } });
+      });
+    
+      const container = document.createElement('div');
+      container.appendChild(button);
+    
       L.popup()
-        .setLatLng(latlng)
-        .setContent('<button id="segnalaButton">Segnala</button>')
+        .setLatLng(e.latlng)
+        .setContent(container)
         .openOn(map);
-    });
-
-    map.on('popupopen', function() {
-      const button = document.getElementById('segnalaButton');
-      if (button) {
-        button.onclick = () => {
-          navigate('/segnalazioni'); 
-        };
-      }
     });
 
     return () => {
@@ -76,21 +76,14 @@ const Mappa = () => {
     navigate('/menu');
   };
 
-  const handleNotificheRedirect = () => {
-    navigate('/notifiche');
-  };
-
   return (
-    <div className="mappa-container">
-      <button onClick={handleRedirect} className="back-button">
+    <div className>
+      <button onClick={handleRedirect} class="back-button">
         <img
           src="https://cdn-icons-png.flaticon.com/128/507/507257.png"
           alt="Back to Interfaccia DA"
           style={{ width: '30px', height: '30px' }}
         />
-      </button>
-      <button onClick={handleNotificheRedirect} className="notifiche-button">
-        Notifiche
       </button>
       <h1 className="fade-in">Mappa per Segnalazioni Utente</h1>
       <div id="map"></div>
