@@ -13,6 +13,7 @@ import InterfacciaC from './InterfacciaC';
 import Disposizioni from './Disposizioni';
 import Calendari from './Calendari';
 import Notifiche from './Notifiche';
+import CalendariUtente from './CalendariUtente';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/disposizioni" element={<Disposizioni />} /> 
         <Route path="/notifiche" element={<Notifiche />} /> 
         <Route path="/calendari" element={<Calendari />} /> 
+        <Route path="/calendariutente" element={<CalendariUtente />} />
       </Routes>
     </Router>
   );
