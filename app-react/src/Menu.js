@@ -1,9 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles/index.css';
 
 function TrentoCleanCity() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   return (
     <div className="container">
       <h1 className="fade-in">Trento Clean City</h1>
@@ -18,9 +27,13 @@ function TrentoCleanCity() {
           <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" alt="Prenotazioni" />
           <h2>Prenotazioni</h2>
         </div>
+        <div className="card" onClick={() => navigate('/calendariutente')}>
+          <img src="https://cdn-icons-png.flaticon.com/128/3634/3634595.png" alt="Informazioni Raccolta" />
+          <h2>Calendari</h2>
+        </div>
         <div className="card">
           <img src="https://cdn-icons-png.flaticon.com/128/14601/14601199.png" alt="Informazioni Raccolta" />
-          <h2>Informazioni Raccolta</h2>
+          <h2>Disposizioni</h2>
         </div>
       </div> 
 

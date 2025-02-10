@@ -11,7 +11,7 @@ body {
 
 .container {
   text-align: center;
-  width: 95%;
+  width: 955%;
   max-width: 1400px;
 }
 
@@ -39,7 +39,7 @@ p {
   background: #fff;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  width: 30%;
+  width: 20%;
   min-width: 250px;
   text-align: center;
   padding: 1.5em;

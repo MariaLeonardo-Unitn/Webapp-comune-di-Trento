@@ -1,10 +1,21 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./styles/Segnalazioni.css";
 
 const Segnalazioni = () => {
   const location = useLocation();
   const coords = location.state?.coords;
+  const navigate = useNavigate();
+  
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   useEffect(() => {
     const h1Element = document.querySelector("h1");
     const formElement = document.querySelector("form");
