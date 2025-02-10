@@ -1,13 +1,10 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useSegnalazioni } from './SegnalazioniContext';
 import './styles/Segnalazioni.css';
 
 const SegnalazioniAnonime = () => {
   const location = useLocation();
-  const { addSegnalazione } = useSegnalazioni();
-  const coordinates = location.state?.coordinates;
-
+  const coords = location.state?.coords;
   useEffect(() => {
     const h1Element = document.querySelector('h1');
     const formElement = document.querySelector('form');
@@ -17,24 +14,42 @@ const SegnalazioniAnonime = () => {
       formElement.classList.add('slide-in');
     }
   }, []);
+  if (!coords || !coords.lat || !coords.lng) {
+    return <div>Posizione non disponibile. Si prega di selezionare una posizione sulla mappa.</div>;
+  }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    const formData = new FormData();
     const reason = event.target.reason.value;
-    const visibility = event.target.visibility.value;
     const photo = event.target.photo.files[0];
-
-    const newSegnalazione = {
-      id: Date.now(),
-      date: new Date().toLocaleDateString(),
-      reason,
-      location: coordinates ? `Lat: ${coordinates.lat}, Lng: ${coordinates.lng}` : 'N/A',
-      status: 'In attesa',
-      image: photo ? URL.createObjectURL(photo) : null,
-    };
-
-    addSegnalazione(newSegnalazione);
-    alert('Segnalazione inviata con successo!');
+    if (!coords || !coords.lat || !coords.lng) {
+      alert("Errore: Nessuna posizione selezionata.");
+      return;
+    }
+    formData.append("reason", reason);
+    formData.append("lat", coords.lat);
+    formData.append("lng", coords.lng);
+    if(!photo){
+      alert("Foto mancante, inserisci foto");
+      return;
+    }
+    formData.append("photo", photo);
+    try {
+      const response = await fetch("http://localhost:5000/api/segnalazioni/anonime", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (response.ok) {
+        alert(`Segnalazione inviata con successo!`);
+      } else {
+        alert("Errore nell'invio della segnalazione.");
+      }
+    } catch (error) {
+      console.error("Errore:", error);
+      alert("Errore di connessione con il server.");
+    }
   };
 
   return (
@@ -42,16 +57,10 @@ const SegnalazioniAnonime = () => {
       <h1>Segnalazioni</h1>
       <form id="reservation-form" onSubmit={handleSubmit}>
         <label htmlFor="reason">Motivo Segnalazione:</label>
-        <textarea id="reason" name="reason" required></textarea>
-
-        <label htmlFor="visibility">Pubblica o Privata:</label>
-        <select id="visibility" name="visibility" required>
-          <option value="pubblica">Pubblica</option>
-          <option value="privata">Privata</option>
-        </select>
+        <input id="reason" name="reason" required/>
 
         <label htmlFor="photo">Carica una fotografia:</label>
-        <input type="file" id="photo" name="photo" accept="image/*" />
+        <input type="file" id="photo" name="photo" accept="image/*" required/>
 
         <button type="submit">Invia</button>
       </form>

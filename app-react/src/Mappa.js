@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './styles/Mappa.css';
@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Mappa = () => {
   const navigate = useNavigate();
+  const [coords, setCoords] = useState(null);
 
   useEffect(() => {
     const map = L.map('map').setView([46.0667, 11.1333], 12);
@@ -49,18 +50,16 @@ const Mappa = () => {
     });
 
     map.on('click', function(e) {
+      const latlng = e.latlng;
+      setCoords(latlng);
       L.popup()
-        .setLatLng(e.latlng)
+        .setLatLng(latlng)
         .setContent('<button id="segnalaButton">Segnala</button>')
         .openOn(map);
-    });
-
-    map.on('popupopen', function() {
-      const button = document.getElementById('segnalaButton');
-      if (button) {
-        button.onclick = () => {
-          navigate('/segnalazioni'); 
-        };
+    
+      // Directly navigate after setting the coordinates
+      if (latlng) {
+        navigate('/segnalazioni', { state: { coords: { lat: latlng.lat, lng: latlng.lng } } });
       }
     });
 

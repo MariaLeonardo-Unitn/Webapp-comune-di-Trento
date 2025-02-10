@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "./styles/Segnalazioni.css";
 
 const Segnalazioni = () => {
+  const location = useLocation();
+  const coords = location.state?.coords;
   useEffect(() => {
     const h1Element = document.querySelector("h1");
     const formElement = document.querySelector("form");
@@ -11,17 +14,49 @@ const Segnalazioni = () => {
       formElement.classList.add("slide-in");
     }
   }, []);
+  if (!coords || !coords.lat || !coords.lng) {
+    return <div>Posizione non disponibile. Si prega di selezionare una posizione sulla mappa.</div>;
+  }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    const formData = new FormData();
     const reason = event.target.reason.value;
-    const visibility = event.target.visibility.value;
-    const photo = event.target.photo.files[0]; 
+    const photo = event.target.photo.files[0];
+    if (!coords.lat || !coords.lng) {
+      alert("Errore: Nessuna posizione selezionata.");
+      return;
+    }
+    formData.append("reason", reason);
+    formData.append("lat", coords.lat);
+    formData.append("lng", coords.lng);
+    if(!photo){
+      alert("Foto mancante, inserisci foto");
+      return;
+    }
+    formData.append("photo", photo);
+    const token = localStorage.getItem("token"); 
+    if (!token) {
+        alert("Errore: utente non autenticato.");
+        return;
+    }
+    try {
+      const response = await fetch("http://localhost:5000/api/segnalazioni", {
+        method: "POST",
+        headers: {
+          "access-token": token
+        },
+        body: formData,
+      });
 
-    if (photo) {
-      alert(`Segnalazione motivata: ${reason}. Visibilità: ${visibility}. Foto: ${photo.name}`);
-    } else {
-      alert(`Segnalazione motivata: ${reason}. Visibilità: ${visibility}. Nessuna foto caricata.`);
+      if (response.ok) {
+        alert(`Segnalazione inviata con successo!`);
+      } else {
+        alert("Errore nell'invio della segnalazione.");
+      }
+    } catch (error) {
+      console.error("Errore:", error);
+      alert("Errore di connessione con il server.");
     }
   };
 
@@ -30,13 +65,7 @@ const Segnalazioni = () => {
       <h1>Segnalazioni</h1>
       <form id="reservation-form" onSubmit={handleSubmit}>
         <label htmlFor="reason">Motivo Segnalazione:</label>
-        <textarea id="reason" name="reason" required></textarea>
-
-        <label htmlFor="visibility">Pubblica o Privata:</label>
-        <select id="visibility" name="visibility" required>
-          <option value="pubblica">Pubblica</option>
-          <option value="privata">Privata</option>
-        </select>
+        <input id="reason" name="reason" required/>
 
         <label htmlFor="photo">Carica una fotografia :</label>
         <input
@@ -44,6 +73,7 @@ const Segnalazioni = () => {
           id="photo"
           name="photo"
           accept="image/*" 
+          required
         />
 
         <button type="submit">Invia</button>
