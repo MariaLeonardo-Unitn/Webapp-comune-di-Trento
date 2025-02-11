@@ -6,8 +6,7 @@ info:
   license:
     name: MIT
 servers:
-  - url: http://localhost:3000/api/v1
-    description: Localhost
+  - url: https://trentocleancity.onrender.com
 components:
   parameters:
     Zona:
