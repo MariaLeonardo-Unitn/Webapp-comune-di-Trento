@@ -2,7 +2,6 @@ import React, { useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSegnalazioni } from './SegnalazioniContext';
 import './styles/Segnalazioni.css';
-import API_BASE_URL from "./config";
 
 
 const SegnalazioniAnonime = () => {
