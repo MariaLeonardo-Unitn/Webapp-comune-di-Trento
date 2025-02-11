@@ -16,7 +16,7 @@
     "supertest": "^7.0.0"
   },
   "scripts": {
-    "start": "node ./ENDPOINZ/APP.js",
+    "start": "node ./API/ENDPOINZ/APP.js",
     "dev": "node -r dotenv/config",
     "test": "jest --setupFiles dotenv/config"
   },
