@@ -312,7 +312,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /segnalazioni:
+  /api/segnalazioni:
       post:
         description: >-
           Permette agli utenti di creare una nuova segnalazione.
@@ -363,7 +363,7 @@ paths:
             description: Richiesta non valida.
           '500':
             description: Errore del server.
-  /segnalazioni/utente:
+  /api/segnalazioni/utente:
     get:
       summary: Ottiene la lista delle segnalazioni dell'utente.
       description: Mostra la lista delle segnalazioni effettuate in passato dall'utente, con il relativo stato attuale della segnalazione.
@@ -395,7 +395,7 @@ paths:
           description: Non autenticato.
         '500':
           description: Errore del server.
-  /segnalazioni/{segnalazioneId}:
+  /api/segnalazioni/{segnalazioneId}:
     get:
       description: >-
         Mostra la segnalazione specificata tramite ID.
@@ -421,7 +421,7 @@ paths:
         '500':
           description: Errore del server.
           
-  /operatore_dol/segnalazioni:
+  /api/operatore_dol/segnalazioni:
     get:
       summary: Lista delle segnalazioni visibile dagli operatori di Dolomiti Ambiente.
       description: >-
@@ -452,7 +452,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Segnalazioni'
-  /operatore_dol/segnalazioni/{segnalazioneId}:
+  /api/operatore_dol/segnalazioni/{segnalazioneId}:
     patch:
       summary: Aggiorna lo stato della segnalazione.
       description: >-
@@ -504,7 +504,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Segnalazioni'
-  /operatore_com/segnalazioni:
+  /api/operatore_com/segnalazioni:
     get:
       summary: Lista segnalazioni completate o prese in carico da Dolomiti Ambiente.
       description: >-
@@ -654,7 +654,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalError'
-  /prenotazioni:
+  /api/prenotazioni:
     post:
       tags: 
         - Cittadini
