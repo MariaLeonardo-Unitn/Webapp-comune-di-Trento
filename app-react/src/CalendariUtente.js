@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import './styles/Login.css';
+import API_BASE_URL from "./config";
+
 
 function CalendariUtente() {
   const [zona, setZona] = useState('');
@@ -27,7 +29,7 @@ function CalendariUtente() {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/api/rifiuti/calendari/" + zona, {
+      const response = await fetch(API_BASE_URL + "/api/rifiuti/calendari/" + zona, {
         method: "GET",
         headers: {
           "access-token": token,

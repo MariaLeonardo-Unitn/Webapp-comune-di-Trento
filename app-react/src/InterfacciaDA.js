@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; 
 import { useSegnalazioni } from "./SegnalazioniContext";
 import "./styles/InterfacciaDA.css";
+import API_BASE_URL from "./config";
+
 
 const InterfacciaDA = () => {
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ const InterfacciaDA = () => {
   const fetchSegnalazioni = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/operatore_dol/segnalazioni", {
+      const response = await fetch(API_BASE_URL + "/api/operatore_dol/segnalazioni", {
         method: "GET",
         headers: {
           "access-token": token,
@@ -56,7 +58,7 @@ const InterfacciaDA = () => {
   const patchSegnalazione = async (segnalazioneId, nuovoStato) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/operatore_dol/segnalazioni/" + segnalazioneId, {
+      const response = await fetch(API_BASE_URL + "/api/operatore_dol/segnalazioni/" + segnalazioneId, {
         method: "PATCH",
         headers: {
           "access-token": token,
@@ -83,7 +85,7 @@ const InterfacciaDA = () => {
   const deleteSegnalazione = async (segnalazioneId) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/operatore_dol/segnalazioni/" + segnalazioneId, {
+      const response = await fetch(API_BASE_URL + "/api/operatore_dol/segnalazioni/" + segnalazioneId, {
         method: "DELETE",
         headers: {
           "access-token": token,

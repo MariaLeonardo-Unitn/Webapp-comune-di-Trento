@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles/Login.css";
+import API_BASE_URL from "./config";
+
 
 function Disposizioni() {
   const [file, setFile] = useState(null);
@@ -44,7 +46,7 @@ function Disposizioni() {
       formData.append("file", file);
       formData.append("title", title); 
 
-      const response = await fetch("http://localhost:5000/api/rifiuti/disposizioni", {
+      const response = await fetch(API_BASE_URL + "/api/rifiuti/disposizioni", {
         method: "POST",
         headers: { "access-token": token },
         body: formData,
@@ -75,7 +77,7 @@ function Disposizioni() {
       formData.append("title", title); 
 
 
-      const response = await fetch("http://localhost:5000/api/rifiuti/disposizioni", {
+      const response = await fetch(API_BASE_URL + "/api/rifiuti/disposizioni", {
         method: "PATCH",
         headers: { "access-token": token },
         body: formData,
@@ -101,7 +103,7 @@ function Disposizioni() {
 
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:5000/api/rifiuti/disposizioni", {
+      const response = await fetch(API_BASE_URL + "/api/rifiuti/disposizioni", {
         method: "DELETE",
         headers: { "access-token": token },
       });

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './styles/Prenotazioni_index.css';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from "./config";
+
 function PrenotazioniPage() {
   const navigate = useNavigate();
 
@@ -34,7 +36,7 @@ function PrenotazioniPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/me", {
+      const response = await fetch(API_BASE_URL + "/api/auth/me", {
         method: "GET",
         headers: {
           "access-token": token,
@@ -74,7 +76,7 @@ function PrenotazioniPage() {
       dataPrenotazione: formData.date,
       puntoRitiro: formData.puntoRitiro
     };
-    const response = await fetch("http://localhost:5000/api/prenotazione", {
+    const response = await fetch(API_BASE_URL + "/api/prenotazione", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

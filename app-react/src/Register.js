@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles/Login.css'; 
+import API_BASE_URL from "./config";
+
 
 function Register() {
   const [message, setMessage] = useState('');
@@ -27,7 +29,7 @@ function Register() {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/signup', {
+      const response = await fetch(API_BASE_URL + '/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -61,7 +63,7 @@ function Register() {
 
   const handleLogin = async (credentials) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch(API_BASE_URL + "/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

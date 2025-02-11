@@ -4,6 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './styles/Homepage.css';
 
+
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIconShadow from 'leaflet/dist/images/marker-shadow.png';
 

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './styles/InterfacciaDA.css';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from "./config";
+
 
 const InterfacciaC = () => {
     const navigate = useNavigate();
@@ -22,7 +24,7 @@ const InterfacciaC = () => {
         }
     
         try {
-          const response = await fetch("http://localhost:5000/api/auth/me", {
+          const response = await fetch(API_BASE_URL + "/api/auth/me", {
             method: "GET",
             headers: {
               "access-token": token,
@@ -53,14 +55,14 @@ const InterfacciaC = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const resSegnalazioni = await fetch('http://localhost:5000/api/operatore_com/segnalazioni', {
+                const resSegnalazioni = await fetch(API_BASE_URL + '/api/operatore_com/segnalazioni', {
                     method: "GET",
                     headers:{
                         "access-token": token,
                         "Content-Type": "application/json",
                     }
                 });
-                const resPrenotazioni = await fetch('http://localhost:5000/api/operatore_com/prenotazioni', {
+                const resPrenotazioni = await fetch(API_BASE_URL + '/api/operatore_com/prenotazioni', {
                     method: "GET",
                     headers:{
                         "access-token": token,
@@ -81,7 +83,7 @@ const InterfacciaC = () => {
         fetchData();
     }, []);
     const sortReports = (order, reports) => {
-        if (!Array.isArray(reports)) {  // Controllo per evitare errori
+        if (!Array.isArray(reports)) {  
             console.error("sortReports: reports is not an array", reports);
             return;
         }

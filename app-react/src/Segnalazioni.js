@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./styles/Segnalazioni.css";
+import API_BASE_URL from "./config";
+
 
 const Segnalazioni = () => {
   const location = useLocation();
@@ -52,10 +54,8 @@ const Segnalazioni = () => {
     formData.append("lng", coords.lng);
     formData.append("descrizione", event.target.reason.value);
 
-
-    console.error(localStorage.getItem("utenteId"));
     try {
-      const response = await fetch("http://localhost:5000/api/segnalazioni", {
+      const response = await fetch(API_BASE_URL + "/api/segnalazioni", {
         method: "POST",
         headers: {
           "access-token": token

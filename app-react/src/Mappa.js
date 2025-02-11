@@ -3,6 +3,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './styles/Mappa.css';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from "./config";
+
 
 const Mappa = () => {
   const navigate = useNavigate();

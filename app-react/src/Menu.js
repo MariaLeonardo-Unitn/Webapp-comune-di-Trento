@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles/index.css';
+import API_BASE_URL from "./config";
+
 
 function TrentoCleanCity() {
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ function TrentoCleanCity() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:5000/api/rifiuti/disposizioni/", {
+      const response = await fetch(API_BASE_URL + "/api/rifiuti/disposizioni/", {
         method: "GET",
         headers: {
           "access-token": token,
